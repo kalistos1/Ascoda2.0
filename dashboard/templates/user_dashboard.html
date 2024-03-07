@@ -1,0 +1,368 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="apple-touch-icon" sizes="76x76" href="../../assets/img/apple-icon.png">
+    <link rel="icon" type="image/png" href="../../assets/img/favicon.png">
+    <title>
+      ASCODA
+    </title>
+
+
+    <meta name="keywords"
+      content="creative tim, html dashboard, html css dashboard, web dashboard, bootstrap 5 dashboard, bootstrap 5, css3 dashboard, bootstrap 5 admin, material dashboard bootstrap 5 dashboard, frontend, responsive bootstrap 5 dashboard, material design, material dashboard bootstrap 5 dashboard">
+    <meta name="description"
+      content="Material Dashboard PRO is a beautiful Bootstrap 5 admin dashboard with a large number of components, designed to look beautiful, clean and organized. If you are looking for a tool to manage dates about your business, this dashboard is the thing for you.">
+
+    <meta name="twitter:card" content="product">
+    <meta name="twitter:site" content="@creativetim">
+    <meta name="twitter:title" content="Material Dashboard PRO by Creative Tim">
+    <meta name="twitter:description"
+      content="Material Dashboard PRO is a beautiful Bootstrap 5 admin dashboard with a large number of components, designed to look beautiful, clean and organized. If you are looking for a tool to manage dates about your business, this dashboard is the thing for you.">
+    <meta name="twitter:creator" content="@creativetim">
+    <meta name="twitter:image"
+      content="https://s3.amazonaws.com/creativetim_bucket/products/51/original/opt_mdp_bs5_thumbnail.jpg">
+
+    <meta property="fb:app_id" content="655968634437471">
+    <meta property="og:title" content="Material Dashboard PRO by Creative Tim">
+    <meta property="og:type" content="article">
+    <meta property="og:url"
+      content="https://demos.creative-tim.com/material-dashboard-pro/pages/dashboards/default.html">
+    <meta property="og:image"
+      content="https://s3.amazonaws.com/creativetim_bucket/products/51/original/opt_mdp_bs5_thumbnail.jpg">
+    <meta property="og:description"
+      content="Material Dashboard PRO is a beautiful Bootstrap 5 admin dashboard with a large number of components, designed to look beautiful, clean and organized. If you are looking for a tool to manage dates about your business, this dashboard is the thing for you.">
+    <meta property="og:site_name" content="Creative Tim">
+
+    <link rel="stylesheet" type="text/css" href="../../../css?family=Roboto:300,400,500,700,900|Roboto+Slab:400,700">
+
+    <link href="{% static 'dashboard/assets/css/nucleo-icons.css' %}" rel="stylesheet">
+    <link href="{% static 'dashboard/assets/css/nucleo-svg.css' %}" rel="stylesheet">
+
+    <script src="{% static 'dashboard/42d5adcbca.js' %}"></script>
+
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+
+    <link id="pagestyle" href="{% static 'dashboard/assets/css/material-dashboard.min.css' %}?v=3.0.6" rel="stylesheet">
+
+
+
+  {% comment %}
+   
+   <script defer="" data-site="demos.creative-tim.com" src="../../../js/nepcha-analytics.js"></script>
+  
+  {% endcomment %}
+  </head>
+
+  <body class="g-sidenav-show  bg-gray-200">
+  
+  {% block content %}
+  
+  {% endblock %}
+  
+  
+    <script src="{% static 'dashboard/assets/js/core/popper.min.js' %}"></script>
+    <script src="{% static 'dashboard/assets/js/core/bootstrap.min.js' %}"></script>
+    <script src="{% static 'dashboard/assets/js/plugins/perfect-scrollbar.min.js' %}"></script>
+    <script src="{% static 'dashboard/assets/js/plugins/smooth-scrollbar.min.js' %}"></script>
+	<script src="{% static 'dashboard/assets/js/plugins/choices.min.js' %}"></script>
+	<script src="{% static 'dashboard/assets/js/plugins/multistep-form.js' %}"></script>
+	<script src="{% static 'dashboard/assets/js/plugins/datatables.js' %}"></script>
+<script>
+    if (document.getElementById('products-list')) {
+      const dataTableSearch = new simpleDatatables.DataTable("#products-list", {
+        searchable: true,
+        fixedHeight: false,
+        perPage: 7
+      });
+
+      document.querySelectorAll(".export").forEach(function(el) {
+        el.addEventListener("click", function(e) {
+          var type = el.dataset.type;
+
+          var data = {
+            type: type,
+            filename: "material-" + type,
+          };
+
+          if (type === "csv") {
+            data.columnDelimiter = "|";
+          }
+
+          dataTableSearch.export(data);
+        });
+      });
+    };
+  </script>
+    <script src="{% static 'dashboard/assets/js/plugins/dragula/dragula.min.js' %}"></script>
+    <script src="{% static 'dashboard/assets/js/plugins/jkanban/jkanban.js' %}"></script>
+	<script src="{% static 'dashboard/assets/js/plugins/countup.min.js' %}"></script>
+    <script src="{% static 'dashboard/assets/js/plugins/chartjs.min.js' %}"></script>
+	<script src="{% static 'dashboard/assets/js/plugins/round-slider.min.js' %}"></script>
+	<script>
+			const dataTableBasic = new simpleDatatables.DataTable("#datatable-basic", {
+			  searchable: false,
+			  fixedHeight: true
+			});
+
+			const dataTableSearch = new simpleDatatables.DataTable("#datatable-search", {
+			  searchable: true,
+			  fixedHeight: true
+			});
+		</script>s
+	
+    <script>
+      var ctx1 = document.getElementById("chart-line").getContext("2d");
+      var ctx2 = document.getElementById("chart-pie").getContext("2d");
+      var ctx3 = document.getElementById("chart-bar").getContext("2d");
+
+      // Line chart
+      new Chart(ctx1, {
+        type: "line",
+        data: {
+          labels: ["Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+          datasets: [{
+            label: "Facebook Ads",
+            tension: 0,
+            pointRadius: 5,
+            pointBackgroundColor: "#e91e63",
+            pointBorderColor: "transparent",
+            borderColor: "#e91e63",
+            borderWidth: 4,
+            backgroundColor: "transparent",
+            fill: true,
+            data: [50, 100, 200, 190, 400, 350, 500, 450, 700],
+            maxBarThickness: 6
+          },
+          {
+            label: "Google Ads",
+            tension: 0,
+            borderWidth: 0,
+            pointRadius: 5,
+            pointBackgroundColor: "#3A416F",
+            pointBorderColor: "transparent",
+            borderColor: "#3A416F",
+            borderWidth: 4,
+            backgroundColor: "transparent",
+            fill: true,
+            data: [10, 30, 40, 120, 150, 220, 280, 250, 280],
+            maxBarThickness: 6
+          }
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              display: false,
+            }
+          },
+          interaction: {
+            intersect: false,
+            mode: 'index',
+          },
+          scales: {
+            y: {
+              grid: {
+                drawBorder: false,
+                display: true,
+                drawOnChartArea: true,
+                drawTicks: false,
+                borderDash: [5, 5],
+                color: '#c1c4ce5c'
+              },
+              ticks: {
+                display: true,
+                padding: 10,
+                color: '#9ca2b7',
+                font: {
+                  size: 14,
+                  weight: 300,
+                  family: "Roboto",
+                  style: 'normal',
+                  lineHeight: 2
+                },
+              }
+            },
+            x: {
+              grid: {
+                drawBorder: false,
+                display: true,
+                drawOnChartArea: true,
+                drawTicks: true,
+                borderDash: [5, 5],
+                color: '#c1c4ce5c'
+              },
+              ticks: {
+                display: true,
+                color: '#9ca2b7',
+                padding: 10,
+                font: {
+                  size: 14,
+                  weight: 300,
+                  family: "Roboto",
+                  style: 'normal',
+                  lineHeight: 2
+                },
+              }
+            },
+          },
+        },
+      });
+
+
+      // Pie chart
+      new Chart(ctx2, {
+        type: "pie",
+        data: {
+          labels: ['Facebook', 'Direct', 'Organic', 'Referral'],
+          datasets: [{
+            label: "Projects",
+            weight: 9,
+            cutout: 0,
+            tension: 0.9,
+            pointRadius: 2,
+            borderWidth: 1,
+            backgroundColor: ['#17c1e8', '#e91e63', '#3A416F', '#a8b8d8'],
+            data: [15, 20, 12, 60],
+            fill: false
+          }],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              display: false,
+            }
+          },
+          interaction: {
+            intersect: false,
+            mode: 'index',
+          },
+          scales: {
+            y: {
+              grid: {
+                drawBorder: false,
+                display: false,
+                drawOnChartArea: false,
+                drawTicks: false,
+                color: '#c1c4ce5c'
+              },
+              ticks: {
+                display: false
+              }
+            },
+            x: {
+              grid: {
+                drawBorder: false,
+                display: false,
+                drawOnChartArea: false,
+                drawTicks: false,
+                color: '#c1c4ce5c'
+              },
+              ticks: {
+                display: false,
+              }
+            },
+          },
+        },
+      });
+
+      // Bar chart
+      new Chart(ctx3, {
+        type: "bar",
+        data: {
+          labels: ['16-20', '21-25', '26-30', '31-36', '36-42', '42-50', '50+'],
+          datasets: [{
+            label: "Sales by age",
+            weight: 5,
+            borderWidth: 0,
+            borderRadius: 4,
+            backgroundColor: '#3A416F',
+            data: [15, 20, 12, 60, 20, 15, 25],
+            fill: false
+          }],
+        },
+        options: {
+          indexAxis: 'y',
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              display: false,
+            }
+          },
+          scales: {
+            y: {
+              grid: {
+                drawBorder: false,
+                display: true,
+                drawOnChartArea: true,
+                drawTicks: false,
+                borderDash: [5, 5],
+                color: '#c1c4ce5c'
+              },
+              ticks: {
+                display: true,
+                padding: 10,
+                color: '#c1c4ce5c',
+                font: {
+                  size: 14,
+                  weight: 300,
+                  family: "Roboto",
+                  style: 'normal',
+                  lineHeight: 2
+                },
+              }
+            },
+            x: {
+              grid: {
+                drawBorder: false,
+                display: false,
+                drawOnChartArea: true,
+                drawTicks: true,
+                color: '#9ca2b7'
+              },
+              ticks: {
+                display: true,
+                color: '#9ca2b7',
+                padding: 10,
+                font: {
+                  size: 14,
+                  weight: 300,
+                  family: "Roboto",
+                  style: 'normal',
+                  lineHeight: 2
+                },
+              }
+            },
+          },
+        },
+      });
+    </script>
+    <script>
+      var win = navigator.platform.indexOf('Win') > -1;
+      if (win && document.querySelector('#sidenav-scrollbar')) {
+        var options = {
+          damping: '0.5'
+        }
+        Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
+      }
+    </script>
+	
+	
+		
+
+
+    <script async="" defer="" src="{% static 'dashboard/buttons.js' %}"></script>
+
+    <script src="{% static 'dashboard/assets/js/material-dashboard.min.js' %}?v=3.0.6"></script>
+    
+  </body>
+
+</html>

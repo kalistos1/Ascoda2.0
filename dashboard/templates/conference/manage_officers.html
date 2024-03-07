@@ -1,0 +1,99 @@
+   {% extends 'user_dashboard.html' %}
+   {% load static %}
+   {% block content %}
+   
+    <!-- side nav -->
+	{% include 'partials/conf_sidebar.html' %}
+	<!-- side nav -->
+  
+    <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
+
+	  <!-- top nav-->
+	   {% include 'partials/top_nav.html' %}
+	  <!-- top nav -->
+
+      <div class="container-fluid py-4">
+	  
+        <div class="card">
+		<div class="card-header">
+			<div class="d-flex justify-content-end">
+			   <div class="me-2">
+				<button class="btn btn-icon btn-3 btn-sm btn-outline-info" type="button">
+					<span class="btn-inner--icon"><i class="material-icons-round">map</i></span>
+				    <span class="btn-inner--text">Add District</span>
+				</button>
+			  </div>
+			  
+			  <div class="">
+			    <button class="btn btn-icon btn-3 btn-sm btn-outline-primary" type="button">
+				  <span class="btn-inner--icon"><i class="material-icons-round">church</i></span>
+				  <span class="btn-inner--text">Add Church</span>
+				</button>
+			  </div>
+			</div>
+			
+		</div>
+  <div class="table-responsive">
+    <table class="table align-items-center mb-0">
+      <thead>
+        <tr>
+          <th class="text-uppercase text-dark text-xxs font-weight-bolder">Church</th>
+          <th class="text-uppercase text-dark text-xxs font-weight-bolder ps-2">District</th>
+          <th class="text-center text-uppercase text-dark text-xxs font-weight-bolder">Pastor</th>
+    
+          <th class="text-center text-uppercase text-dark text-xxs font-weight-bolder">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <div class="d-flex px-2 py-1">
+              <div>
+                <img src="https://demos.creative-tim.com/test/material-dashboard-pro/assets/img/team-2.jpg" class="avatar avatar-sm me-3">
+              </div>
+              <div class="d-flex flex-column justify-content-center">
+                <h6 class="mb-0 text-xs">John Michael</h6>
+                <p class="text-xs text-secondary mb-0">john@creative-tim.com</p>
+              </div>
+            </div>
+          </td>
+          <td>
+            <p class="text-xs font-weight-bold mb-0">Manager</p>
+            <p class="text-xs text-secondary mb-0">Organization</p>
+          </td>
+          <td class="align-middle text-center text-sm">
+            <span class="badge badge-sm badge-success">Online</span>
+          </td>
+          <td class="align-middle text-center">
+            <div class="row justify-content-center">
+			   <div class="col-4">
+			     <span class="btn btn-info btn-sm">View</span>
+			   </div>
+			    <div class="col-4">
+			     <span class="btn  btn-danger btn-sm">Delete</span>
+			   </div>
+			    
+			
+			</div>
+          </td>
+          
+          </td>
+        </tr>
+
+        
+      </tbody>
+    </table>
+  </div>
+</div>
+
+			
+			
+	 	<!-- footer -->
+		 {% include 'partials/footer.html' %}
+		<!-- footer -->
+		
+        </div>
+    </main>
+	{% endblock %}
+
+		

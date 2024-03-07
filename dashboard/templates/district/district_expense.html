@@ -1,0 +1,144 @@
+{% extends 'user_dashboard.html' %}
+{% load static %}
+{% block content %}
+  <!-- side nav -->
+  {% include 'partials/dist_sidebar.html' %}
+  <!-- side nav -->
+
+  <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg">
+    <!-- top nav -->
+    {% include 'partials/top_nav.html' %}
+    <!-- top nav -->
+
+    <div class="container-fluid py-4">
+
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="">
+            <div class="p-3 position-relative">
+              <h4 class="badge badge-info d-inline">{{ active_week_month }}</h4>
+              <h4 class="badge badge-info d-inline">{{ active_quarter }}</h4>
+              <h4 class="badge badge-info d-inline">{{ active_week }}</h4>
+              <h4 class="d-inline text-wrap text-sm">Account Information Of <span class="badge badge-warning">{{ associated_district.district_name }}</span> DISTRICT</h4>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row mt-4 justify-content-center">
+        <div class="col-12 col-lg-8 mb-4">
+          <p>{% include 'partials/messages.html'%}</p>
+        </div>
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header pb-0">
+              <div class="d-lg-flex">
+                <div>
+                  <h5 class="mb-0">District Expenses</h5>
+                  <p class="text-sm mb-0">Add New Expense</p>
+                </div>
+                <div class="ms-auto my-auto mt-lg-0 mt-4">
+                  <div class="ms-auto my-auto">
+                    <a href="#" class="btn bg-gradient-primary btn-sm mb-0" data-bs-toggle="modal" data-bs-target="#add_income">+&nbsp; New Expenses</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="card-body px-0 pb-0">
+              <div class="table-responsive">
+                <table class="table table-flush" id="products-list">
+                  <thead class="thead-light">
+                    <tr>
+                      <th>Title</th>
+                      <th>Comment</th>
+                      <th>Amount</th>
+                      <th>Expense Date</th>
+                      
+
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% if current_expenses %}
+                      {% for expense in current_expenses %}
+                        <tr>
+                          <td class="text-sm">{{ expense.title }}</td>
+                          <td class="text-sm">{{ expense.comment }}</td>
+                          <td class="text-sm">{{ expense.amount }}</td>
+                          <td class="text-sm">{{ expense.expense_date }}</td>
+                         
+
+                          <td class="text-sm">
+                            <a href="javascript:;" class="btn btn-info btn-sm">Edit</a>
+                           
+                          </td>
+                        </tr>
+                      {% endfor %}
+                    {% endif %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Add Expense modal -->
+      <div class="modal fade" id="add_income" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog mt-lg-10">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="ModalLabel">Add District Expense</h5>
+              <i class="material-icons ms-3">file_upload</i>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <form action="" method="post">
+                {% csrf_token %}
+                <div class="row justify-content-around">
+                  <div class="col-md-5">
+                    <div class="input-group input-group-dynamic mb-4">
+                      <label class="form-label">title</label>
+                      {{ form.title }}
+                    </div>
+                  </div>
+
+                  <div class="col-md-5">
+                    <div class="input-group input-group-dynamic mb-4">
+                      <label class="form-label">Comment</label>
+                      {{ form.comment }}
+                    </div>
+                  </div>
+
+                  <div class="col-md-5">
+                    <div class="input-group input-group-dynamic mb-4">
+                      <label class="form-label">Amount</label>
+                      {{ form.amount }}
+                    </div>
+                  </div>
+                  <div class="col-md-5">
+                    <div class="input-group input-group-dynamic mb-4">
+                      <label class="form-label"></label>
+                      {{ form.expense_date }}
+                    </div>
+                  </div>
+                </div>
+
+                <div class="modal-footer">
+                  <button type="button" class="btn bg-gradient-danger btn-sm" data-bs-dismiss="modal">Close</button>
+                  <input type="submit" value="Save" class="btn bg-gradient-success btn-sm" />
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- new member modal -->
+
+      <!-- footer -->
+      {% include 'partials/footer.html' %}
+      <!-- footer -->
+    </div>
+  </main>
+{% endblock %}

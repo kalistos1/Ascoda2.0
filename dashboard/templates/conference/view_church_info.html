@@ -1,0 +1,265 @@
+{% extends 'user_dashboard.html' %} {% load static %} {% block content %}
+  <!-- side nav -->
+  {% include 'partials/conf_sidebar.html' %}
+  <!-- side nav -->
+
+  <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg">
+    <!-- top nav -->
+    {% include 'partials/top_nav.html' %}
+    <!-- top nav -->
+
+    <div class="container-fluid py-4">
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="">
+            <div class="p-3 position-relative">
+              <h4 class="badge badge-info d-inline">{{ active_week_month }}</h4>
+              <h4 class="badge badge-info d-inline">{{ active_quarter }}</h4>
+              <h4 class="badge badge-info d-inline">{{ active_week }}</h4>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="">
+            <div class="p-3 position-relative d-flex justify-content-between align-items-center">
+              <h4 class="d-inline text-wrap text-sm">Account Information <span class="badge badge-warning">{{ church.church_name }} CHURCH</span> of {{ church.district }} DISTRICT</h4>
+              <p>
+                <a class="btn btn-primary btn-sm" href="{% url 'dashboard:view_church_acct' church.church_id %}">View Details</a>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row justify-content-center mt-5">
+        <div class="col-lg-3 col-md-6 col-sm-6 col-6">
+          <div class="card mb-2">
+            <div class="card-header p-3 pt-2">
+              <div class="icon icon-lg icon-shape bg-gradient-dark shadow-dark shadow text-center border-radius-xl mt-n4 position-absolute">
+                <i class="material-icons opacity-10">download</i>
+              </div>
+              <div class="text-end pt-1">
+                <p class="text-sm mb-0 text-capitalize">This Week</p>
+              </div>
+            </div>
+            <hr class="dark horizontal my-0" />
+            <div class="card-footer p-3 text-center">
+              <p class="mb-0 fw-bolder">Tithe</p>
+              <p class="mt-3 text-center">
+                <button class="btn btn-dark btn-lg w-75">#{{ total_tithe }}.00</button>
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-6 col-6 mt-sm-0 mt-1">
+          <div class="card mb-2">
+            <div class="card-header p-3 pt-2">
+              <div class="icon icon-lg icon-shape bg-gradient-primary shadow-primary shadow text-center border-radius-xl mt-n4 position-absolute">
+                <i class="material-icons opacity-10">upload</i>
+              </div>
+              <div class="text-end pt-1">
+                <p class="text-sm mb-0 text-capitalize">This Week</p>
+              </div>
+            </div>
+            <hr class="dark horizontal my-0" />
+            <div class="card-footer p-3 text-center">
+              <p class="mb-0 fw-bolder">Offering</p>
+              <p class="mt-3">
+                <button class="btn btn-primary btn-lg w-75">#{{ total_offering }}.00</button>
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-6 col-6 mt-lg-0 mt-4">
+          <div class="card mb-2">
+            <div class="card-header p-3 pt-2 bg-transparent">
+              <div class="icon icon-lg icon-shape bg-gradient-info shadow-success text-center border-radius-xl mt-n4 position-absolute">
+                <i class="material-icons opacity-10">account_balance_wallet</i>
+              </div>
+              <div class="text-end pt-1">
+                <p class="text-sm mb-0 text-capitalize">This Week</p>
+              </div>
+            </div>
+            <hr class="horizontal my-0 dark" />
+            <div class="card-footer p-3 text-center">
+              <p class="mb-0 fw-bolder">Project</p>
+              <p class="mt-3">
+                <button class="btn btn-info btn-lg w-75">#{{ total_project }}.00</button>
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6 col-sm-6 col-6 mt-lg-0 mt-4">
+          <div class="card mb-2">
+            <div class="card-header p-3 pt-2 bg-transparent">
+              <div class="icon icon-lg icon-shape bg-gradient-success shadow-success text-center border-radius-xl mt-n4 position-absolute">
+                <i class="material-icons opacity-10">account_balance_wallet</i>
+              </div>
+              <div class="text-end pt-1">
+                <p class="text-sm mb-0 text-capitalize">This Week</p>
+              </div>
+            </div>
+            <hr class="horizontal my-0 dark" />
+            <div class="card-footer p-3 text-center">
+              <p class="mb-0 fw-bolder">Cash At Hand</p>
+              <p class="mt-3">
+                <button class="btn btn-success btn-lg w-75">#{{ cash_at_hand }}</button>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      
+
+
+      <div class="row mt-4">
+        <div class="col-lg-4 col-6">
+          <div class="card">
+            <div class="card-header pb-0 px-3">
+              <h6 class="mb-0">This weeks Combined Offerings</h6>
+            </div>
+            <div class="card-body pt-4 p-3">
+              <ul class="list-group">
+                <li class="list-group-item border-0 d-flex p-4 mb-2 mt-3 bg-gray-100 border-radius-lg">
+                  <div class="d-flex flex-column">
+                    <h6 class="mb-3 text-sm">Amount Due Church</h6>
+                  </div>
+                </li>
+                <li class="list-group-item border-0 d-flex p-4 mb-2 mt-3 bg-gray-100 border-radius-lg">
+                  <div class="d-flex flex-column">
+                    <h6 class="mb-3 text-sm">Amount Due District</h6>
+                  </div>
+                </li>
+                <li class="list-group-item border-0 d-flex p-4 mb-2 mt-3 bg-gray-100 border-radius-lg">
+                  <div class="d-flex flex-column">
+                    <h6 class="mb-3 text-sm">Amount Due Conference</h6>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-4 col-6 mt-md-0 mt-4">
+          <div class="card h-100 mb-4">
+            <div class="card-header pb-0 px-3">
+              <div class="row">
+                <div class="col-md-6">
+                  <h6 class="mb-0">church Income</h6>
+                </div>
+                <div class="col-md-6 d-flex justify-content-start justify-content-md-end align-items-center">
+                  <i class="material-icons me-2 text-lg">date_range</i>
+                  <small>{{ sabbath_week_start|date:'j' }} - {{ sabbath_week_ends|date:' j F' }}</small>
+                </div>
+              </div>
+            </div>
+            <div class="card-body pt-4 p-3">
+              <div class="d-flex justify-content-between align-items-center">
+                <h6 class="text-uppercase text-body text-sm fw-bolder mb-3">Total</h6>
+                <p class="badge badge-success badge-primary">#{{  weeks_combined_income_2 }}</p>
+              </div>
+              <hr class="bg-success p-0 m-0" />
+
+              <ul class="list-group">
+                {% if church_incomes %}
+                  <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
+                    <div class="d-flex align-items-center">
+                      <button class="btn btn-icon-only btn-rounded btn-outline-success mb-0 me-3 p-3 btn-sm d-flex align-items-center justify-content-center"><i class="material-icons text-lg">expand_less</i></button>
+                      <div class="d-flex flex-column">
+                        <h6 class="mb-1 text-dark text-sm">Tithe_Project_Offering</h6>
+                      </div>
+                    </div>
+                    <div class="d-flex align-items-center text-success text-gradient text-sm font-weight-bold">#{{  weeks_combined_top_2 }}</div>
+                  </li>
+                  {% for income in church_incomes %}
+                    <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
+                      <div class="d-flex align-items-center">
+                        <button class="btn btn-icon-only btn-rounded btn-outline-success mb-0 me-3 p-3 btn-sm d-flex align-items-center justify-content-center"><i class="material-icons text-lg">expand_less</i></button>
+                        <div class="d-flex flex-column">
+                          <h6 class="mb-1 text-dark text-sm">{{ income.income_type }}</h6>
+                          <span class="text-xs">{{ income.comment }}</span>
+                        </div>
+                      </div>
+                      <div class="d-flex align-items-center text-success text-gradient text-sm font-weight-bold">#{{ income.amount }}</div>
+                    </li>
+                  {% endfor %}
+                {% endif %}
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-4 col-6 mt-md-0 mt-4">
+          <div class="card h-100 mb-4">
+            <div class="card-header pb-0 px-3">
+              <div class="row">
+                <div class="col-md-6">
+                  <h6 class="mb-0">church Expenses</h6>
+                </div>
+                <div class="col-md-6 d-flex justify-content-start justify-content-md-end align-items-center">
+                  <i class="material-icons me-2 text-lg">date_range</i>
+                  <small>{{ sabbath_week_start|date:'j' }} - {{ sabbath_week_ends|date:' j F' }}</small>
+                </div>
+              </div>
+            </div>
+            <div class="card-body pt-4 p-3">
+              <div class="d-flex justify-content-between align-items-center">
+                <h6 class="text-uppercase text-body text-sm fw-bolder mb-3">Total</h6>
+                <p class="badge badge-success badge-primary">#{{  weeks_combined_expense }}</p>
+              </div>
+              <hr class="bg-danger p-0 m-0" />
+              <ul class="list-group">
+                {% if church_expenses %}
+                <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
+                  <div class="d-flex align-items-center">
+                    <button class="btn btn-icon-only btn-rounded btn-outline-danger mb-0 me-3 p-3 btn-sm d-flex align-items-center justify-content-center"><i class="material-icons text-lg">expand_more</i></button>
+                    <div class="d-flex flex-column">
+                      <h6 class="mb-1 text-dark text-sm">Tithe</h6>
+                     
+                    </div>
+                  </div>
+                  <div class="d-flex align-items-center text-danger text-gradient text-sm font-weight-bold">#{{ total_tithe }}</div>
+                </li>
+                  {% for expense in church_expenses %}
+                    <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
+                      <div class="d-flex align-items-center">
+                        <button class="btn btn-icon-only btn-rounded btn-outline-danger mb-0 me-3 p-3 btn-sm d-flex align-items-center justify-content-center"><i class="material-icons text-lg">expand_more</i></button>
+                        <div class="d-flex flex-column">
+                          <h6 class="mb-1 text-dark text-sm">{{ expense.title }}</h6>
+                          <span class="text-xs">{{ expense.comment }}</span>
+                        </div>
+                      </div>
+                      <div class="d-flex align-items-center text-danger text-gradient text-sm font-weight-bold">#{{ expense.amount }}</div>
+                    </li>
+                  {% endfor %}
+                {% endif %}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row justify-content-end mt-4">
+        <div class="col-lg-3 col-md-3 col-sm-3 col-12">
+          
+          <div class="card mb-2">
+            <div class="card-header p-3 pt-2">
+              <h6 class=""> Income & Expense Balance</h6>
+              <p class="badge badge-lg badge-primary text-lg">#{{ income_expence_balance }}</p>
+
+            </div>
+          </div>
+          
+        </div>
+      </div>
+
+      <!-- footer -->
+      {% include 'partials/footer.html' %}
+      <!-- footer -->
+    </div>
+  </main>
+{% endblock %}

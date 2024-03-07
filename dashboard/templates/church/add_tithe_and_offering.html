@@ -1,0 +1,135 @@
+{% extends 'user_dashboard.html' %}
+{% load static %}
+{% block content %}
+  <!-- side nav -->
+  {% include 'partials/church_sidebar.html' %}
+  <!-- side nav -->
+
+  <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg">
+    <!-- top nav -->
+    {% include 'partials/top_nav.html' %}
+    <!-- top nav -->
+
+    <div class="container-fluid py-4">
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="">
+            <div class="p-3 position-relative">
+              <h4 class="badge badge-info d-inline">{{ active_week_month }}</h4>
+              <h4 class="badge badge-info d-inline">{{ active_quarter }}</h4>
+              <h4 class="badge badge-info d-inline">{{ active_week }}</h4>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="">
+            <div class="p-3 position-relative d-flex justify-content-between align-items-center">
+              <h4 class="d-inline text-wrap text-sm">Account Information <span class="badge badge-warning">{{ church_name }} CHURCH</span> of {{ district }} DISTRICT</h4>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row justify-content-center">
+        <div class="col-12 col-lg-8 mb-4">
+          <p>
+            {% include 'partials/messages.html' %}
+          </p>
+        </div>
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header pb-0">
+              <div class="d-lg-flex justify-content-between">
+                <div>
+                  <h5 class="mb-0">Tithe and Offering</h5>
+                  <p class="text-sm mb-0">Add Members tithe and offering</p>
+                </div>
+                <div class="ms-auto my-auto mt-lg-0 mt-4">
+                  <div class="ms-auto my-auto">
+
+                    <a class="btn bg-gradient-primary btn-sm mb-0" href="{% url 'church:calculate_combined_offering' %}">Calculate Combined Offering</a>
+                    <button type="button" class="btn btn-outline-primary btn-sm mb-0" data-bs-toggle="modal" data-bs-target="#import">Import</button>
+                    
+                    {% if form1 %}
+                      <div class="modal fade" id="import" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog mt-lg-10">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title" id="ModalLabel">Import CSV Of Tithe offering and Project</h5>
+                              <i class="material-icons ms-3">file_upload</i>
+                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <form action="{% url 'church:upload_tithe_offering' %}" method="post" enctype="multipart/form-data">
+                              {% csrf_token %}
+                              <div class="modal-body">
+                                <p>You can browse your device for a file.</p>
+
+                                <div class="input-group input-group-dynamic mb-3">{{ form1.csv_file }}</div>
+                              </div>
+                              <div class="modal-footer">
+                                <button type="button" class="btn bg-gradient-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+                                <input type="submit" value="upload" class="btn bg-gradient-primary btn-sm" />
+                              </div>
+                            </form>
+                          </div>
+                        </div>
+                      </div>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="card-body px-0 pb-0">
+              <div class="table-responsive">
+                {% if associated_members %}
+                  <table class="table table-flush" id="products-list">
+                    <thead class="thead-light">
+                      <tr class="">
+                        <th>card No.</th>
+                        <th>Name</th>
+
+                        <th>Tithe</th>
+                        <th>Offering</th>
+                        <th>project</th>
+                        <th>method</th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for detail in tithe_offering_details %}
+                        <tr>
+                          <td class="text-sm">{{ detail.member.tithe_card_number }}</td>
+                          <td class="text-sm">{{ detail.member.member_name }}</td>
+                          <td class="text-sm">{{ detail.tithe_offering.tithe }}</td>
+                          <td class="text-sm">{{ detail.tithe_offering.offering }}</td>
+                          <td class="text-sm">{{ detail.tithe_offering.project }}</td>
+
+                          <td class="text-sm">{{ detail.tithe_offering.payment_method }}</td>
+
+                          <td class="text-sm">
+                            {% if detail.tithe_offering.tithe == None or detail.tithe_offering.offering == None or detail.tithe_offering.project == None %}
+                              <a href="{% url 'church:add_tithe_offering' detail.member.member_id %}" class="btn btn-warning">Add</a>
+                            {% else %}
+                              <a href="" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#add_tithe">Edit</a>
+                            {% endif %}
+                          </td>
+                        </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- footer -->
+      {% include 'partials/footer.html' %}
+      <!-- footer -->
+    </div>
+  </main>
+{% endblock %}

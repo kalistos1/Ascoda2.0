@@ -1,0 +1,296 @@
+{% extends 'user_dashboard.html' %}
+{% load static %}
+
+{% block content %}
+  <!-- side nav -->
+  {% if request.user.role == "Admin" %}
+  {% include 'partials/conf_sidebar.html' %}
+
+{% elif request.user.role == 'District_secretary' %}   
+  {% include 'partials/dist_sidebar.html' %}
+
+{% elif request.user.role == 'District_treasurer' %}   
+
+  {% include 'partials/dist_sidebar.html' %}
+
+{% else %}
+
+ {% include 'partials/church_sidebar.html' %}
+
+{% endif %}
+  <!-- side nav -->
+
+  <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg">
+    <!-- top nav -->
+    {% include 'partials/top_nav.html' %}
+    <!-- top nav -->
+
+    <div class="container-fluid py-4">
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="">
+            <div class="p-3 position-relative">
+              <h4 class="badge badge-info d-inline">{{ active_week_month }}</h4>
+              <h4 class="badge badge-info d-inline">{{ active_quarter }}</h4>
+              <h4 class="badge badge-info d-inline">{{ active_week }}</h4>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row mt-4">
+        <div class="col-lg-12 col-12">
+          <div class="card">
+            <div class="card-header pb-0 px-3">
+              <h6 class="mb-0 text-wrap">Accounting Details of <mark>{{ church.church_name }} CHURCH</mark> in <span class="badge badge-warning">{{ church.district }} DISTRICT</span></h6>
+            </div>
+
+            <div class="card-body pt-3 p-3">
+              <div class="row mt-4">
+                <div class="col-lg-8 col-12">
+                  <div class="nav-wrapper position-relative end-0">
+                    <ul class="nav nav-pills nav-fill p-1" role="tablist">
+                      <li class="nav-item">
+                        <a class="nav-link mb-0 px-0 py-1 fw-bolder active" data-bs-toggle="tab" href="#pills-home" role="tab" aria-selected="true">Tithe</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link mb-0 px-0 py-1 fw-bolder" data-bs-toggle="tab" href="#pills-profile" role="tab" aria-selected="false">Offering</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link mb-0 px-0 py-1 fw-bolder" data-bs-toggle="tab" href="#pills-contact" role="tab" aria-selected="false">Project</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link mb-0 px-0 py-1 fw-bolder" data-bs-toggle="tab" href="#pills-cash" role="tab" aria-selected="false">Cash Account</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link mb-0 px-0 py-1 fw-bolder" data-bs-toggle="tab" href="#pills-combof" role="tab" aria-selected="false">Combined Off.</a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+
+                <div class="col-md-12 mt-5 mb-7">
+                  <div class="tab-content" id="pills-tabContent">
+
+                    <div class="tab-pane fade show active" id="pills-home" role="tabpanel" tabindex="0">
+                      <div class="card">
+                        <div class="card-header pb-0">
+                          <div class="d-lg-flex">
+                            <div>
+                              <h5 class="mb-0">Tithe</h5>
+                            </div>
+                            <div class="ms-auto my-auto mt-lg-0 mt-4"></div>
+                          </div>
+                        </div>
+                        <div class="card-body px-0 pb-0">
+                          <div class="table-responsive">
+                            <table class="table table-flush table-hover table-dark text-center">
+                              <thead class="thead-light">
+                                <tr>
+                                  <th>Card No.</th>
+                                  <th>Name</th>
+                                  <th>Amount</th>
+                                  <th>Payment Method</th>
+                                  <th>Date</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {% if church_tithes_and_offerings %}
+                                  {% for tithe in church_tithes_and_offerings %}
+                                    <tr>
+                                      <td class="fw-bolder">{{ tithe.church_member.tithe_card_number }}</td>
+                                      <td class="fw-bolder">{{ tithe.church_member.member_name }}</td>
+                                      <td class="fw-bolder">{{ tithe.tithe }}</td>
+                                      <td class="fw-bolder">{{ tithe.payment_method }}</td>
+                                      <td class="fw-bolder">{{ tithe.date_added }}</td>
+                                    </tr>
+                                  {% endfor %}
+                                {% endif %}
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="tab-pane fade" id="pills-profile" role="tabpanel" tabindex="0">
+                      <div class="card">
+                        <div class="card-header pb-0">
+                          <div class="d-lg-flex">
+                            <div>
+                              <h5 class="mb-0">Offering</h5>
+                            </div>
+                            <div class="ms-auto my-auto mt-lg-0 mt-4"></div>
+                          </div>
+                        </div>
+                        <div class="card-body px-0 pb-0">
+                          <div class="table-responsive">
+                            <table class="table table-flush table-hover table-dark text-center">
+                              <thead class="thead-light">
+                                <tr>
+                                  <th>Card No.</th>
+                                  <th>Name</th>
+                                  <th>Amount</th>
+                                  <th>Payment Method</th>
+                                  <th>Date</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {% if church_tithes_and_offerings %}
+                                  {% for offering in church_tithes_and_offerings %}
+                                    <tr>
+                                      <td class="fw-bolder">{{ offering.church_member.tithe_card_number }}</td>
+                                      <td class="fw-bolder">{{ offering.church_member.member_name }}</td>
+                                      <td class="fw-bolder">{{ offering.offering }}</td>
+                                      <td class="fw-bolder">{{ offering.payment_method }}</td>
+                                      <td class="fw-bolder">{{ offering.date_added }}</td>
+                                    </tr>
+                                  {% endfor %}
+                                {% endif %}
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="tab-pane fade" id="pills-contact" role="tabpanel" tabindex="0">
+                      <div class="card">
+                        <div class="card-header pb-0">
+                          <div class="d-lg-flex">
+                            <div>
+                              <h5 class="mb-0">Project</h5>
+                            </div>
+                            <div class="ms-auto my-auto mt-lg-0 mt-4"></div>
+                          </div>
+                        </div>
+                        <div class="card-body px-0 pb-0">
+                          <div class="table-responsive">
+                            <table class="table table-flush table-hover table-dark text-center">
+                              <thead class="thead-light">
+                                <tr>
+                                  <th>Card No.</th>
+                                  <th>Name</th>
+                                  <th>Amount</th>
+                                  <th>Payment Method</th>
+                                  <th>Date</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {% if church_tithes_and_offerings %}
+                                  {% for project in church_tithes_and_offerings %}
+                                    <tr>
+                                      <td class="fw-bolder">{{ project.church_member.tithe_card_number }}</td>
+                                      <td class="fw-bolder">{{ project.church_member.member_name }}</td>
+                                      <td class="fw-bolder">{{ project.project }}</td>
+                                      <td class="fw-bolder">{{ project.payment_method }}</td>
+                                      <td class="fw-bolder">{{ project.date_added }}</td>
+                                    </tr>
+                                  {% endfor %}
+                                {% endif %}
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="tab-pane fade" id="pills-cash" role="tabpanel" tabindex="0">
+                      <div class="card">
+                        <div class="card-header pb-0">
+                          <div class="d-lg-flex">
+                            <div>
+                              <h5 class="mb-0">Cash Account</h5>
+                            </div>
+                            <div class="ms-auto my-auto mt-lg-0 mt-4"></div>
+                          </div>
+                        </div>
+                        <div class="card-body px-0 pb-0">
+                          <div class="table-responsive">
+                            <table class="table table-flush table-hover table-dark text-center">
+                              <thead class="thead-light">
+                                <tr>
+                                  <th>S/No.</th>
+                                  <th>Cash Generated</th>
+                                  <th>Cash Spent</th>
+                                  <th>Cash To Bank</th>
+                                  <th>Cash At Hand</th>
+                                  <th>Sabbath Week</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {% if weekly_cash_transaction %}
+                                  {% for transaction in weekly_cash_transaction %}
+                                    <tr>
+                                      <td class="fw-bolder">{{ forloop.counter }}</td>
+                                      <td class="fw-bolder">{{ transaction.cash_generated }}</td>
+                                      <td class="fw-bolder">{{ transaction.cash_spent }}</td>
+                                      <td class="fw-bolder">{{ transaction.cash_to_bank }}</td>
+                                      <td class="fw-bolder">{{ transaction.cash_at_hand }}</td>
+                                      <td class="fw-bolder">{{ transaction.sabbath_week }}</td>
+                                    </tr>
+                                  {% endfor %}
+                                {% endif %}
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="tab-pane fade" id="pills-combof" role="tabpanel" tabindex="0">
+                      <div class="card">
+                        <div class="card-header pb-0">
+                          <div class="d-lg-flex">
+                            <div>
+                              <h5 class="mb-0">Combined offering</h5>
+                            </div>
+                            <div class="ms-auto my-auto mt-lg-0 mt-4"></div>
+                          </div>
+                        </div>
+                        <div class="card-body px-0 pb-0">
+                          <div class="table-responsive">
+                            <table class="table table-flush table-hover table-dark text-center">
+                              <thead class="thead-light">
+                                <tr>
+                                  <th>Card No.</th>
+                                  <th>Name</th>
+                                  <th>Amount</th>
+                                  <th>Payment Method</th>
+                                  <th>Date</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {% if church_tithes_and_offerings %}
+                                  {% for offering in church_tithes_and_offerings %}
+                                    <tr>
+                                      <td class="fw-bolder">{{ offering.church_member.tithe_card_number }}</td>
+                                      <td class="fw-bolder">{{ offering.church_member.member_name }}</td>
+                                      <td class="fw-bolder">{{ offering.offering }}</td>
+                                      <td class="fw-bolder">{{ offering.payment_method }}</td>
+                                      <td class="fw-bolder">{{ offering.date_added }}</td>
+                                    </tr>
+                                  {% endfor %}
+                                {% endif %}
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- footer -->
+      {% include 'partials/footer.html' %}
+      <!-- footer -->
+    </div>
+  </main>
+{% endblock %}

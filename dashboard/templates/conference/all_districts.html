@@ -1,0 +1,79 @@
+{% extends 'user_dashboard.html' %}
+{% load static %}
+{% block content %}
+  <!-- side nav -->
+  {% include 'partials/conf_sidebar.html' %}
+  <!-- side nav -->
+
+  <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg">
+    <!-- top nav -->
+    {% include 'partials/top_nav.html' %}
+    <!-- top nav -->
+
+    <div class="container-fluid py-4">
+      
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="">
+            <div class="p-3 position-relative">
+              <h4 class="badge badge-info d-inline">{{ active_quarter }}</h4>
+              <h4 class="badge badge-info d-inline">{{ active_week }}</h4>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card"></div>
+      <div class="row mt-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header pb-0">
+              <div class="d-lg-flex">
+                <div>
+                  <h5 class="mb-0">All Districts</h5>
+                </div>
+                <div class="ms-auto my-auto mt-lg-0 mt-4"></div>
+              </div>
+            </div>
+            <div class="card-body px-0 pb-0">
+              <div class="table-responsive">
+                <table class="table table-flush table-hover" id="products-list">
+                  <thead class="thead-light">
+                    <tr>
+                      <th>S/N</th>
+                      <th>Name</th>
+                      <th>Email</th>
+                      <th>Phone</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% if districts %}
+                      {% for district in districts %}
+                        <tr>
+                          <td class="text-sm">{{ forloop.counter }}</td>
+                          <td class="text-sm">{{ district.district_name }}</td>
+                          <td class="text-sm">{{ district.email }}</td>
+                          <td class="text-sm">{{ district.phone }}</td>
+
+                          <td class="text-sm">
+                           <a href="{% url 'dashboard:view_district' district.district_id %}" class="btn btn-primary "> View District info</a>
+
+                          </td>
+                        </tr>
+                      {% endfor %}
+                    {% endif %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- footer -->
+      {% include 'partials/footer.html' %}
+      <!-- footer -->
+    </div>
+  </main>
+{% endblock %}

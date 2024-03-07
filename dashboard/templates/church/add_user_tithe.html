@@ -1,0 +1,91 @@
+{% extends 'user_dashboard.html' %}
+{% load static %}
+{% block content %}
+  <!-- side nav -->
+  {% include 'partials/church_sidebar.html' %}
+  <!-- side nav -->
+
+  <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg">
+    <!-- top nav -->
+    {% include 'partials/top_nav.html' %}
+    <!-- top nav -->
+
+    <div class="container-fluid py-4">
+     
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="">
+            <div class="p-3 position-relative">
+              <h4 class="badge badge-info d-inline">{{ active_week_month }}</h4>
+              <h4 class="badge badge-info d-inline">{{ active_quarter }}</h4>
+              <h4 class="badge badge-info d-inline">{{ active_week }}</h4>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="">
+            <div class="p-3 position-relative d-flex justify-content-between align-items-center">
+              <h4 class="d-inline text-wrap text-sm">Account Information <span class="badge badge-warning">{{ church_name }} CHURCH</span> of {{ district }} DISTRICT</h4>
+             
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row justify-content-center">
+        <div class="col-12 col-lg-8 mb-4">
+          <p>{% include 'partials/messages.html'%}</p>
+        </div>
+        <div class="col-12">
+          <div class="card-header pb-0">
+            <div>
+              <h5 class="mb-0 text-center">Add Tithe and Offering for {{ church_member}}</h5>
+            </div>
+          </div>
+        </div>
+
+        <div class="row mt-5">
+          <div class="col-12 col-lg-6 m-auto">
+            <div class="card p-4">
+              <div class="card-body">
+                {% if form %}
+                  <form action="{% url 'church:add_tithe_offering' church_member.member_id %}" method="post">
+                    {% csrf_token %}
+                    <div class="row justify-content-around">
+                      <div class="col-md-8">
+                        <div class="input-group input-group-dynamic mb-4">{{ form.tithe }}</div>
+                      </div>
+                      <div class="col-md-8">
+                        <div class="input-group input-group-dynamic mb-4">{{ form.offering }}</div>
+                      </div>
+
+                      <div class="col-md-8">
+                        <div class="input-group input-group-dynamic mb-4">{{ form.project }}</div>
+                      </div>
+                      <div class="col-md-8">
+                        <div class="input-group input-group-dynamic mb-4">{{ form.payment_method }}</div>
+                      </div>
+
+                      <div class="col-md-8">
+                        <div class="input-group input-group-dynamic mb-4">
+                          <input type="submit" value="Submit" class="btn btn-info bg-gradient-info">
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- footer -->
+      {% include 'partials/footer.html' %}
+      <!-- footer -->
+    </div>
+  </main>
+{% endblock %}

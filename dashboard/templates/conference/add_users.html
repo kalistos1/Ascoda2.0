@@ -1,0 +1,430 @@
+{% extends 'user_dashboard.html' %} {% load static %} {% block content %}
+  <!-- side nav -->
+  {% include 'partials/conf_sidebar.html' %}
+  <!-- side nav -->
+
+  <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg">
+    <!-- top nav -->
+    {% include 'partials/top_nav.html' %}
+    <!-- top nav -->
+
+    <div class="container-fluid py-4">
+      
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="">
+            <div class="p-3 position-relative">
+              <h4 class="badge badge-info d-inline">{{ active_quarter }}</h4>
+              <h4 class="badge badge-info d-inline">{{ active_week }}</h4>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row mt-4">
+        <div class="col-12 col-lg-8 mb-4">
+          <p>{% include 'partials/messages.html'%}</p>
+      </div>
+        <div class="col-lg-12 col-sm-12">
+          
+          <div class="row">
+            <div class="col-md-3 col-6">
+              <div type="button" class="card" data-bs-toggle="modal" data-bs-target="#districtSecModal">
+                <div class="card-header mx-4 p-3 text-center">
+                  <div class="icon icon-shape icon-lg bg-gradient-primary shadow text-center border-radius-lg">
+                    <i class="material-icons opacity-10">account_circle</i>
+                  </div>
+                </div>
+                <div class="card-body pt-0 p-3 text-center">
+                  <h6 class="text-center mb-0 text-wrap">Add District Financial Secretary</h6>
+                  <span class="text-xs"></span>
+                  <hr class="horizontal dark my-3" />
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-3 col-6 mb-md-0 mb-sm-2 mb-2">
+              <div type="button" class="card" data-bs-toggle="modal" data-bs-target="#districtTreModal">
+                <div class="card-header mx-4 p-3 text-center">
+                  <div class="icon icon-shape icon-lg bg-gradient-primary shadow text-center border-radius-lg">
+                    <i class="material-icons opacity-10">supervised_user_circle</i>
+                  </div>
+                </div>
+                <div class="card-body pt-0 p-3 text-center">
+                  <h6 class="text-center mb-0 text-wrap "> Add District Treasurer</h6>
+                  <hr class="horizontal dark my-3" />
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-3 col-6">
+              <div type="button" class="card" data-bs-toggle="modal" data-bs-target="#churchSecModal">
+                <div class="card-header mx-4 p-3 text-center">
+                  <div class="icon icon-shape icon-lg bg-gradient-primary shadow text-center border-radius-lg">
+                    <i class="material-icons opacity-10">person</i>
+                  </div>
+                </div>
+                <div class="card-body pt-0 p-3 text-center">
+                  <h6 class="text-center mb-0 text-wrap"> Add Church Financial Secretary</h6>
+
+                  <hr class="horizontal dark my-3" />
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-3 col-6 mt-md-0 mt-sm-2 mt-2">
+              <div type="button" class="card" data-bs-toggle="modal" data-bs-target="#churchTreModal">
+                <div class="card-header mx-4 p-3 text-center">
+                  <div class="icon icon-shape icon-lg bg-gradient-primary shadow text-center border-radius-lg">
+                    <i class="material-icons opacity-10">supervisor_account</i>
+                  </div>
+                </div>
+                <div class="card-body pt-0 p-3 text-center">
+                  <h6 class="text-center mb-0 text-wrap">Add Church Treasurer</h6>
+                  <hr class="horizontal dark my-3" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Assign officer section -->
+      <div class="row mt-8">
+        <div class="col-12 col-lg-8 m-auto">
+          <div class="card">
+            <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+              <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
+                <div class="multisteps-form__progress">
+                  <h5 class="text-center text-light">Assign officer To Church/District</h5>
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+              <form action="{% url 'dashboard:assign_officer' %}" method="post">
+                {% csrf_token %}
+                <div class="row justify-content-center">
+                  <div class="col-md-8">
+                    <label class="form-label">Church Name</label>
+                    <div class="input-group input-group-dynamic mb-4">{{ assign_officer_form.church }}</div>
+                  </div>
+                  <div class="col-md-8">
+                    <label class="form-label">District Name</label>
+                    <div class="input-group input-group-dynamic mb-4">{{ assign_officer_form.district }}</div>
+                  </div>
+
+                  <div class="col-md-8">
+                    <label class="form-label">Church officer</label>
+                    <div class="input-group input-group-dynamic mb-4">{{ assign_officer_form.officer }}</div>
+                  </div>
+
+                  <div class="col-md-8">
+                    <input type="submit" value="submit" class="btn btn-info form-control" />
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+	  <!-- assign officer section-->
+
+      <!-- =================Distric sec modals =============== -->
+      <!-- Modal -->
+      <div class="modal fade" id="districtSecModal" tabindex="-1" role="dialog" aria-labelledby="districtSecLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <form action="{% url 'dashboard:process_add_officer_form' %}" method="post" enctype="multipart/form-data">
+              <div class="modal-header">
+                <h5 class="modal-title font-weight-normal" id="districtSecLabel">Add District Secretary</h5>
+                <button type="button" class="btn-close text-dark" data-bs-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              </div>
+              <div class="modal-body">
+                {% csrf_token %}
+
+                <div class="row justify-content-center">
+                  <div class="col-md-6">
+                    <div class="input-group input-group-outline my-2">
+                      <label class="form-label">First Name</label>
+                      {{ add_officer_form.first_name }}
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="input-group input-group-outline my-2">
+                      <label class="form-label">Last name</label>
+                      {{ add_officer_form.last_name }}
+                    </div>
+                  </div>
+
+                  <div class="col-md-6">
+                    <div class="input-group input-group-outline my-2">
+                      <label class="form-label">User Name</label>
+                      {{ add_officer_form.username }}
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="input-group input-group-outline my-2">
+                      <label class="form-label">Gender</label>
+                      {{ add_officer_form.sex }}
+                    </div>
+                  </div>
+    
+                  <div class="col-md-6">
+                    <div class="input-group input-group-outline my-2">
+                      <label class="form-label">Email</label>
+                      {{ add_officer_form.email }}
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="input-group input-group-outline my-2">
+                      <label class="form-label">Phone No.</label>
+                      {{ add_officer_form.phone }}
+                    </div>
+                  </div>
+                  <div class="col-md-12">
+                    <div class="input-group input-group-outline my-2">
+                      <label class="form-label"></label>
+                      {{ add_officer_form.photo }}
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn bg-gradient-danger" data-bs-dismiss="modal">Close</button>
+                <input type="submit" value="Create User" name="district_sec_form" class="btn bg-gradient-info" />
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========================== modals ================= -->
+
+      <!-- =================District tre modals =============== -->
+      <!-- Modal -->
+      <div class="modal fade" id="districtTreModal" tabindex="-1" role="dialog" aria-labelledby="districtTreLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <form action="{% url 'dashboard:process_add_officer_form' %}" method="post" enctype="multipart/form-data">
+              <div class="modal-header">
+                <h5 class="modal-title font-weight-normal" id="districtSecLabel">Add District Treasurer</h5>
+                <button type="button" class="btn-close text-dark" data-bs-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              </div>
+              <div class="modal-body">
+                {% csrf_token %}
+                <div class="row justify-content-center">
+                  <div class="col-md-6">
+                    <div class="input-group input-group-outline my-2">
+                      <label class="form-label">First Name</label>
+                      {{ add_officer_form.first_name }}
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="input-group input-group-outline my-2">
+                      <label class="form-label">Last name</label>
+                      {{ add_officer_form.last_name }}
+                    </div>
+                  </div>
+
+                  <div class="col-md-6">
+                    <div class="input-group input-group-outline my-2">
+                      <label class="form-label">User Name</label>
+                      {{ add_officer_form.username }}
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="input-group input-group-outline my-2">
+                      <label class="form-label">Gender</label>
+                      {{ add_officer_form.sex }}
+                    </div>
+                  </div>
+    
+                  <div class="col-md-6">
+                    <div class="input-group input-group-outline my-2">
+                      <label class="form-label">Email</label>
+                      {{ add_officer_form.email }}
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="input-group input-group-outline my-2">
+                      <label class="form-label">Phone No.</label>
+                      {{ add_officer_form.phone }}
+                    </div>
+                  </div>
+                  <div class="col-md-12">
+                    <div class="input-group input-group-outline my-2">
+                      <label class="form-label"></label>
+                      {{ add_officer_form.photo }}
+                    </div>
+                  </div>
+                </div>
+
+
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn bg-gradient-danger" data-bs-dismiss="modal">Close</button>
+                <input type="submit" value="Create User" name="district_tre_form" class="btn bg-gradient-info" />
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========================== modals ================= -->
+
+	        <!-- ================= Church Sec modals =============== -->
+      <!-- Modal -->
+      <div class="modal fade" id="churchSecModal" tabindex="-1" role="dialog" aria-labelledby="churchSecLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <form action="{% url 'dashboard:process_add_officer_form' %}" method="post" enctype="multipart/form-data">
+              <div class="modal-header">
+                <h5 class="modal-title font-weight-normal" id="churchSecLabel">Add Church Secretary</h5>
+                <button type="button" class="btn-close text-dark" data-bs-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              </div>
+              <div class="modal-body">
+                {% csrf_token %}
+                <div class="row justify-content-center">
+                  <div class="col-md-6">
+                    <div class="input-group input-group-outline my-2">
+                      <label class="form-label">First Name</label>
+                      {{ add_officer_form.first_name }}
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="input-group input-group-outline my-2">
+                      <label class="form-label">Last name</label>
+                      {{ add_officer_form.last_name }}
+                    </div>
+                  </div>
+
+                  <div class="col-md-6">
+                    <div class="input-group input-group-outline my-2">
+                      <label class="form-label">User Name</label>
+                      {{ add_officer_form.username }}
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="input-group input-group-outline my-2">
+                      <label class="form-label">Gender</label>
+                      {{ add_officer_form.sex }}
+                    </div>
+                  </div>
+    
+                  <div class="col-md-6">
+                    <div class="input-group input-group-outline my-2">
+                      <label class="form-label">Email</label>
+                      {{ add_officer_form.email }}
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="input-group input-group-outline my-2">
+                      <label class="form-label">Phone No.</label>
+                      {{ add_officer_form.phone }}
+                    </div>
+                  </div>
+                  <div class="col-md-12">
+                    <div class="input-group input-group-outline my-2">
+                      <label class="form-label"></label>
+                      {{ add_officer_form.photo }}
+                    </div>
+                  </div>
+                </div>
+
+
+
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn bg-gradient-danger" data-bs-dismiss="modal">Close</button>
+                <input type="submit" value="Create User" name="church_sec_form" class="btn bg-gradient-info" />
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========================== modals ================= -->
+
+	  
+	        <!-- ================= Church Tre modals =============== -->
+      <!-- Modal -->
+      <div class="modal fade" id="churchTreModal" tabindex="-1" role="dialog" aria-labelledby="churchTreLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <form action="{% url 'dashboard:process_add_officer_form' %}" method="post" enctype="multipart/form-data">
+              <div class="modal-header">
+                <h5 class="modal-title font-weight-normal" id="churchTreLabel">Add Church Treasurer</h5>
+                <button type="button" class="btn-close text-dark" data-bs-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              </div>
+              <div class="modal-body">
+                {% csrf_token %}
+
+               <div class="row justify-content-center">
+                  <div class="col-md-6">
+                    <div class="input-group input-group-outline my-2">
+                      <label class="form-label">First Name</label>
+                      {{ add_officer_form.first_name }}
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="input-group input-group-outline my-2">
+                      <label class="form-label">Last name</label>
+                      {{ add_officer_form.last_name }}
+                    </div>
+                  </div>
+
+                  <div class="col-md-6">
+                    <div class="input-group input-group-outline my-2">
+                      <label class="form-label">User Name</label>
+                      {{ add_officer_form.username }}
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="input-group input-group-outline my-2">
+                      <label class="form-label">Gender</label>
+                      {{ add_officer_form.sex }}
+                    </div>
+                  </div>
+    
+                  <div class="col-md-6">
+                    <div class="input-group input-group-outline my-2">
+                      <label class="form-label">Email</label>
+                      {{ add_officer_form.email }}
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="input-group input-group-outline my-2">
+                      <label class="form-label">Phone No.</label>
+                      {{ add_officer_form.phone }}
+                    </div>
+                  </div>
+                  <div class="col-md-12">
+                    <div class="input-group input-group-outline my-2">
+                      <label class="form-label"></label>
+                      {{ add_officer_form.photo }}
+                    </div>
+                  </div>
+                </div>
+
+
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn bg-gradient-danger" data-bs-dismiss="modal">Close</button>
+                <input type="submit" value="Create User" name="church_tre_form" class="btn bg-gradient-info" />
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========================== modals ================= -->
+
+     
+
+      <!-- footer -->
+      {% include 'partials/footer.html' %}
+      <!-- footer -->
+    </div>
+  </main>
+{% endblock %}

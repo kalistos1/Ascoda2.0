@@ -1,0 +1,52 @@
+
+
+{% if messages %}
+  <div id="alert-container">
+    <div class=" text-center alert   {% for message in messages %}  {% if message.tags == 'success' %} alert-success  {% else %} alert-danger   {% endif %} {% endfor %} alert-dismissible text-white fade" role="alert">
+     
+       
+          
+        {% for message in messages %}
+          <span class="text-light text-center">  {{ message }}</span>
+          {% endfor %}
+
+      
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+  </div>
+  <script>
+    // Add animation and auto-dismissal logic
+    document.addEventListener('DOMContentLoaded', function () {
+      var alertContainer = document.getElementById('alert-container');
+      if (alertContainer) {
+        var alert = alertContainer.querySelector('.alert');
+
+        // Animate the alert on appearance with longer duration
+        alert.classList.add('show', 'fade-in');
+
+        // Auto-dismiss after 5 seconds
+        setTimeout(function () {
+          alertContainer.innerHTML = ''; // Remove the alert from the DOM
+        }, 5000);
+      }
+    });
+  </script>
+  <style>
+    /* Add custom styles for more pronounced animation */
+    .fade-in {
+      opacity: 0;
+      animation: fadeIn 1s forwards;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+  </style>
+{% endif %}

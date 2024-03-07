@@ -1,0 +1,100 @@
+{% extends 'user_dashboard.html' %}
+{% load static %}
+{% block content %}
+  <!-- side nav -->
+  {% include 'partials/conf_sidebar.html' %}
+  <!-- side nav -->
+
+  <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg">
+    <!-- top nav -->
+    {% include 'partials/top_nav.html' %}
+    <!-- top nav -->
+
+    <div class="container-fluid py-4">
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="">
+            <div class="p-3 position-relative">
+              <h4 class="badge badge-info d-inline">{{ active_quarter }}</h4>
+              <h4 class="badge badge-info d-inline">{{ active_week }}</h4>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-12">
+          <div class="multisteps-form mb-9">
+            <div class="row">
+              <div class="col-12 col-lg-8 mx-auto my-5"></div>
+            </div>
+
+            <div class="row justify-content-center">
+              <div class="col-12 col-lg-8 mb-4">
+                <p>{% include 'partials/messages.html'%}</p>
+              </div>
+              <div class="col-12 col-lg-8 m-auto">
+                <div class="card">
+                  <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+                    <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
+                      <div class="multisteps-form__progress">
+                        <h5 class="text-center text-light">Add Church Information</h5>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="card-body">
+                    <form>
+                      <div class="row justify-content-around">
+                        <div class="col-md-5">
+                          <div class="input-group input-group-dynamic mb-4">
+                            <label class="form-label">Church Name</label>
+                            <input type="text" class="form-control" />
+                          </div>
+                        </div>
+                        <div class="col-md-5">
+                          <div class="input-group input-group-dynamic mb-4">
+                            <label class="form-label">District</label>
+                            <input type="text" class="form-control" />
+                          </div>
+                        </div>
+
+                        <div class="col-md-5">
+                          <div class="input-group input-group-dynamic mb-4">
+                            <label class="form-label">Address</label>
+                            <input type="text" class="form-control" />
+                          </div>
+                        </div>
+                        <div class="col-md-5">
+                          <div class="input-group input-group-dynamic mb-4">
+                            <label class="form-label">Email</label>
+                            <input type="text" class="form-control" />
+                          </div>
+                        </div>
+                        <div class="col-md-5">
+                          <div class="input-group input-group-dynamic mb-4">
+                            <label class="form-label">Phone</label>
+                            <input type="text" class="form-control" />
+                          </div>
+                        </div>
+                        <div class="col-md-5">
+                          <div class="input-group input-group-dynamic mb-4">
+                            <label class="form-label">Facebook Page</label>
+                            <input type="text" class="form-control" />
+                          </div>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- footer -->
+      {% include 'partials/footer.html' %}
+      <!-- footer -->
+    </div>
+  </main>
+{% endblock %}

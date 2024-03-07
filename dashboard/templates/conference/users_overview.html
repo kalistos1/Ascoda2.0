@@ -1,0 +1,180 @@
+{% extends 'user_dashboard.html' %}
+{% load static %}
+{% block content %}
+  <!-- side nav -->
+  {% include 'partials/conf_sidebar.html' %}
+  <!-- side nav -->
+
+  <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg">
+    <!-- top nav -->
+    {% include 'partials/top_nav.html' %}
+    <!-- top nav -->
+
+    <div class="container-fluid py-4">
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="">
+            <div class="p-3 position-relative">
+              <h4 class="badge badge-info d-inline">{{ active_quarter }}</h4>
+              <h4 class="badge badge-info d-inline">{{ active_week }}</h4>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- main content -->
+      <div class="row mt-4 ">
+        
+		<div class="col-md-3 col-sm-6 col-6">
+          <div class="card">
+            <div class="card-body text-center">
+              <h1 class="text-gradient text-primary"><span id="status1" countto="21">{{ role_users }}</span> <span class="text-lg ms-n2"></span></h1>
+              <h6 class="mb-0 font-weight-bolder">Account Officers</h6>
+            </div>
+            <div class="card h-100">
+              <div class="card-body d-flex p-3">
+                <div class="nav-wrapper position-relative ms-auto w-100">
+                  <ul class="nav nav-pills nav-fill p-1" role="tablist">
+                    <li class="nav-item">
+                      <a class="nav-link mb-0 px-0 py-1 active" href="{% url 'dashboard:add_user' %}" aria-controls="cam1" aria-selected="true">Add</a>
+                    </li>
+                    <li class="nav-item">
+                      <a  href="{% url 'dashboard:all_officers' %}" class="nav-link mb-0 px-0 py-1" >Manage</a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="col-md-3 col-sm-6 col-6">
+          <div class="card">
+            <div class="card-body text-center">
+              <h1 class="text-gradient text-primary"><span id="status2" countto="44">{{ districts }}</span> <span class="text-lg ms-n1"></span></h1>
+              <h6 class="mb-0 font-weight-bolder">Districts</h6>
+              <p class="opacity-8 mb-0 text-sm"></p>
+            </div>
+            <div class="card h-100">
+              <div class="card-body d-flex p-3">
+                <div class="nav-wrapper position-relative ms-auto w-100">
+                  <ul class="nav nav-pills nav-fill p-1" role="tablist">
+                    <li class="nav-item">
+                      <a class="nav-link mb-0 px-0 py-1 active" href="{% url 'dashboard:create_district' %}">Add</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link mb-0 px-0 py-1" href="{% url 'dashboard:all_districts' %}">Manage</a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="col-md-3 col-sm-6 col-6 mt-4 mt-md-0">
+          <div class="card">
+            <div class="card-body text-center">
+              <h1 class="text-gradient text-primary"><span id="status3" countto="87">{{ churches }}</span> <span class="text-lg ms-n2"></span></h1>
+              <h6 class="mb-0 font-weight-bolder">Local churches</h6>
+              <p class="opacity-8 mb-0 text-sm"></p>
+            </div>
+            <div class="card h-100">
+              <div class="card-body d-flex p-3">
+                <div class="nav-wrapper position-relative ms-auto w-100">
+                  <ul class="nav nav-pills nav-fill p-1" role="tablist">
+                    <li class="nav-item">
+                      <a class="nav-link mb-0 px-0 py-1 active" href="{% url 'dashboard:create_church' %}">Add</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link mb-0 px-0 py-1" href="{% url 'dashboard:all_churches' %}">Manage</a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="col-md-3 col-sm-6 col-6 mt-4 mt-md-0">
+          <div class="card">
+            <div class="card-body text-center">
+              <h1 class="text-gradient text-primary"><span id="status4" countto="417">{{ members }}</span> <span class="text-lg ms-n2"></span></h1>
+              <h6 class="mb-0 font-weight-bolder">Members</h6>
+            </div>
+            <div class="card h-100">
+              <div class="card-body d-flex p-3">
+                <div class="nav-wrapper position-relative ms-auto w-100">
+                  <ul class="nav nav-pills nav-fill p-1" role="tablist">
+                    <li class="nav-item">
+                      <a class="nav-link mb-0 px-0 py-1 active" data-bs-toggle="tab" href="#cam1" role="tab" aria-controls="cam1" aria-selected="true">Add</a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="{% url 'dashboard:all_members' %}" class="nav-link mb-0 px-0 py-1">Manage</a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="row mt-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header pb-0">
+              <div class="d-lg-flex">
+                <div>
+                  <h5 class="mb-0">Active Assigned Account Officers</h5>
+                  <p class="text-sm mb-0">list of active account officers</p>
+                </div>
+                <div class="ms-auto my-auto mt-lg-0 mt-4"></div>
+              </div>
+            </div>
+            <div class="card-body px-0 pb-0">
+              <div class="table-responsive">
+                <table class="table table-flush" id="products-list">
+                  <thead class="thead-light">
+                    <tr>
+                      <th>Name</th>
+                      <th>Phone</th>
+                      <th>Role</th>
+                      <th>Church</th>
+                      <th>District</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% if assigned_officer %}
+                      {% for officer in assigned_officer %}
+                        <tr>
+                          <td class="text-sm">{{ officer.officer.get_fullname }}</td>
+                          <td class="text-sm">{{ officer.officer.phone }}</td>
+                          <td class="text-sm">{{ officer.officer.role }}</td>
+                          <td class="text-sm">{{ officer.church }}</td>
+                          <td class="text-sm">{{ officer.church.district }}</td>
+
+                          <td class="text-sm">
+                            <a href="javascript:;" class="btn btn-info btn-sm">Edit</a>
+                          </td>
+                        </tr>
+                      {% endfor %}
+                    {% endif %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- footer -->
+      {% include 'partials/footer.html' %}
+      <!-- footer -->
+    </div>
+  </main>
+{% endblock %}
