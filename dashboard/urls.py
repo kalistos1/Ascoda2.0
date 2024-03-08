@@ -31,7 +31,7 @@ urlpatterns = [
    path('conference/admin_setup_acct/sabbath/', views.add_sabbath, name="add_sabbath"),
    path('conference/admin_setup_acct/assign_officer/', views.assign_officer, name ="assign_officer"),
    path('conference/admin/church_list/church/accounting_details/<int:church_id>', views.admin_view_church_account_detail, name ="view_church_acct") ,
+   path('conference/admin/trustfund/details/', views.view_trustfunds, name ="view_trustfunds") ,
 
-    
 
 ]

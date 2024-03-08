@@ -34,11 +34,12 @@
                 </div>
                 <div class="card-body">
                     <h6 class="mb-0">Weekly Offering</h6>
-                    <p class="text-sm">This Week Total Trustfund Offering</p>
+                    <p class="text-sm">This Weeks Total Trustfund Offering</p>
+                    <p class="text-dark fw-bolder text-center ">#{{total_offering }}</p>
                     <hr class="dark horizontal" />
                     <div class="d-flex justify-content-center">
                        
-                        <p class=" btn btn-primary text-center mb-0 text-sm">View Details</p>
+                        <a  href="{% url 'dashboard:view_trustfunds' %}" class=" btn btn-primary mb-0 text-sm">View Details</a>
                     </div>
                 </div>
             </div>
@@ -56,10 +57,13 @@
                 </div>
                 <div class="card-body">
                     <h6 class="mb-0">Weekly Tithe</h6>
-                    <p class="text-sm">his Week Total Trustfund Tithes</p>
+                    <p class="text-sm">This Weeks Total Trustfund Tithes</p>
+                     <p class="text-dark fw-bolder text-center ">#{{total_tithe }}</p>
                     <hr class="dark horizontal" />
                     <div class="d-flex justify-content-center">
-                      <p class=" btn btn-success text-center mb-0 text-sm">View Details</p>
+                       
+                      <a  href="{% url 'dashboard:view_trustfunds' %}" class=" btn btn-success mb-0 text-sm">View Details</a>
+
                     </div>
                 </div>
             </div>
@@ -77,12 +81,13 @@
                   </div>
               </div>
               <div class="card-body">
-                  <h6 class="mb-0">Weekl Total</h6>
+                  <h6 class="mb-0">Weekly Total</h6>
                   <p class="text-sm">Total: Tithe And Offering Trustfund</p>
+                  <p class="text-dark fw-bolder text-center ">{{sum_off_trustfund}} </p>
                   <hr class="dark horizontal" />
                   <div class="d-flex justify-content-center">
                     
-                      <p class=" btn btn-dark mb-0 text-sm">View Details</p>
+                      <a  href="{% url 'dashboard:view_trustfunds' %}" class=" btn btn-dark mb-0 text-sm">View Details</a>
                   </div>
               </div>
           </div>
@@ -96,7 +101,7 @@
           <div class="card">
             <div class="card-header pb-0 p-3">
               <div class="d-flex justify-content-between">
-                <h6 class="mb-0">Weekly Trustfund offerings</h6>
+                <h6 class="mb-0">Total Trustfund offerings</h6>
               </div>
             </div>
             <div class="card-body p-3">
@@ -104,12 +109,12 @@
                 <li class="list-group-item px-0 border-0">
                   <div class="row align-items-center">
                     <div class="col">
-                      <p class="text-xs font-weight-bold mb-0">Week:</p>
+                      <p class="text-xs badge badge-info font-weight-bold mb-0">{{ active_quarter }}</p>
                       <h6 class="text-sm font-weight-normal mb-0"></h6>
                     </div>
                     <div class="col text-center">
-                      <p class="text-xs font-weight-bold mb-0">Offering Total:</p>
-                      <h6 class="text-sm font-weight-normal mb-0">{{sum_off_trustfund }}</h6>
+                      
+                      <h6 class="text-sm font-weight-normal mb-0"> #{{ quater_total_offering }}</h6>
                     </div>
                   </div>
                 </li>
@@ -122,7 +127,7 @@
           <div class="card">
             <div class="card-header pb-0 p-3">
               <div class="d-flex justify-content-between">
-                <h6 class="mb-0">Weekly Trustfund Tithes</h6>
+                <h6 class="mb-0">Total Trustfund Tithe</h6>
               </div>
             </div>
             <div class="card-body p-3">
@@ -130,12 +135,12 @@
                 <li class="list-group-item px-0 border-0">
                   <div class="row align-items-center">
                     <div class="col">
-                      <p class="text-xs font-weight-bold mb-0">Week:</p>
-                      <h6 class="text-sm font-weight-normal mb-0">2nd week</h6>
+                     <p class="text-xs badge badge-info font-weight-bold mb-0">{{ active_quarter }}</p>
+                      <h6 class="text-sm font-weight-normal mb-0"></h6>
                     </div>
                     <div class="col text-center">
-                      <p class="text-xs font-weight-bold mb-0">Tithe Total:</p>
-                      <h6 class="text-sm font-weight-normal mb-0">400</h6>
+                      
+                      <h6 class="text-sm font-weight-normal mb-0">#{{quater_total_tithe}}</h6>
                     </div>
                   </div>
                 </li>
@@ -148,7 +153,7 @@
           <div class="card">
             <div class="card-header pb-0 p-3">
               <div class="d-flex justify-content-between">
-                <h6 class="mb-0">Weekly Trustfund Total</h6>
+                <h6 class="mb-0"> Trustfund Total</h6>
               </div>
             </div>
             <div class="card-body p-3">
@@ -156,12 +161,12 @@
                 <li class="list-group-item px-0 border-0">
                   <div class="row align-items-center">
                     <div class="col">
-                      <p class="text-xs font-weight-bold mb-0">Week:</p>
-                      <h6 class="text-sm font-weight-normal mb-0">2nd week</h6>
+                      <p class="text-xs badge badge-info font-weight-bold mb-0">{{ active_quarter }}</p>
+                      <h6 class="text-sm font-weight-normal mb-0"></h6>
                     </div>
                     <div class="col text-center">
-                      <p class="text-xs font-weight-bold mb-0">Trustfund Total:</p>
-                      <h6 class="text-sm font-weight-normal mb-0">400</h6>
+                    
+                      <h6 class="text-sm font-weight-normal mb-0">#{{quater_total_amount}}</h6>
                     </div>
                   </div>
                 </li>

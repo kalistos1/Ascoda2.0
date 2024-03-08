@@ -194,7 +194,7 @@ def conference_dashboard(request):
 
         members = Member.objects.all()
 
-        current_weeks_trustfunds = TrustFund.objects.filter(church= associated_church, 
+        current_weeks_trustfunds = TrustFund.objects.filter(
                                                              sabbath_week = active_week,
                                                                sabbath_week__month__quarter=active_quarter
                                                                ).aggregate(
@@ -202,6 +202,17 @@ def conference_dashboard(request):
                                                                    total_offering=Sum('offering_amount'),
                                                                    
                                                                    )
+        current_quater_trustfunds = TrustFund.objects.filter(                                              
+                                                            sabbath_week__month__quarter=active_quarter
+                                                               ).aggregate(
+                                                                   total_tithe=Sum('tithe_amount'),
+                                                                   total_offering=Sum('offering_amount'),
+                                                                    total_amount=Sum('total_amount'),                                                                   
+                                                                   )
+
+        quater_total_tithe = current_quater_trustfunds['total_tithe'] or 0
+        quater_total_offering = current_quater_trustfunds['total_offering'] or 0      
+        quater_total_amount = current_quater_trustfunds['total_amount'] or 0               
 
         total_tithe = current_weeks_trustfunds['total_tithe'] or 0
         total_offering = current_weeks_trustfunds['total_offering'] or 0
@@ -216,6 +227,9 @@ def conference_dashboard(request):
             'total_tithe': total_tithe,
             'total_offering':total_offering,
             'sum_off_trustfund':sum_off_trustfund,
+            'quater_total_tithe':quater_total_tithe,
+            'quater_total_offering':quater_total_offering,
+            'quater_total_amount':quater_total_amount,
 
 
         })
@@ -1532,3 +1546,33 @@ def process_members_csv_file(csv_file, associated_church):
             )
     except Exception as e:
         raise e  # Propagate the exception to the caller
+
+
+
+def view_trustfunds (request):
+    if request.user.role == "Admin":
+        context = getGlobalContext(request.user)
+        conference  = context.get('conference')
+        associated_church = context.get('associated_church')
+        active_week = context.get('active_week')
+        active_quarter = context.get('active_quarter')
+        sabbath_week_start = context.get('sabbath_week_start')
+        sabbath_week_ends = context.get('sabbath_week_ends')
+        
+        current_weeks_trustfunds = TrustFund.objects.filter(
+                                                            sabbath_week = active_week,
+                                                            sabbath_week__month__quarter=active_quarter
+                                                               )
+                                                               
+                                                   
+                                                               
+        context.update({
+            'conference':conference,
+            'active_week':active_week,
+            'active_quarter':active_quarter,
+            'current_weeks_trustfunds':current_weeks_trustfunds,
+           
+        })
+        
+
+        return render(request,'conference/trustfund_weekly_detail.html', context)
