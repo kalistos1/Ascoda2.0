@@ -22,93 +22,75 @@
         </div>
       </div>
 
-      <div class="row mt-4">
-        <div class="col-sm-4 col-4">
-          <div class="card bg-info text-light p-4">
-            <div class="card-body p-3 position-relative">
-              <div class="row">
-                <div class="col-7 text-start">
-                  <p class="text-sm mb-1 text-capitalize font-weight-bold">This Quater Trustfund Offering</p>
-                  <h5 class="font-weight-bolder mb-0 text-light">#230,220</h5>
+      <div class="row mb-4">
+        <div class="col-lg-4 col-md-6 mt-4 mb-4">
+            <div class="card z-index-2">
+                <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2 bg-transparent">
+                    <div class="bg-gradient-primary shadow-primary border-radius-lg py-3 pe-1">
+                        <div class="chart">
+                            <canvas id="chart-bars" class="chart-canvas" height="170"></canvas>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-5">
-                  <div class="dropdown text-end">
-                    <a href="javascript:;" class="cursor-pointer text-secondary" id="dropdownUsers1" data-bs-toggle="dropdown" aria-expanded="false"><span class="text-xs text-light">{{ sabbath_week_start|date:'F j' }} - {{ sabbath_week_ends|date:'F j' }}</span></a>
-                    <ul class="dropdown-menu dropdown-menu-end px-2 py-3" aria-labelledby="dropdownUsers1">
-                      <li>
-                        <a class="dropdown-item border-radius-md" href="javascript:;">Last 7 days</a>
-                      </li>
-                      <li>
-                        <a class="dropdown-item border-radius-md" href="javascript:;">Last week</a>
-                      </li>
-                      <li>
-                        <a class="dropdown-item border-radius-md" href="javascript:;">Last 30 days</a>
-                      </li>
-                    </ul>
-                  </div>
+                <div class="card-body">
+                    <h6 class="mb-0">Weekly Offering</h6>
+                    <p class="text-sm">This Week Total Trustfund Offering</p>
+                    <hr class="dark horizontal" />
+                    <div class="d-flex justify-content-center">
+                       
+                        <p class=" btn btn-primary text-center mb-0 text-sm">View Details</p>
+                    </div>
                 </div>
-              </div>
             </div>
-          </div>
-        </div>
-        <div class="col-sm-4 col-4">
-          <div class="card bg-warning text-light p-4">
-            <div class="card-body p-3 position-relative">
-              <div class="row">
-                <div class="col-7 text-start">
-                  <p class="text-sm mb-1 text-capitalize font-weight-bold">This Quater Trustfund tithe</p>
-                  <h5 class="font-weight-bolder mb-0 text-light">#3.200</h5>
-                </div>
-                <div class="col-5">
-                  <div class="dropdown text-end">
-                    <a href="javascript:;" class="cursor-pointer text-secondary" id="dropdownUsers2" data-bs-toggle="dropdown" aria-expanded="false"><span class="text-xs text-light">{{ sabbath_week_start|date:'F j' }} - {{ sabbath_week_ends|date:'F j' }}</span></a>
-                    <ul class="dropdown-menu dropdown-menu-end px-2 py-3" aria-labelledby="dropdownUsers2">
-                      <li>
-                        <a class="dropdown-item border-radius-md" href="javascript:;">Last 7 days</a>
-                      </li>
-                      <li>
-                        <a class="dropdown-item border-radius-md" href="javascript:;">Last week</a>
-                      </li>
-                      <li>
-                        <a class="dropdown-item border-radius-md" href="javascript:;">Last 30 days</a>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+            
         </div>
 
-        <div class="col-sm-4 col-4">
-          <div class="card bg-danger text-light p-4">
-            <div class="card-body p-3 position-relative">
-              <div class="row">
-                <div class="col-7 text-start">
-                  <p class="text-sm mb-1 text-capitalize font-weight-bold sm-fs-1 fs-1">This Quater Trustfund Total</p>
-                  <h5 class="font-weight-bolder mb-0 text-light">#1.200</h5>
+        <div class="col-lg-4 col-md-6 mt-4 mb-4">
+            <div class="card z-index-2">
+                <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2 bg-transparent">
+                    <div class="bg-gradient-success shadow-success border-radius-lg py-3 pe-1">
+                        <div class="chart">
+                            <canvas id="chart-bars2" class="chart-canvas" height="170"></canvas>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-5">
-                  <div class="dropdown text-end">
-                    <a href="javascript:;" class="cursor-pointer text-secondary" id="dropdownUsers3" data-bs-toggle="dropdown" aria-expanded="false"><span class="text-xs text-light">{{ sabbath_week_start|date:'F j' }} - {{ sabbath_week_ends|date:'F j' }}</span></a>
-                    <ul class="dropdown-menu dropdown-menu-end px-2 py-3" aria-labelledby="dropdownUsers3">
-                      <li>
-                        <a class="dropdown-item border-radius-md" href="javascript:;">Last 7 days</a>
-                      </li>
-                      <li>
-                        <a class="dropdown-item border-radius-md" href="javascript:;">Last week</a>
-                      </li>
-                      <li>
-                        <a class="dropdown-item border-radius-md" href="javascript:;">Last 30 days</a>
-                      </li>
-                    </ul>
-                  </div>
+                <div class="card-body">
+                    <h6 class="mb-0">Weekly Tithe</h6>
+                    <p class="text-sm">his Week Total Trustfund Tithes</p>
+                    <hr class="dark horizontal" />
+                    <div class="d-flex justify-content-center">
+                      <p class=" btn btn-success text-center mb-0 text-sm">View Details</p>
+                    </div>
                 </div>
-              </div>
             </div>
-          </div>
+            
         </div>
+       
+
+        <div class="col-lg-4 col-md-6 mt-4 mb-4">
+          <div class="card z-index-2">
+              <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2 bg-transparent">
+                  <div class="bg-gradient-dark shadow-dark border-radius-lg py-3 pe-1">
+                      <div class="chart">
+                          <canvas id="chart-bars3" class="chart-canvas" height="170"></canvas>
+                      </div>
+                  </div>
+              </div>
+              <div class="card-body">
+                  <h6 class="mb-0">Weekl Total</h6>
+                  <p class="text-sm">Total: Tithe And Offering Trustfund</p>
+                  <hr class="dark horizontal" />
+                  <div class="d-flex justify-content-center">
+                    
+                      <p class=" btn btn-dark mb-0 text-sm">View Details</p>
+                  </div>
+              </div>
+          </div>
+          
       </div>
+        
+    </div>
+      
       <div class="row mt-4">
         <div class="col-lg-4 mt-lg-0 mt-4">
           <div class="card">
