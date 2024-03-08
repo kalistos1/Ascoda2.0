@@ -205,13 +205,18 @@ def conference_dashboard(request):
 
         total_tithe = current_weeks_trustfunds['total_tithe'] or 0
         total_offering = current_weeks_trustfunds['total_offering'] or 0
+        sum_off_trustfund = total_tithe + total_offering
         context.update({
             'conference':conference,
             'active_week':active_week,
             'active_quarter':active_quarter,
             'members': members,
             'sabbath_week_start':sabbath_week_start,
-            'sabbath_week_ends': sabbath_week_ends
+            'sabbath_week_ends': sabbath_week_ends,
+            'total_tithe': total_tithe,
+            'total_offering':total_offering,
+            'sum_off_trustfund':sum_off_trustfund,
+
 
         })
         return render(request,'conference/dashboard.html',context)
