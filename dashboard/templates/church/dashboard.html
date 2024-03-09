@@ -1,6 +1,7 @@
 ﻿{% extends 'user_dashboard.html' %} {% load static %} {% block content %}
   <!-- side nav -->
   {% include 'partials/church_sidebar.html' %}
+  {% load custom_filters %}
   <!-- side nav -->
 
   <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg">
@@ -179,10 +180,10 @@
                     <div class="d-flex align-items-center">
                       <button class="btn btn-icon-only btn-rounded btn-outline-success mb-0 me-3 p-3 btn-sm d-flex align-items-center justify-content-center"><i class="material-icons text-lg">expand_less</i></button>
                       <div class="d-flex flex-column">
-                        <h6 class="mb-1 text-dark text-sm">Tithe_Project_Offering</h6>
+                        <h6 class="mb-1 text-dark text-sm">tithe_project_offering</h6>
                       </div>
                     </div>
-                    <div class="d-flex align-items-center text-success text-gradient text-sm font-weight-bold">#{{ weeks_combined_t_o_p }}</div>
+                    <div class="d-flex align-items-center text-success text-gradient text-sm font-weight-bold">#{{ weeks_combined_top_2}}</div>
                   </li>
                   {% for income in church_incomes %}
                     <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
@@ -193,7 +194,9 @@
                           <span class="text-xs">{{ income.comment }}</span>
                         </div>
                       </div>
-                      <div class="d-flex align-items-center text-success text-gradient text-sm font-weight-bold">#{{ income.amount }}</div>
+                      <div class="d-flex align-items-center text-success text-gradient text-sm font-weight-bold">#{{ income.amount }}    
+                        {% if income.income_type in 'APPRECIATION,LOOSE_OFFERING,CHILD_DEDICATION,THANKS_OFFERING,SABBATH_SCHOOL' %} <span class="text-danger" style ="color:red;">   -  [#{{ income.amount|divide_by_half:income.income_type }}] </span>{% endif %}
+                       </div>
                     </li>
                   {% endfor %}
                 {% endif %}
@@ -223,7 +226,7 @@
               <hr class="bg-danger p-0 m-0" />
               <ul class="list-group">
                 {% if church_expenses %}
-                <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
+                {% comment %} <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
                   <div class="d-flex align-items-center">
                     <button class="btn btn-icon-only btn-rounded btn-outline-danger mb-0 me-3 p-3 btn-sm d-flex align-items-center justify-content-center"><i class="material-icons text-lg">expand_more</i></button>
                     <div class="d-flex flex-column">
@@ -232,7 +235,8 @@
                     </div>
                   </div>
                   <div class="d-flex align-items-center text-danger text-gradient text-sm font-weight-bold">#{{ total_tithe }}</div>
-                </li>
+                </li> {% endcomment %}
+
                   {% for expense in church_expenses %}
                     <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
                       <div class="d-flex align-items-center">
@@ -250,6 +254,9 @@
             </div>
           </div>
         </div>
+
+
+        
       </div>
       <div class="row justify-content-end mt-4">
         <div class="col-lg-3 col-md-3 col-sm-3 col-12">
@@ -257,7 +264,7 @@
           <div class="card mb-2">
             <div class="card-header p-3 pt-2">
               <h6 class=""> Income & Expense Balance</h6>
-              <p class="badge badge-lg badge-primary text-lg">#{{ income_expense_balance }}</p>
+              <p class="badge badge-lg badge-primary text-lg">#{{income_expence_balance }}</p>
 
             </div>
           </div>

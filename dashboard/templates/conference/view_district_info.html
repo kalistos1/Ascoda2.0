@@ -147,6 +147,27 @@
             <div class="card-body pt-4 p-3">
               <h6 class="text-uppercase text-body text-xs font-weight-bolder mb-3">Newest</h6>
               <ul class="list-group">
+
+                {% if combined_offering_entry %}
+                 {% for offering in combined_offering_entry %}
+                  <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
+                    <div class="d-flex align-items-center">
+                      <button class="btn btn-icon-only btn-rounded btn-outline-success mb-0 me-3 p-3 btn-sm d-flex align-items-center justify-content-center"><i class="material-icons text-lg">expand_less</i></button>
+                      <div class="d-flex flex-column">
+                        <h6 class="mb-1 text-dark text-sm">Combined offering from {{offering.associated_church}}</h6>
+                      
+                      </div>
+                    </div>
+                    <div class="d-flex align-items-center text-success text-gradient text-sm font-weight-bold">
+                      
+                      #{{offering.amount_due_district}}
+                     
+                    </div>
+                  </li>
+                 {% endfor %}
+                {% endif %}
+
+
                 {% if district_incomes %}
                  {% for income in district_incomes %}
                   <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
@@ -158,11 +179,9 @@
                       </div>
                     </div>
                     <div class="d-flex align-items-center text-success text-gradient text-sm font-weight-bold">
-                      {% if income.payment_method == "Others"%}
-                         #{{income.tithe.amount_due_district}}
-                      {% else %}
+                      
                       #{{income.amount}}
-                      {% endif %}
+                     
                     </div>
                   </li>
                  {% endfor %}

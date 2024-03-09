@@ -16,7 +16,6 @@ import csv
 
 # Create your views here.
 
-
 @login_required
 def church_dashboard(request):
     user_context = getGlobalContext(request.user)
@@ -67,8 +66,10 @@ def church_dashboard(request):
         # Calculate total income excluding specific income_types
         excluded_income_types = ['APPRECIATION', 'LOOSE_OFFERING', 'CHILD_DEDICATION', 'THANKS_OFFERING', 'SABBATH_SCHOOL']
         total_week_income = church_incomes.exclude(income_type__in=excluded_income_types).aggregate(Sum('amount'))['amount__sum'] or 0
+        
 
         total_week_expense = church_expenses.aggregate(Sum('amount'))['amount__sum'] or 0
+      
 
             
          #sum of tithe and offering from titheofferiing model
@@ -85,22 +86,23 @@ def church_dashboard(request):
         total_project=  church_tithes_and_offerings['total_project'] or 0
         combined_offering_church = CombinedOffering.objects.filter(associated_church=associated_church, sabbath_week=active_week, sabbath_week__month__quarter=active_quarter_info).first()
     
-        weeks_combined_top_2=  total_tithe+ total_project + combined_offering_church.amount_due_church
+        weeks_combined_top_2=  total_tithe + total_project + (combined_offering_church.amount_due_church if combined_offering_church else 0)
+        
        # Calculate the combined income for the week using data fromm tithe offering model
         weeks_combined_income_2= weeks_combined_top_2 + total_week_income
-        weeks_combined_expense = total_week_expense 
-        income_expence_balance = weeks_combined_income_2 - weeks_combined_expense
+       
+        income_expence_balance = weeks_combined_income_2 -  total_week_expense 
 
        
     user_context.update({
-        'combined_offering_church':combined_offering_church ,
-        'conference_info':conference_info,
+        'combined_offering_church': combined_offering_church,
+        'conference_info': conference_info,
         'district_info': district_info,
         'active_quarter_info': active_quarter_info,
         'total_tithe': total_tithe,
         'total_offering': total_offering,
         'total_project': total_project,
-        'cash_at_hand':cash_at_hand ,
+        'cash_at_hand': cash_at_hand,
         'church_expenses': church_expenses,
         'church_incomes': church_incomes,
         'sabbath_week_start': sabbath_week_start,
@@ -108,15 +110,14 @@ def church_dashboard(request):
         'active_week_month': active_week_month,
         'total_week_cash': total_week_cash,
         'total_week_income': total_week_income,
-        'weeks_combined_expense': weeks_combined_expense,
+        'weeks_combined_expense': total_week_expense,
         'income_expence_balance':income_expence_balance,
         'weeks_combined_top_2': weeks_combined_top_2,
         'weeks_combined_income_2': weeks_combined_income_2,
-
-      
     })
 
     return render(request, 'church/dashboard.html', user_context)
+
 
 
 
@@ -140,7 +141,7 @@ def district_dashboard(request):
             total_weekly_income = district_incomes.aggregate(Sum('amount'))['amount__sum'] or 0
 
             combined_offering_entry = CombinedOffering.objects.filter(
-            church__district=associated_district,
+            associated_church__district=associated_district,
             sabbath_week=active_week
             )
             total_amount_due_district = combined_offering_entry.aggregate(Sum('amount_due_district'))['amount_due_district__sum'] or 0
@@ -595,7 +596,7 @@ def admin_view_district(request, district_id):
         total_weekly_income = district_incomes.aggregate(Sum('amount'))['amount__sum'] or 0
 
         combined_offering_entry = CombinedOffering.objects.filter(
-            church__district=district,
+            associated_church__district=district,
             sabbath_week=active_week,
             sabbath_week__month__quarter = active_quarter
         )
@@ -775,45 +776,35 @@ def admin_view_church(request, church_id):
         sabbath_week_ends = context.get('sabbath_week_ends')
        
 
-        church = get_object_or_404(Church, church_id=church_id)
-        members = Member.objects.filter(church=church)
-        assigned_officers = AssignedOfficer.objects.filter(church=church)
+        associated_church = get_object_or_404(Church, church_id=church_id)
+        members = Member.objects.filter(church=associated_church)
+        assigned_officers = AssignedOfficer.objects.filter(church=associated_church)
 
         # Get expenses and income for the district
-        church_expenses = ChurchExpense.objects.filter(church=church, sabbath=active_week, sabbath__month__quarter=active_quarter)
-        church_incomes = ChurchIncome.objects.filter(church=church, sabbath=active_week, sabbath__month__quarter=active_quarter)
-        cash = ChurchCashAccount.objects.filter(church=church, sabbath_week=active_week, sabbath_week__month__quarter=active_quarter)
+        church_expenses = ChurchExpense.objects.filter(church=associated_church, sabbath=active_week,sabbath__month__quarter=active_quarter)
+        church_incomes = ChurchIncome.objects.filter(church=associated_church, sabbath=active_week, sabbath__month__quarter=active_quarter)
+        cash = ChurchCashAccount.objects.filter(church=associated_church, sabbath_week=active_week, sabbath_week__month__quarter=active_quarter)
 
         total_week_cash = cash.aggregate(Sum('cash_generated'))['cash_generated__sum'] or 0
         total_cash_spent = cash.aggregate(Sum('cash_spent'))['cash_spent__sum'] or 0
         total_cash_to_bank = cash.aggregate(Sum('cash_to_bank'))['cash_to_bank__sum'] or 0
-
         cash_out =  float(total_cash_spent) +  float(total_cash_to_bank)
         cash_at_hand = float(total_week_cash) - float(cash_out)
-
-        # Calculate the sum of income for the church
-        total_week_income = church_incomes.aggregate(Sum('amount'))['amount__sum'] or 0
-        total_week_expense = church_expenses.aggregate(Sum('amount'))['amount__sum'] or 0
-
-        # this is  not in use ->Calculate the sum of WeeklyTransaction (tithe_sum + offering_sum + project_sum) for the active week and church
-        # starts
-        # weekly_transaction_data = WeeklyTransaction.objects.filter(
-        #     sabbath_week=active_week,
-        #     church=church
-        # ).aggregate(
-        #     total_tithe=Sum('tithe_sum'),
-        #     total_offering=Sum('offering_sum'),
-        #     total_project=Sum('project_sum')
-        # )
-        # total_week_tithe = weekly_transaction_data['total_tithe'] or 0
-        # total_week_offering = weekly_transaction_data['total_offering'] or 0
-        # total_week_project = weekly_transaction_data['total_project'] or 0
-        # # ends
         
-        #sum of tithe and offering from titheofferiing model
+        #total_week_income = church_incomes.aggregate(Sum('amount'))['amount__sum'] or 0
+        # Calculate total income excluding specific income_types
+        excluded_income_types = ['APPRECIATION', 'LOOSE_OFFERING', 'CHILD_DEDICATION', 'THANKS_OFFERING', 'SABBATH_SCHOOL']
+        total_week_income = church_incomes.exclude(income_type__in=excluded_income_types).aggregate(Sum('amount'))['amount__sum'] or 0
+        
+
+        total_week_expense = church_expenses.aggregate(Sum('amount'))['amount__sum'] or 0
+      
+
+            
+         #sum of tithe and offering from titheofferiing model
         church_tithes_and_offerings = TitheOffering.objects.filter(
-        church_member__church=church,
-        sabbath_week=active_week,sabbath_week__month__quarter=active_quarter
+        church_member__church= associated_church,
+        sabbath_week=active_week, sabbath_week__month__quarter=active_quarter
         ).aggregate(
             total_tithe=Sum('tithe'),
             total_offering=Sum('offering'),
@@ -822,31 +813,24 @@ def admin_view_church(request, church_id):
         total_tithe=  church_tithes_and_offerings['total_tithe'] or 0
         total_offering=  church_tithes_and_offerings['total_offering'] or 0
         total_project=  church_tithes_and_offerings['total_project'] or 0
-        # sum of weekly income ffrom tithe and offering model
-        weeks_combined_top_2=  total_tithe+ total_project + total_offering
-        # sum of weekly transaction from weekly transaction
-        #weeks_combined_t_o_p = total_week_tithe + total_week_offering + total_week_project
-
-        # Calculate the combined income for the week using data fromm weekly transaction model
-       # weeks_combined_income = total_week_income + total_week_tithe + total_week_offering + total_week_project
-       
-        # Calculate the combined income for the week using data fromm tithe offering model
+        combined_offering_church = CombinedOffering.objects.filter(associated_church=associated_church, sabbath_week=active_week, sabbath_week__month__quarter=active_quarter).first()
+   
+        weeks_combined_top_2=  total_tithe + total_project + (combined_offering_church.amount_due_church if combined_offering_church else 0)
+        
+       # Calculate the combined income for the week using data fromm tithe offering model
         weeks_combined_income_2= weeks_combined_top_2 + total_week_income
-
-
-        weeks_combined_expense = total_week_expense
-
-        income_expence_balance = weeks_combined_income_2 - weeks_combined_expense
-
+       
+        income_expence_balance = weeks_combined_income_2 -  total_week_expense 
         active_week_month = active_week.month if active_week else None
 
         context.update({
+            'combined_offering_church':combined_offering_church,
             'active_week': active_week,
             'active_quarter': active_quarter,
             'cash_at_hand': cash_at_hand,
             'conference': conference,
-            'church': church,
-            'church_name': church,
+            'church': associated_church,
+            'church_name': associated_church,
             'assigned_officers': assigned_officers,
             'church_expenses': church_expenses,
             'church_incomes': church_incomes,
@@ -855,12 +839,8 @@ def admin_view_church(request, church_id):
             'active_week_month': active_week_month,
             'total_week_cash': total_week_cash,
             'total_week_income': total_week_income,
-            # 'total_week_tithe': total_week_tithe,
-            # 'total_week_offering': total_week_offering,
-            # 'total_week_project': total_week_project,
-            # 'weeks_combined_income': weeks_combined_income,
-            # 'weeks_combined_t_o_p': weeks_combined_t_o_p ,
-            'weeks_combined_expense': weeks_combined_expense,
+            
+            'weeks_combined_expense': total_week_expense,
             'income_expence_balance':income_expence_balance,
             #updated from tithe offering model instead of weekly 
             'total_tithe':total_tithe,

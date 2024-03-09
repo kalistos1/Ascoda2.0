@@ -1,6 +1,7 @@
 {% extends 'user_dashboard.html' %} {% load static %} {% block content %}
   <!-- side nav -->
   {% include 'partials/conf_sidebar.html' %}
+  {% load custom_filters %}
   <!-- side nav -->
 
   <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg">
@@ -68,7 +69,7 @@
             <div class="card-footer p-3 text-center">
               <p class="mb-0 fw-bolder">Offering</p>
               <p class="mt-3">
-                <button class="btn btn-primary btn-lg w-75">#{{ total_offering }}.00</button>
+                <button class="btn btn-primary btn-lg w-75">#{{combined_offering_church.amount_due_church}}</button>
               </p>
             </div>
           </div>
@@ -127,17 +128,17 @@
               <ul class="list-group">
                 <li class="list-group-item border-0 d-flex p-4 mb-2 mt-3 bg-gray-100 border-radius-lg">
                   <div class="d-flex flex-column">
-                    <h6 class="mb-3 text-sm">Amount Due Church</h6>
+                    <h6 class="mb-3 text-sm">Amount Due Church --> <span>{{combined_offering_church.amount_due_church}}</span></h6>
                   </div>
                 </li>
                 <li class="list-group-item border-0 d-flex p-4 mb-2 mt-3 bg-gray-100 border-radius-lg">
                   <div class="d-flex flex-column">
-                    <h6 class="mb-3 text-sm">Amount Due District</h6>
+                    <h6 class="mb-3 text-sm">Amount Due District --> <span>{{combined_offering_church.amount_due_district}}</span></h6>
                   </div>
                 </li>
                 <li class="list-group-item border-0 d-flex p-4 mb-2 mt-3 bg-gray-100 border-radius-lg">
                   <div class="d-flex flex-column">
-                    <h6 class="mb-3 text-sm">Amount Due Conference</h6>
+                    <h6 class="mb-3 text-sm">Amount Due Conference --> <span>{{combined_offering_church.amount_due_conference}}</span></h6>
                   </div>
                 </li>
               </ul>
@@ -161,7 +162,7 @@
             <div class="card-body pt-4 p-3">
               <div class="d-flex justify-content-between align-items-center">
                 <h6 class="text-uppercase text-body text-sm fw-bolder mb-3">Total</h6>
-                <p class="badge badge-success badge-primary">#{{  weeks_combined_income_2 }}</p>
+                <p class="badge badge-success badge-primary">#{{ weeks_combined_income_2 }}</p>
               </div>
               <hr class="bg-success p-0 m-0" />
 
@@ -171,10 +172,10 @@
                     <div class="d-flex align-items-center">
                       <button class="btn btn-icon-only btn-rounded btn-outline-success mb-0 me-3 p-3 btn-sm d-flex align-items-center justify-content-center"><i class="material-icons text-lg">expand_less</i></button>
                       <div class="d-flex flex-column">
-                        <h6 class="mb-1 text-dark text-sm">Tithe_Project_Offering</h6>
+                        <h6 class="mb-1 text-dark text-sm">tithe_project_offering</h6>
                       </div>
                     </div>
-                    <div class="d-flex align-items-center text-success text-gradient text-sm font-weight-bold">#{{  weeks_combined_top_2 }}</div>
+                    <div class="d-flex align-items-center text-success text-gradient text-sm font-weight-bold">#{{ weeks_combined_top_2}}</div>
                   </li>
                   {% for income in church_incomes %}
                     <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
@@ -185,7 +186,9 @@
                           <span class="text-xs">{{ income.comment }}</span>
                         </div>
                       </div>
-                      <div class="d-flex align-items-center text-success text-gradient text-sm font-weight-bold">#{{ income.amount }}</div>
+                      <div class="d-flex align-items-center text-success text-gradient text-sm font-weight-bold">#{{ income.amount }}    
+                        {% if income.income_type in 'APPRECIATION,LOOSE_OFFERING,CHILD_DEDICATION,THANKS_OFFERING,SABBATH_SCHOOL' %} <span class="text-danger" style ="color:red;">   -  [#{{ income.amount|divide_by_half:income.income_type }}] </span>{% endif %}
+                       </div>
                     </li>
                   {% endfor %}
                 {% endif %}
@@ -215,7 +218,7 @@
               <hr class="bg-danger p-0 m-0" />
               <ul class="list-group">
                 {% if church_expenses %}
-                <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
+                {% comment %} <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
                   <div class="d-flex align-items-center">
                     <button class="btn btn-icon-only btn-rounded btn-outline-danger mb-0 me-3 p-3 btn-sm d-flex align-items-center justify-content-center"><i class="material-icons text-lg">expand_more</i></button>
                     <div class="d-flex flex-column">
@@ -224,7 +227,8 @@
                     </div>
                   </div>
                   <div class="d-flex align-items-center text-danger text-gradient text-sm font-weight-bold">#{{ total_tithe }}</div>
-                </li>
+                </li> {% endcomment %}
+
                   {% for expense in church_expenses %}
                     <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
                       <div class="d-flex align-items-center">
@@ -242,6 +246,10 @@
             </div>
           </div>
         </div>
+
+
+
+
       </div>
       <div class="row justify-content-end mt-4">
         <div class="col-lg-3 col-md-3 col-sm-3 col-12">
