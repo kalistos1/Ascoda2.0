@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'district',
     'notification',
     'settings',
+    'reports'
     
 ]
 

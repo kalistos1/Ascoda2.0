@@ -84,7 +84,7 @@ class ChurchIncome(models.Model):
 
     income_id = models.AutoField(primary_key=True)
     sabbath = models.ForeignKey(Sabbath, on_delete=models.CASCADE)
-    church = models.ForeignKey(Church, on_delete=models.CASCADE, default=0)
+    church = models.ForeignKey(Church, on_delete=models.CASCADE)
     comment = models.CharField(max_length=255, blank=True, null=True)
     income_type = models.CharField(max_length=20, choices=INCOME)
     payment_method = models.CharField(max_length=10, choices=METHOD)
@@ -127,67 +127,13 @@ class CombinedOffering(models.Model):
     def __str__(self):
         return f"Combined Offering for {self.associated_church.church_name} - {self.sabbath_week.sabbath_alias}"
    
-    # @classmethod
-    # def calculate_combined_offering(cls, church_income_entries, church):
-    #         # Extract ChurchIncome entries IDs
-    #         church_income_ids = [entry.income_id for entry in church_income_entries]
-
-    #         # Fetch relevant ChurchIncome entries as a queryset for each entry's week
-    #         church_income_queryset = ChurchIncome.objects.filter(
-    #             income_id__in=church_income_ids
-    #         ).filter(
-    #             sabbath__in=[entry.sabbath for entry in church_income_entries],
-    #             income_type__in=['APPRECIATION', 'LOOSE_OFFERING', 'CHILD_DEDICATION', 'THANKS_OFFERING', 'SABBATH_SCHOOL']
-    #         )
-    #         print('ssssssssssssssssssssssssssssssssssssssssssss',church_income_queryset)
-    #         for i in church_income_queryset:
-    #             print (i.sabbath_id)
-
-    #         # Extract related TitheOffering entries IDs
-    #         tithe_offering_ids = TitheOffering.objects.filter(
-    #             donation_id__in=church_income_queryset
-    #         ).values_list('donation_id', flat=True)
-
-    #         # Fetch relevant TitheOffering entries as a queryset
-    #         tithe_offering_queryset = TitheOffering.objects.filter(donation_id__in=tithe_offering_ids)
-
-    #         # Calculate combined offering
-    #         combined_offering = (
-    #             church_income_queryset.aggregate(amount=Sum('amount'))['amount'] or 0 +
-    #             tithe_offering_queryset.aggregate(offering=Sum('offering'))['offering'] or 0
-    #         )
-
-    #         # Calculate amounts due based on percentages
-    #         amount_due_district = float(combined_offering) * 0.10
-    #         amount_due_church = float(combined_offering) * 0.50
-    #         amount_due_conference = float(combined_offering) * 0.40
-
-    #         # Fetch the active Sabbath
-    #         active_sabbath = Sabbath.objects.filter(is_active=True).first()
-
-    #         # Create or update the CombinedOffering entry
-    #         combined_offering_entry, created = cls.objects.update_or_create(
-    #             associated_church=church,
-    #             sabbath_week=active_sabbath,
-    #             defaults={
-    #                 'combined_offering': combined_offering,
-    #                 'amount_due_district': amount_due_district,
-    #                 'amount_due_church': amount_due_church,
-    #                 'amount_due_conference': amount_due_conference,
-    #             }
-    #         )
-
-    #         # Calculate and update total_available_income
-    #         # combined_offering_entry.update_total_available_income()
-
-    #         return combined_offering_entry, created
 
   
 class ChurchExpense(models.Model):
 
     expense_id = models.AutoField(primary_key=True)
-    sabbath = models.ForeignKey(Sabbath, on_delete=models.CASCADE, default=0)
-    church = models.ForeignKey(Church, on_delete=models.CASCADE, default=0)
+    sabbath = models.ForeignKey(Sabbath, on_delete=models.CASCADE)
+    church = models.ForeignKey(Church, on_delete=models.CASCADE)
     title = models.CharField(max_length=255, blank=False, null=False)
     comment = models.CharField(max_length=255, blank=True, null=True)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
@@ -200,16 +146,87 @@ class ChurchExpense(models.Model):
 
 class ChurchCashAccount(models.Model):
     cash_id = models.AutoField(primary_key=True)
-    cash_generated = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    cash_generated = models.DecimalField(max_digits=10, decimal_places=2)
     cash_spent = models.DecimalField(max_digits=10, decimal_places=2)
     cash_to_bank = models.DecimalField(max_digits=10, decimal_places=2)
     cash_at_hand = models.DecimalField(max_digits=10, decimal_places=2)
     sabbath_week = models.ForeignKey(Sabbath, on_delete=models.CASCADE)
-    church = models.ForeignKey(Church, on_delete=models.CASCADE, default=0)
+    church = models.ForeignKey(Church, on_delete=models.CASCADE)
     date_added = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.sabbath_week.sabbath_alias
+        return f'cash spent'
+    
+    def save(self, *args, **kwargs):
+        # Calculate cash_at_hand before saving
+        self.cash_at_hand = (self.cash_generated) - (self.cash_spent + self. cash_to_bank)
+        super(ChurchCashAccount, self).save(*args, **kwargs)
+
+
+class BalanceBroughtForward(models.Model):
+    balance_id = models.AutoField(primary_key=True)
+    balance_amount = models.DecimalField(max_digits=10, decimal_places=2)
+    sabbath_week = models.ForeignKey(Sabbath, on_delete=models.CASCADE)
+    church = models.ForeignKey(Church, on_delete=models.CASCADE)
+    date_added = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        # Add an ordering to ensure consistency in queries
+        ordering = ['sabbath_week', 'church']
+
+    def __str__(self):
+        return f"Balance Brought Forward - {self.sabbath_week.sabbath_alias} - {self.church.church_name}"
+    
+    @classmethod
+    def create_balance_entry(cls, church, sabbath_week):
+        active_quarter_info = sabbath_week.month.quarter  # Adjust this based on your model structure
+
+
+        church_expenses = ChurchExpense.objects.filter(church=church, sabbath=sabbath_week, sabbath__month__quarter=active_quarter_info)
+        church_incomes = ChurchIncome.objects.filter(church=church, sabbath=sabbath_week, sabbath__month__quarter=active_quarter_info)
+
+        # Calculate total income excluding specific income_types
+        excluded_income_types = ['APPRECIATION', 'LOOSE_OFFERING', 'CHILD_DEDICATION', 'THANKS_OFFERING', 'SABBATH_SCHOOL']
+        total_week_income = church_incomes.exclude(income_type__in=excluded_income_types).aggregate(Sum('amount'))['amount__sum'] or 0
+
+        total_week_expense = church_expenses.aggregate(Sum('amount'))['amount__sum'] or 0
+
+        # Sum of tithe and offering from titheoffering model
+        church_tithes_and_offerings = TitheOffering.objects.filter(
+            church_member__church=church,
+            sabbath_week=sabbath_week,
+            sabbath_week__month__quarter=active_quarter_info
+        ).aggregate(
+            total_tithe=Sum('tithe'),
+            total_offering=Sum('offering'),
+            total_project=Sum('project')
+        )
+        total_tithe = church_tithes_and_offerings['total_tithe'] or 0
+        total_offering = church_tithes_and_offerings['total_offering'] or 0
+        total_project = church_tithes_and_offerings['total_project'] or 0
+
+        combined_offering_church = CombinedOffering.objects.filter(
+            associated_church=church,
+            sabbath_week=sabbath_week,
+            sabbath_week__month__quarter=active_quarter_info
+        ).first()
+
+        weeks_combined_top_2 = total_tithe + total_project + (combined_offering_church.amount_due_church if combined_offering_church else 0)
+
+        # Calculate the combined income for the week using data from tithe offering model
+        weeks_combined_income_2 = weeks_combined_top_2 + total_week_income
+        balance_brought_forward = weeks_combined_income_2 - total_week_expense
+
+        # Create a new BalanceBroughtForward entry
+        # cls.objects.create(
+        #     balance_amount=balance_brought_forward,
+        #     sabbath_week=sabbath_week,
+        #     church=church
+        # )
+   # Create a new BalanceBroughtForward entry
+        return cls(church=church, sabbath_week=sabbath_week, balance_amount=balance_brought_forward)
+
+# In 
 
 
 class TrustFund(models.Model):

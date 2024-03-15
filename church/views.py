@@ -5,6 +5,7 @@ from django.http import HttpResponse
 from accounts.models import *
 from accounts.forms import *
 from accounting.forms import *
+from accounting.models import BalanceBroughtForward
 from django.contrib.auth.decorators import login_required
 
 from django.http import HttpResponse
@@ -77,8 +78,7 @@ def add_new_member(request):
             
         })
 
-    return render(request, 'church/add_member.html', context)
-    
+    return render(request, 'church/add_member.html', context) 
     
     
 @login_required
@@ -272,59 +272,59 @@ def add_church_income(request):
 
 
 
-@login_required
-@transaction.atomic
-def calculate_weekly_transaction(request):
-    context = getGlobalContext(request.user)
-    active_week = context.get('active_week')
-    active_week_month = active_week.month if active_week else None
-    associated_church = context.get('associated_church')
+# @login_required
+# @transaction.atomic
+# def calculate_weekly_transaction(request):
+#     context = getGlobalContext(request.user)
+#     active_week = context.get('active_week')
+#     active_week_month = active_week.month if active_week else None
+#     associated_church = context.get('associated_church')
 
-    if active_week:
-        churches = Church.objects.all()  
+#     if active_week:
+#         churches = Church.objects.all()  
 
-        for church in churches:
-            # Calculate the sum of tithe, offering, and project for the active week
-            tithe_sum = TitheOffering.objects.filter(
-                sabbath_week=active_week,
-                church_member__church=church
-            ).aggregate(tithe_sum=Sum('tithe'))['tithe_sum'] or 0
+#         for church in churches:
+#             # Calculate the sum of tithe, offering, and project for the active week
+#             tithe_sum = TitheOffering.objects.filter(
+#                 sabbath_week=active_week,
+#                 church_member__church=church
+#             ).aggregate(tithe_sum=Sum('tithe'))['tithe_sum'] or 0
 
-            offering_sum = TitheOffering.objects.filter(
-                sabbath_week=active_week,
-                church_member__church=church
-            ).aggregate(offering_sum=Sum('offering'))['offering_sum'] or 0
+#             offering_sum = TitheOffering.objects.filter(
+#                 sabbath_week=active_week,
+#                 church_member__church=church
+#             ).aggregate(offering_sum=Sum('offering'))['offering_sum'] or 0
 
-            project_sum = TitheOffering.objects.filter(
-                sabbath_week=active_week,
-                church_member__church=church
-            ).aggregate(project_sum=Sum('project'))['project_sum'] or 0
+#             project_sum = TitheOffering.objects.filter(
+#                 sabbath_week=active_week,
+#                 church_member__church=church
+#             ).aggregate(project_sum=Sum('project'))['project_sum'] or 0
 
-            # Create or update the WeeklyTransaction entry
-            weekly_transaction, created = WeeklyTransaction.objects.update_or_create(
-                sabbath_week=active_week,
-                church=church,
-                defaults={
-                    'tithe_sum': tithe_sum,
-                    'offering_sum': offering_sum,
-                    'project_sum': project_sum,
-                }
-            )
+#             # Create or update the WeeklyTransaction entry
+#             weekly_transaction, created = WeeklyTransaction.objects.update_or_create(
+#                 sabbath_week=active_week,
+#                 church=church,
+#                 defaults={
+#                     'tithe_sum': tithe_sum,
+#                     'offering_sum': offering_sum,
+#                     'project_sum': project_sum,
+#                 }
+#             )
 
-        context.update({
-            'message': 'Weekly transaction calculated successfully',
-        })
+#         context.update({
+#             'message': 'Weekly transaction calculated successfully',
+#         })
 
-        # Call create_weekly_income view
-        create_weekly_income(request)
+#         # Call create_weekly_income view
+#         create_weekly_income(request)
         
-        return redirect('church:your_success_url')  # Replace 'your_success_url' with the appropriate URL
-    else:
-        context.update({
-            'error': 'Active week not set',
-        })
+#         return redirect('church:your_success_url')  # Replace 'your_success_url' with the appropriate URL
+#     else:
+#         context.update({
+#             'error': 'Active week not set',
+#         })
 
-    return redirect('church:your_error_url')  
+#     return redirect('church:your_error_url')  
 
 
 
@@ -392,10 +392,10 @@ def church_expense(request):
         if form.is_valid():
             form.save()
             messages.success(request, 'expense was added successfully')
-            return redirect('church:church_expense')  # Replace 'your_success_url' with the appropriate URL
+            return redirect('church:church_expenses')  # Replace 'your_success_url' with the appropriate URL
         else:
             messages.error(request, 'Unable to add expense')
-            return redirect('church:church_expense')  # Replace 'your_error_url' with the appropriate URL
+            return redirect('church:church_expenses')  # Replace 'your_error_url' with the appropriate URL
 
     else:
         form = ChurchExpenseForm()
@@ -411,18 +411,18 @@ def church_expense(request):
     return render(request, 'church/church_expense.html', context)
 
 
-
 @login_required
 def church_cash_account(request):
     context = getGlobalContext(request.user)
     active_week = context.get('active_week')
     associated_church = context.get('associated_church')
     active_sabbath = Sabbath.objects.filter(is_active=True).first()
+    active_quarter = context.get('active_quarter')
     active_week_month = active_week.month if active_week else None
 
 
     # Load current Church Cash Account records for the active week and associated church
-    current_cash_accounts = ChurchCashAccount.objects.filter(sabbath_week=active_week, church=associated_church)
+    current_cash_accounts = ChurchCashAccount.objects.filter(sabbath_week=active_week, church=associated_church, sabbath_week__month__quarter = active_quarter)
 
     if request.method == "POST":
         form = ChurchCashAccountForm(request.POST)
@@ -453,6 +453,7 @@ def church_cash_account(request):
     })
 
     return render(request, 'church/cash_account.html', context)
+
 
 
 @login_required

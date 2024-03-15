@@ -14,4 +14,6 @@ urlpatterns = [
     path('dashboard/church_us/', include('church.urls')),
     path('dashboard/distric_us/', include('district.urls')),
     path('dashboard/conf_us/', include('conference.urls')),
+    path('dashboard/admin_user/', include('reports.urls')),
 ]
+

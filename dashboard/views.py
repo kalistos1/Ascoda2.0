@@ -13,6 +13,7 @@ from django.contrib import messages
 from django.contrib.auth.hashers import make_password
 from django.core.exceptions import ValidationError
 import csv
+from django.db import transaction
 
 # Create your views here.
 
@@ -88,13 +89,24 @@ def church_dashboard(request):
     
         weeks_combined_top_2=  total_tithe + total_project + (combined_offering_church.amount_due_church if combined_offering_church else 0)
         
+        
+        previous_week = Sabbath.objects.filter(sabbath_week_ends__lt=active_week.sabbath_week_start).order_by('-sabbath_week_start').first()
+        if previous_week:
+            try:
+               balance_bf = BalanceBroughtForward.objects.get(church =associated_church, sabbath_week= previous_week, sabbath_week__month__quarter=active_quarter_info)
+               
+            except:
+                balance_bf = 0
+      
+      
        # Calculate the combined income for the week using data fromm tithe offering model
-        weeks_combined_income_2= weeks_combined_top_2 + total_week_income
+        weeks_combined_income_2= float(weeks_combined_top_2) + float(total_week_income) + float(balance_bf.balance_amount)
        
         income_expence_balance = weeks_combined_income_2 -  total_week_expense 
 
        
     user_context.update({
+        'balance_brought_foward': balance_bf,
         'combined_offering_church': combined_offering_church,
         'conference_info': conference_info,
         'district_info': district_info,
@@ -1178,28 +1190,45 @@ def edit_sabbath(request, sabbath_id):
     
 
 # Activate Sabbath
+from django.db import transaction
+
 @login_required
 def activate_sabbath(request, sabbath_id):
     context = getGlobalContext(request.user)
+    active_week = context.get('active_week')
 
     if request.user.role == 'Admin':
-
         try:
-           current_active_sabbath = Sabbath.objects.get(is_active=True)
-           current_active_sabbath.is_active = False
-           current_active_sabbath.save()
+            all_churches = Church.objects.all()
 
+            # Iterate through churches and create entries only if they don't exist
+            with transaction.atomic():
+                for church in all_churches:
+                    # Check if entries already exist for the given church and week
+                    existing_entries = BalanceBroughtForward.objects.filter(church=church, sabbath_week=active_week)
+                    
+                    if not existing_entries.exists():
+                        # Create a new entry if none exist
+                        balance_entry = BalanceBroughtForward.create_balance_entry(church, active_week)
+                        balance_entry.save()
 
-           selected_sabbath = get_object_or_404(Sabbath, sabbath_id=sabbath_id)
-           selected_sabbath.is_active = True
-           selected_sabbath.save()
+                # Deactivate the current active Sabbath
+                current_active_sabbath = Sabbath.objects.get(is_active=True)
+                current_active_sabbath.is_active = False
+                current_active_sabbath.save()
 
-           messages.success(request, 'Sabbath activated successfully')
+                # Activate the selected Sabbath
+                selected_sabbath = get_object_or_404(Sabbath, sabbath_id=sabbath_id)
+                selected_sabbath.is_active = True
+                selected_sabbath.save()
+
+                messages.success(request, 'Sabbath activated successfully')
         except Exception as e:
             messages.error(request, f'Unable to activate Sabbath: {str(e)}')
-            
+
     return redirect('dashboard:setup_accounting')
- 
+
+
 
 @login_required
 def delete_sabbath(request, sabbath_id):

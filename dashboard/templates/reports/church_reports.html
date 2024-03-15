@@ -1,0 +1,115 @@
+{% extends 'user_dashboard.html' %}
+{% load static %}
+{% block content %}
+  <!-- side nav -->
+  {% include 'partials/conf_sidebar.html' %}
+  <!-- side nav -->
+
+  <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg">
+    <!-- top nav -->
+    {% include 'partials/top_nav.html' %}
+    <!-- top nav -->
+    <div class="container-fluid py-4">
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="">
+            <div class="p-3 position-relative">
+              <h4 class="badge badge-info d-inline">{{ active_quarter }}</h4>
+              <h4 class="badge badge-info d-inline">{{ active_week }}</h4>
+              <h4 class="badge badge-danger d-inline">Generate Reports</h4>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container-fluid py-4">
+      <!-- main content -->
+
+      <div class="row justify-content-center mt-4">
+        <div class="col-lg-3 col-md-3 col-sm-6">
+          <div class="card mb-2">
+            <div class="card-header p-3 pt-2">
+              <div class="icon icon-lg icon-shape bg-gradient-dark shadow-dark shadow text-center border-radius-xl mt-n4 position-absolute">
+                <i class="material-icons opacity-10">person</i>
+              </div>
+              <div class="text-end pt-1">
+                <p class="text-sm mb-0 text-capitalize">Report</p>
+              </div>
+            </div>
+            <hr class="dark horizontal my-0" />
+            <div class="card-footer p-3">
+              <p class="mb-0 text-dark text-center">A church Member's Report</p>
+              <p class="mt-3">
+                <a href="{% url 'reports:church_trustfund_report' %}" class="btn btn-dark btn-lg w-100">Generate</a>
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-6 mt-sm-0 mt-4">
+          <div class="card mb-2">
+            <div class="card-header p-3 pt-2">
+              <div class="icon icon-lg icon-shape bg-gradient-primary shadow-primary shadow text-center border-radius-xl mt-n4 position-absolute">
+                <i class="material-icons opacity-10">church</i>
+              </div>
+              <div class="text-end pt-1">
+                <p class="text-sm mb-0 text-capitalize">Report</p>
+              </div>
+            </div>
+            <hr class="dark horizontal my-0" />
+            <div class="card-footer p-3">
+              <p class="mb-0 text-dark text-center ">Trustfund Report for Church</p>
+              <p class="mt-3">
+                <a href="" class="btn btn-primary btn-lg w-100">Generate</a>
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-6 mt-lg-0 mt-4">
+          <div class="card mb-2">
+            <div class="card-header p-3 pt-2 bg-transparent">
+              <div class="icon icon-lg icon-shape bg-gradient-success shadow-success text-center border-radius-xl mt-n4 position-absolute">
+                <i class="material-icons opacity-10">apartment</i>
+              </div>
+              <div class="text-end pt-1">
+                <p class="text-sm mb-0 text-capitalize">Report</p>
+              </div>
+            </div>
+            <hr class="horizontal my-0 dark" />
+            <div class="card-footer p-3">
+              <p class="mb-0 text-dark text-center">Trustfund Report For District</p>
+              <p class="mt-3">
+                <a href="" class="btn btn-success btn-lg w-100">Compute</a>
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-3 col-md-3 col-sm-6 mt-lg-0 mt-4">
+            <div class="card mb-2">
+              <div class="card-header p-3 pt-2 bg-transparent">
+                <div class="icon icon-lg icon-shape bg-gradient-info shadow-info text-center border-radius-xl mt-n4 position-absolute">
+                  <i class="material-icons opacity-10">incomplete_circle</i>
+                </div>
+                <div class="text-end pt-1">
+                  <p class="text-sm mb-0 text-capitalize">Report</p>
+                </div>
+              </div>
+              <hr class="horizontal my-0 dark" />
+              <div class="card-footer p-3">
+                <p class="mb-0 text-center text-dark ">Church Income  Expense</p>
+                <p class="mt-3">
+                  <a href="" class="btn btn-info btn-lg w-100">generate</a>
+                </p>
+              </div>
+            </div>
+          </div>
+
+
+      </div>
+
+      <!-- footer -->
+      {% include 'partials/footer.html' %}
+      <!-- footer -->
+    </div>
+  </main>
+{% endblock %}

@@ -28,13 +28,6 @@
                 <span class="sidenav-normal ms-2 ps-1">Setup</span>
               </a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link text-white" href="{% url 'conference:take_action' %}">
-                <i class="material-icons-round">update</i>
-                <span class="sidenav-normal ms-2 ps-1">Actions</span>
-              </a>
-            </li>
-            
             
           </ul>
         </div>
@@ -117,42 +110,26 @@
         <div class="collapse" id="account">
           <ul class="nav">
             <li class="nav-item">
-              <a class="nav-link text-white">
+              <a class="nav-link text-white" href="{% url 'reports:admin_reports' %}">
                 <i class="material-icons-round">volunteer_activism</i>
-                <span class="sidenav-normal ms-2 ps-1">Tithe & Offering</span>
+                <span class="sidenav-normal ms-2 ps-1">Church Reports</span>
               </a>
             </li>
 
             <li class="nav-item">
               <a class="nav-link text-white">
                 <i class="material-icons-round">roundabout_right</i>
-                <span class="sidenav-normal ms-2 ps-1">Income</span>
+                <span class="sidenav-normal ms-2 ps-1">District Reports</span>
               </a>
             </li>
             <li class="nav-item">
               <a class="nav-link text-white">
                 <i class="material-icons-round">roundabout_left</i>
-                <span class="sidenav-normal ms-2 ps-1">Expenses</span>
+                <span class="sidenav-normal ms-2 ps-1">Member Reports</span>
               </a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link text-white">
-                <i class="material-icons-round">incomplete_circle</i>
-                <span class="sidenav-normal ms-2 ps-1">Cash Account</span>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link text-white">
-                <i class="material-icons-round">reduce_capacity</i>
-                <span class="sidenav-normal ms-2 ps-1">Trust Fund</span>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link text-white" href="{% url 'account:signout' %}">
-                <i class="material-icons-round">logout</i>
-                <span class="nav-link-text ms-2 ps-1">logout</span>
-              </a>
-            </li>
+           
+            
           </ul>
         </div>
       </li>

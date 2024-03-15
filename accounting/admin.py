@@ -12,4 +12,5 @@ admin.site.register(TrustFund)
 admin.site.register(CombinedOffering)
 admin.site.register(DistrictIncome)
 admin.site.register(DistrictExpense)
+admin.site.register(BalanceBroughtForward)
 

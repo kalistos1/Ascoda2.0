@@ -1,0 +1,146 @@
+{% extends 'user_dashboard.html' %}
+{% load static %}
+{% block content %}
+{% load custom_filters %}
+  <!-- side nav -->
+  {% include 'partials/conf_sidebar.html' %}
+  <!-- side nav -->
+
+  <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg">
+    <!-- top nav -->
+    {% include 'partials/top_nav.html' %}
+    <style>
+        @media print {
+            /* Hide title */
+            head {
+                display: none;
+            }
+            /* Hide elements containing URL */
+            a[href]:after {
+                content: none !important;
+            }
+            /* Rest of the print styles */
+            body * {
+                visibility: hidden;
+            }
+            #printable-section, #printable-section * {
+                visibility: visible;
+            }
+            #printable-section {
+                position: absolute;
+                left: 0;
+                top: 0;
+            }
+        }
+    </style>
+    <!-- top nav -->
+    <div class="container-fluid py-4">
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="">
+            <div class="p-3 position-relative">
+              <h4 class="badge badge-info d-inline">{{ active_quarter }}</h4>
+              <h4 class="badge badge-info d-inline">{{ active_week }}</h4>
+              <h4 class="badge badge-danger d-inline">Generate Reports</h4>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container-fluid py-1">
+      <!-- main content -->
+
+      <div class="row justify-content-center mt-4">
+       
+        <div class="row my-4">
+            <div class="col-12 d-flex justify-content-end">
+                <button class="btn btn-primary btn-lg float-right"onclick="window.print()">Print</button>
+            </div>    
+            <div class="col-12" id="printable-section">
+                <div class="card">
+
+                    <div class="card-header pb-0 px-3 mt-3 mb-4">
+                        <h6 class="mb-0 text-wrap">Seventh-Day Adventist Church (church name),(District  name)</h6>
+                        <h6 class="mb-0 text-wrap">Aba South Conference </h6>
+
+                        <h6 class="mb-0 text-wrap">Statement Of Income and Expenses </h6>
+                        <h6 class="mb-0 text-wrap">Period: Date - Date </h6>
+                    </div>
+
+
+                    <div class="table-responsive">
+                        <table class="table align-items-center mb-0">
+                            <thead>
+                                <tr>
+                                    <th class="text-uppercase text-xxs font-weight-bolder text-dark">Date</th>
+                                    <th class="text-uppercase text-xxs font-weight-bolder text-dark">Particulars</th>
+                                    <th class="text-uppercase text-xxs font-weight-bolder text-dark ">Amount</th>
+                                   
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {% if incomes %}
+                                <tr>
+                                    <td>
+                                        <div class="d-flex px-2 py-1">
+                                            
+                                            <div class="d-flex flex-column justify-content-center">
+                                                <h6 class="mb-0 font-weight-normal text-sm">John Michael</h6>
+                                            </div>
+
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <p class="text-sm font-weight-normal mb-0">Manager</p>
+                                    </td>
+                                    <td>
+                                        <span class="badge badge-dot me-4">
+                                            <i class="bg-info"></i>
+                                            <span class="text-dark text-xs">positive</span>
+                                        </span>
+                                    </td>
+                                   
+                                </tr>
+                                {% endif %}
+
+                                {% if expenses %}
+                                <tr>
+                                    <td>
+                                        <div class="d-flex px-2 py-1">
+                                            
+                                            <div class="d-flex flex-column justify-content-center">
+                                                <h6 class="mb-0 font-weight-normal text-sm">John Michael</h6>
+                                            </div>
+
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <p class="text-sm font-weight-normal mb-0">Manager</p>
+                                    </td>
+                                    <td>
+                                        <span class="badge badge-dot me-4">
+                                            <i class="bg-info"></i>
+                                            <span class="text-dark text-xs">positive</span>
+                                        </span>
+                                    </td>
+                                   
+                                </tr>
+                                {% endif %}
+                                
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+      </div>
+
+      <!-- footer -->
+      {% include 'partials/footer.html' %}
+      <!-- footer -->
+    </div>
+  </main>
+{% endblock %}

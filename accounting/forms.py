@@ -63,14 +63,14 @@ class ChurchExpenseForm(forms.ModelForm):
 class ChurchCashAccountForm(forms.ModelForm):
     class Meta:
         model = ChurchCashAccount
-        fields = ('cash_generated', 'cash_spent', 'cash_to_bank', 'cash_at_hand' )
+        fields = ('cash_generated', 'cash_spent', 'cash_to_bank' )
         
     def __init__(self, *args, **kwargs):
         super(ChurchCashAccountForm, self).__init__(*args, **kwargs)
         self.fields['cash_generated'].widget.attrs.update({'class': 'form-control'})
         self.fields['cash_spent'].widget.attrs.update({'class': 'form-control'})
         self.fields['cash_to_bank'].widget.attrs.update({'class': 'form-control'})
-        self.fields['cash_at_hand'].widget.attrs.update({'class': 'form-control'})
+      
        
 
 class TrustFundForm(forms.ModelForm):
