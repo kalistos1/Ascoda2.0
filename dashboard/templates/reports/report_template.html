@@ -60,73 +60,60 @@
                 <div class="card">
 
                     <div class="card-header pb-0 px-3 mt-3 mb-4">
-                        <h6 class="mb-0 text-wrap">Seventh-Day Adventist Church (church name),(District  name)</h6>
+                        <h6 class="mb-0 text-wrap">Seventh-Day Adventist Church <span class="text-primary"> {{church}}, {{church.district}} District<span></h6>
                         <h6 class="mb-0 text-wrap">Aba South Conference </h6>
 
                         <h6 class="mb-0 text-wrap">Statement Of Income and Expenses </h6>
-                        <h6 class="mb-0 text-wrap">Period: Date - Date </h6>
+                        <h6 class="mb-0 text-wrap">Period: <span> {{month.start_date}} - {{month.end_date}}<span></h6>
                     </div>
 
 
-                    <div class="table-responsive">
-                        <table class="table align-items-center mb-0">
+                    <div class=" table-flush table-striped table-responsive">
+                        <table class=" table align-items-center mb-0">
                             <thead>
                                 <tr>
                                     <th class="text-uppercase text-xxs font-weight-bolder text-dark">Date</th>
                                     <th class="text-uppercase text-xxs font-weight-bolder text-dark">Particulars</th>
-                                    <th class="text-uppercase text-xxs font-weight-bolder text-dark ">Amount</th>
-                                   
+                                    <th class="text-uppercase text-xxs font-weight-bolder text-dark">Comment</th>
+                                    <th class="text-uppercase text-xxs font-weight-bolder text-dark">Amount</th>
                                 </tr>
                             </thead>
                             <tbody>
-                            {% if incomes %}
-                                <tr>
-                                    <td>
-                                        <div class="d-flex px-2 py-1">
-                                            
-                                            <div class="d-flex flex-column justify-content-center">
-                                                <h6 class="mb-0 font-weight-normal text-sm">John Michael</h6>
-                                            </div>
+                                {% if church_trustfunds %}
+                                    {% with church_income.0.sabbath as current_sabbath %}
+                                        <tr>
+                                            <td colspan="3" class="badge badge-primary text-uppercase font-weight-bold text-center">{{ current_sabbath.sabbath_alias }} Income</td>
+                                        </tr>
 
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <p class="text-sm font-weight-normal mb-0">Manager</p>
-                                    </td>
-                                    <td>
-                                        <span class="badge badge-dot me-4">
-                                            <i class="bg-info"></i>
-                                            <span class="text-dark text-xs">positive</span>
-                                        </span>
-                                    </td>
-                                   
-                                </tr>
+                                        {% for income_entry in church_income %}
+                                            {% if income_entry.sabbath == current_sabbath %}
+                                                <tr class ="p-4">
+                                                    <td class="text-dark">{{ income_entry.date_added|date:"Y-m-d"}}</td>
+                                                    <td class="text-dark">{{ income_entry.income_type }}</td>
+                                                    <td class="text-dark">{{ income_entry.comment }}</td>
+                                                    <td class="text-dark">  {{ income_entry.amount}}  {% if income_entry.income_type in 'APPRECIATION,LOOSE_OFFERING,CHILD_DEDICATION,THANKS_OFFERING,SABBATH_SCHOOL' %} <span class="text-danger" style ="color:red;">   -  [#{{ income_entry.amount|divide_by_half:income_entry.income_type }}] </span>{% endif %}
+                                                      </td>
+                                                </tr>
+                                                
+                                            {% else %}
+
+                                                {% with income_entry.sabbath as current_sabbath %}
+                                                    <tr>
+                                                        <td colspan="3" class="badge badge-primary text-uppercase font-weight-bold text-center ">{{ current_sabbath.sabbath_alias }} Income</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-dark">{{income_entry.date_added|date:"Y-m-d" }}</td>
+                                                        <td class="text-dark">{{ income_entry.income_type }}</td>
+                                                        <td class="text-dark">{{ income_entry.comment }}</td>
+                                                        <td class="text-dark">  {{ income_entry.amount}}  {% if income_entry.income_type in 'APPRECIATION,LOOSE_OFFERING,CHILD_DEDICATION,THANKS_OFFERING,SABBATH_SCHOOL' %} <span class="text-danger" style ="color:red;">   -  [#{{ income_entry.amount|divide_by_half:income_entry.income_type }}] </span>{% endif %}</td>
+                                                    </tr>
+                                                {% endwith %}
+                                            {% endif %}         
+                                                                             
+                                        {% endfor %}      
+                                                                        
+                                    {% endwith %}
                                 {% endif %}
-
-                                {% if expenses %}
-                                <tr>
-                                    <td>
-                                        <div class="d-flex px-2 py-1">
-                                            
-                                            <div class="d-flex flex-column justify-content-center">
-                                                <h6 class="mb-0 font-weight-normal text-sm">John Michael</h6>
-                                            </div>
-
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <p class="text-sm font-weight-normal mb-0">Manager</p>
-                                    </td>
-                                    <td>
-                                        <span class="badge badge-dot me-4">
-                                            <i class="bg-info"></i>
-                                            <span class="text-dark text-xs">positive</span>
-                                        </span>
-                                    </td>
-                                   
-                                </tr>
-                                {% endif %}
-                                
                             </tbody>
                         </table>
                     </div>

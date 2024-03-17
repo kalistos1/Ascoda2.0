@@ -58,8 +58,10 @@
                           <td class="text-sm">{{ member.church.church_name }}</td>
                           
                           <td class="text-sm">
-                          <a href="{% url 'dashboard:view_member' member.member_id %}" class="btn btn-primary "> View Tithe & Offering</a>
-                          </td>
+                             <a href="{% url 'dashboard:view_member' member.member_id %}" class="btn btn-primary  btn-sm"> View Tithe & Offering</a>
+                             <a href="{% url 'reports:member_tithe_offering_report' member.member_id %}" class="btn btn-info  btn-sm"> Generate Report</a>
+                          
+                            </td>
                         </tr>
                       {% endfor %}
                     {% endif %}
