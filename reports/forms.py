@@ -37,4 +37,16 @@ class DistrictTrustfundForm(forms.Form):
         for field_name, field in self.fields.items():
             field.widget.attrs.update({'class': 'form-control'})
 
+class MonthForm (forms.Form):
+    month = forms.ModelChoiceField(
+        queryset=Month.objects.all(),
+        empty_label="Select a month",
+        widget=forms.Select(attrs={'class': 'form-select', 'placeholder': 'Select a month'})
+    )
+
+    def __init__(self, *args, **kwargs):
+        super(MonthForm, self).__init__(*args, **kwargs)
+        for field_name, field in self.fields.items():
+            field.widget.attrs.update({'class': 'form-control'})
+
 

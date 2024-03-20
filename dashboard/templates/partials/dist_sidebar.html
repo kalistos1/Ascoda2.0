@@ -69,29 +69,31 @@
         </a>
         <div class="collapse" id="report">
           <ul class="nav">
-            <li class="nav-item">
-              <a class="nav-link text-white">
-                <i class="material-icons-round">tune</i>
-                <span class="sidenav-normal ms-2 ps-1">Settings</span>
-              </a>
+            <li class="nav-item ">
+              <a class="nav-link text-white" href="{% url 'reports:admin_reports' %}">
+                <i class="material-icons-round ">roundabout_right</i>
+                <span class="sidenav-normal  ms-2  ps-1"> Generate Reports  </span>
+              </a>                 
             </li>
-
-            <li class="nav-item">
-              <a class="nav-link text-white">
-                <i class="material-icons-round">lock</i>
-                <span class="sidenav-normal ms-2 ps-1">Security</span>
-              </a>
-            </li>
+            
           </ul>
+
         </div>
       </li>
+    
 
+      <li class="nav-item">
+        <a class="nav-link text-white" href="{% url 'account:edit_user_info' %}">
+          <i class="material-icons-round">lock</i>
+          <span class="sidenav-normal ms-2 ps-1">Security</span>
+        </a>
+      </li>
       <li class="nav-item">
         <a class="nav-link text-white" href="{% url 'account:signout' %}">
           <i class="material-icons-round">logout</i>
           <span class="nav-link-text ms-2 ps-1">logout</span>
         </a>
       </li>
-    </ul>
+    </ul>user_profile_information
   </div>
 </aside>

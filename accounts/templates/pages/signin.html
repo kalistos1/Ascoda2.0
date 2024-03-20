@@ -14,6 +14,7 @@
                   <div>
                     <h4 class="text-white font-weight-bolder text-center mt-0 mb-0">Sign in</h4>
                   </div>
+                  {% include 'partials/messages.html' %}
                 </div>
               </div>
               <div class="card-body">
@@ -36,8 +37,8 @@
                     <input type="submit"  value ="Sign in" class="btn bg-gradient-info w-100 my-4 mb-2">
                   </div>
                   <p class="mt-4 text-sm text-center">
-                    Don't have an account?
-                    <a href="#" class="text-info text-gradient font-weight-bold">Sign up</a>
+                
+                    <a href="{% url 'password_reset' %}" class="text-info text-gradient font-weight-bold">Forgot username or password?</a>
                   </p>
                 </form>
               </div>

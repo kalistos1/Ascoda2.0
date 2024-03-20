@@ -1,0 +1,140 @@
+{% extends 'user_dashboard.html' %}
+{% load static %}
+{% block content %}
+{% load custom_filters %}
+  <!-- side nav -->
+  {% if request.user.role == "Admin" %}
+     {% include 'partials/conf_sidebar.html' %}
+  
+  {% elif request.user.role == 'District_secretary' %}   
+     {% include 'partials/dist_sidebar.html' %}
+  
+  {% elif request.user.role == 'District_treasurer' %}   
+  
+     {% include 'partials/dist_sidebar.html' %}
+  
+  {% else %}
+  
+    {% include 'partials/church_sidebar.html' %}
+  
+  {% endif %}
+  <!-- side nav -->
+
+  <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg">
+    <!-- top nav -->
+    {% include 'partials/top_nav.html' %}
+    <style>
+        @media print {
+            /* Hide title */
+            head {
+                display: none;
+            }
+            /* Hide elements containing URL */
+            a[href]:after {
+                content: none !important;
+            }
+            /* Rest of the print styles */
+            body * {
+                visibility: hidden;
+            }
+            #printable-section, #printable-section * {
+                visibility: visible;
+            }
+            #printable-section {
+                position: absolute;
+                left: 0;
+                top: 0;
+            }
+        }
+    </style>
+    <!-- top nav -->
+    <div class="container-fluid py-4">
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="">
+            <div class="p-3 position-relative">
+              <h4 class="badge badge-info d-inline">{{ active_quarter }}</h4>
+              <h4 class="badge badge-info d-inline">{{ active_week }}</h4>
+              <h4 class="badge badge-danger d-inline">Generate Reports</h4>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container-fluid py-1">
+      <!-- main content -->
+
+      <div class="row justify-content-center mt-4">
+        <div class="col-12" id="printable-section">
+            <div class="card">
+                <!-- Church Income -->
+                <div class="card-header pb-0 px-3 mt-3 mb-4">
+                    <h6 class="mb-0 text-wrap">Church Income</h6>
+                </div>
+                <div class="table-flush table-striped table-responsive">
+                    <table class="table align-items-center mb-0">
+                        <thead>
+                            <tr>
+                                <th class="text-uppercase text-xxs font-weight-bolder text-dark">Sabbath Week</th>
+                                <th class="text-uppercase text-xxs font-weight-bolder text-dark">Date</th>
+                                <th class="text-uppercase text-xxs font-weight-bolder text-dark">Particulars</th>
+                                <th class="text-uppercase text-xxs font-weight-bolder text-dark">Comment</th>
+                                <th class="text-uppercase text-xxs font-weight-bolder text-dark">Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for income_entry in church_income %}
+                            <tr>
+                                <td class="text-dark">{{ income_entry.sabbath }}</td>
+                                <td class="text-dark">{{ income_entry.date_added|date:"Y-m-d" }}</td>
+                                <td class="text-dark">{{ income_entry.income_type }}</td>
+                                <td class="text-dark">{{ income_entry.comment }}</td>
+                                <td class="text-dark">{{ income_entry.amount }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+        
+                <!-- Church Expense -->
+                <div class="card-header pb-0 px-3 mt-3 mb-4">
+                    <h6 class="mb-0 text-wrap">Church Expense</h6>
+                </div>
+                <div class="table-flush table-striped table-responsive">
+                    <table class="table align-items-center mb-0">
+                        <thead>
+                            <tr>
+                                <th class="text-uppercase text-xxs font-weight-bolder text-dark">Sabbath Week</th>
+                                <th class="text-uppercase text-xxs font-weight-bolder text-dark">Date</th>
+                                <th class="text-uppercase text-xxs font-weight-bolder text-dark">Particulars</th>
+                                <th class="text-uppercase text-xxs font-weight-bolder text-dark">Comment</th>
+                                <th class="text-uppercase text-xxs font-weight-bolder text-dark">Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for expense_entry in church_expense %}
+                            <tr>
+                                <td class="text-dark">{{ expense_entry.sabbath }}</td>
+                                <td class="text-dark">{{ expense_entry.date_added|date:"Y-m-d" }}</td>
+                                <td class="text-dark">{{ expense_entry.expense_type }}</td>
+                                <td class="text-dark">{{ expense_entry.comment }}</td>
+                                <td class="text-dark">{{ expense_entry.amount }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+
+
+
+      </div>
+
+      <!-- footer -->
+      {% include 'partials/footer.html' %}
+      <!-- footer -->
+    </div>
+  </main>
+{% endblock %}

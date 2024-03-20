@@ -91,7 +91,7 @@ class District(models.Model):
 class Church(models.Model):
     church_id = models.AutoField(primary_key=True)
     church_name = models.CharField(max_length=255)
-    district = models.ForeignKey(District, on_delete=models.CASCADE)
+    district = models.ForeignKey(District, on_delete=models.CASCADE, related_name ='church_district')
     address = models.CharField(max_length=255)
     email = models.CharField(max_length=300, blank=True, null=True)
     phone = models.CharField(max_length=300, blank=True, null=True)

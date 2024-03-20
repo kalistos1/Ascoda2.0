@@ -16,8 +16,6 @@ from .forms import LoginForm
 from django.contrib.auth.hashers import make_password
 from django.contrib import messages
 
-
-# Create your views here.
 def signin(request):
     # Check if the user is already authenticated
     if request.user.is_authenticated:
@@ -25,32 +23,26 @@ def signin(request):
         user = request.user
         return redirect(get_dashboard_url(user.role))  # Replace with the actual function to get the dashboard URL
 
-    context = {}  # Initialize the context dictionary
-
     if request.method == 'POST':
         form = LoginForm(request.POST)
         if form.is_valid():
             cd = form.cleaned_data
             user = authenticate(request, username=cd['username'], password=cd['password'])
+            if user is not None:
+                login(request, user)
+                # Redirect to the appropriate dashboard based on the user's role
+                messages.success(request, 'Welcome back')
+                return redirect(get_dashboard_url(user.role))
+            else:
+                messages.error(request, 'Invalid login details')
         else:
-            context['form_errors'] = form.errors
-            user = None
-
-        if user is not None:
-            login(request, user)
-
-            # Redirect to the appropriate dashboard based on the user's role
-            return redirect(get_dashboard_url(user.role))
-
-        else:
-            context['message'] = 'Invalid login details'
-            context['form'] = form
-
-    if request.method == 'GET':
+            for field, errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, f'{field.capitalize()}: {error}')
+    else:
         form = LoginForm()
-        context = {'form': form, 'name': "hello"}
 
-    return render(request, "pages/signin.html", context)
+    return render(request, "pages/signin.html", {'form': form})
 
 
 def get_dashboard_url(user_role):
@@ -73,25 +65,80 @@ def signout(request):
     logout(request)
     return redirect('core:index')
 
+@login_required
+def edit_user_info(request):
+    return render(request, 'pages/security.html')
 
 
-def forgot_password(request):
-    pass
-    
-    
-    
-def recover_password (request):
-    pass
+@login_required
+def change_email(request):
+    if request.method =="POST":
+        new_email = request.POST.get("new_email")
+        old_email = request.POST.get("old_email")
+        user = request.user
+
+    try:
+        User.objects.get(email=new_email)
+        messages.error(request,'User Email already Exists')
+        return redirect('authentication:change_email')
+
+    except User.DoesNotExist:
+        confirm = User.objects.get(email=old_email)         
+        if confirm == request.user:
+
+            user.email = new_email
+            user.save()
+            messages.success(request,'mail changed successfully!')
+            return redirect('dashboard:profile')
+            
+        else:
+            messages.error(request,'unforeseen error while trying tp change user email. try again')
+            return redirect('authentication:change_email')
 
 
 
-def signup_confirm(request):
-    pass
-    
-    
+@login_required
+def change_password(request):
+    if request.method =="POST":
 
-def email_confirm(request):
-    pass
+        new_password = request.POST.get("new_password")
+        old_password = request.POST.get("old_password")
+        confirm_password = request.POST.get("confirm_password")
+        user = request.user
+
+    if confirm_password != new_password:
+        messages.error(request, 'password mismatch (new password and confirm password)')
+        return redirect('authentication:change_password_form')
+
+    try:
+        User.objects.filter(id=user.id).update(password=make_password(new_password))
+        messages.success(request, 'password was successfully changed')
+        return redirect('dashboard:profile')
+        
+    except User.DoesNotExist:
+        messages.error(request, ' An unforeseen error occured while attempting to change your password. Please retry')
+        return redirect('authentication:change_password_form')
+
+
+
+@login_required
+def edit_profile(request):
+    if request.method =="POST":
+        profile = Profile.objects.get(user=request.user)
+        form = ProfileForm(request.POST, request.FILES, instance=profile)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'profile was updates successfully')
+            return redirect('dashboard:profile')
+        else:
+            messages.error(request, 'form was not saved successfully')
+            return redirect('authentication:edit_profile')
+    else:
+       profile = Profile.objects.get(user=request.user)
+       form = ProfileForm(instance=profile)
     
-    
-    
+       context = {        
+        'form':form,
+    }   
+
+       return render(request, "pages/edit_profile.html", context)

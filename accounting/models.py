@@ -226,8 +226,6 @@ class BalanceBroughtForward(models.Model):
    # Create a new BalanceBroughtForward entry
         return cls(church=church, sabbath_week=sabbath_week, balance_amount=balance_brought_forward)
 
-# In 
-
 
 class TrustFund(models.Model):
     fund_id = models.AutoField(primary_key=True)

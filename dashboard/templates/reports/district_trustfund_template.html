@@ -3,7 +3,21 @@
 {% block content %}
 {% load custom_filters %}
   <!-- side nav -->
-  {% include 'partials/conf_sidebar.html' %}
+  {% if request.user.role == "Admin" %}
+     {% include 'partials/conf_sidebar.html' %}
+  
+  {% elif request.user.role == 'District_secretary' %}   
+     {% include 'partials/dist_sidebar.html' %}
+  
+  {% elif request.user.role == 'District_treasurer' %}   
+  
+     {% include 'partials/dist_sidebar.html' %}
+  
+  {% else %}
+  
+    {% include 'partials/church_sidebar.html' %}
+  
+  {% endif %}
   <!-- side nav -->
 
   <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg">

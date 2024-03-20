@@ -107,6 +107,8 @@
                             <a href="{% url 'dashboard:view_member' member.member_id %}" data-bs-toggle="tooltip" data-bs-original-title="View User"><i class="material-icons text-secondary position-relative text-lg">visibility</i></a>
                             <a href="javascript:;" class="mx-3" data-bs-toggle="tooltip" data-bs-original-title="Edit Member"><i class="material-icons text-secondary position-relative text-lg">drive_file_rename_outline</i></a>
                             <a href="{% url 'church:delete_member' member.member_id %}" data-bs-toggle="tooltip" data-bs-original-title="Delete Member"><i class="material-icons text-secondary position-relative text-lg">delete</i></a>
+                            <a href="{% url 'reports:church_member_tithe_offering_report' member.member_id %}" class="btn btn-primary btn-sm ms-3" data-bs-toggle="tooltip" data-bs-original-title="Delete Member"><i class="material-icons text-secondary position-relative text-lg"></i>Report</a>
+
                           </td>
                         </tr>
                       {% endfor %}

@@ -2,7 +2,23 @@
 {% load static %}
 {% block content %}
   <!-- side nav -->
-  {% include 'partials/conf_sidebar.html' %}
+ 
+  {% if request.user.role == "Admin" %}
+     {% include 'partials/conf_sidebar.html' %}
+  
+  {% elif request.user.role == 'District_secretary' %}   
+     {% include 'partials/dist_sidebar.html' %}
+  
+  {% elif request.user.role == 'District_treasurer' %}   
+  
+     {% include 'partials/dist_sidebar.html' %}
+  
+  {% else %}
+  
+    {% include 'partials/church_sidebar.html' %}
+  
+  {% endif %}
+  
   <!-- side nav -->
 
   <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg">
@@ -24,6 +40,7 @@
     </div>
     <div class="container-fluid py-4">
       <!-- main content -->
+      {% if request.user.role == "Admin" %}
 
       <div class="row justify-content-center mt-4">
         <div class="col-lg-3 col-md-3 col-sm-6">
@@ -40,7 +57,7 @@
             <div class="card-footer p-3">
               <p class="mb-0 text-dark text-center">A church Member's Report</p>
               <p class="mt-3">
-                <a href="" class="btn btn-dark btn-lg w-100">Generate</a>
+                <a href="{% url 'dashboard:all_members' %}" class="btn btn-dark btn-lg w-100">Generate</a>
               </p>
             </div>
           </div>
@@ -104,6 +121,99 @@
             </div>
           </div>
       </div>
+    {% endif %}
+
+
+    {% if  request.user.role == 'Church_treasurer' or   request.user.role == 'Church_secretary' %}
+    <div class="row justify-content-center mt-4">
+      <div class="col-lg-3 col-md-3 col-sm-6">
+        <div class="card mb-2">
+          <div class="card-header p-3 pt-2">
+            <div class="icon icon-lg icon-shape bg-gradient-dark shadow-dark shadow text-center border-radius-xl mt-n4 position-absolute">
+              <i class="material-icons opacity-10">person</i>
+            </div>
+            <div class="text-end pt-1">
+              <p class="text-sm mb-0 text-capitalize">Report</p>
+            </div>
+          </div>
+          <hr class="dark horizontal my-0" />
+          <div class="card-footer p-3">
+            <p class="mb-0 text-dark text-center">A church Member's Report</p>
+            <p class="mt-3">
+              <a href="" class="btn btn-dark btn-lg w-100">Generate</a>
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-3 col-sm-6 mt-sm-0 mt-4">
+        <div class="card mb-2">
+          <div class="card-header p-3 pt-2">
+            <div class="icon icon-lg icon-shape bg-gradient-primary shadow-primary shadow text-center border-radius-xl mt-n4 position-absolute">
+              <i class="material-icons opacity-10">church</i>
+            </div>
+            <div class="text-end pt-1">
+              <p class="text-sm mb-0 text-capitalize">Report</p>
+            </div>
+          </div>
+          <hr class="dark horizontal my-0" />
+          <div class="card-footer p-3">
+            <p class="mb-0 text-dark text-center ">Trustfund Report for Church</p>
+            <p class="mt-3">
+              <a href="" class="btn btn-primary btn-lg w-100" data-bs-toggle="modal" data-bs-target="#church_trustfund_month_modal">Generate</a>
+            </p>
+          </div>
+        </div>
+      </div>
+      
+    
+
+      <div class="col-lg-3 col-md-3 col-sm-6 mt-lg-0 mt-4">
+          <div class="card mb-2">
+            <div class="card-header p-3 pt-2 bg-transparent">
+              <div class="icon icon-lg icon-shape bg-gradient-info shadow-info text-center border-radius-xl mt-n4 position-absolute">
+                <i class="material-icons opacity-10">incomplete_circle</i>
+              </div>
+              <div class="text-end pt-1">
+                <p class="text-sm mb-0 text-capitalize">Report</p>
+              </div>
+            </div>
+            <hr class="horizontal my-0 dark" />
+            <div class="card-footer p-3">
+              <p class="mb-0 text-center text-dark ">Church Income  Expense</p>
+              <p class="mt-3">
+                <a href="#" class="btn btn-info btn-lg w-100"  data-bs-toggle="modal" data-bs-target="#church_income_month_modal">generate</a>
+              </p>
+            </div>
+          </div>
+        </div>
+    </div>
+    {% endif %}
+
+    {% if  request.user.role == 'District_treasurer' or   request.user.role == 'District_secretary' %}
+    
+      <div class="col-lg-3 col-md-3 col-sm-6 mt-sm-0 mt-4">
+        <div class="card mb-2">
+          <div class="card-header p-3 pt-2">
+            <div class="icon icon-lg icon-shape bg-gradient-primary shadow-primary shadow text-center border-radius-xl mt-n4 position-absolute">
+              <i class="material-icons opacity-10">church</i>
+            </div>
+            <div class="text-end pt-1">
+              <p class="text-sm mb-0 text-capitalize">Report</p>
+            </div>
+          </div>
+          <hr class="dark horizontal my-0" />
+          <div class="card-footer p-3">
+            <p class="mb-0 text-dark text-center ">Trustfund Report for District</p>
+            <p class="mt-3">
+              <a href="" class="btn btn-primary btn-lg w-100" data-bs-toggle="modal" data-bs-target="#district_trustfund_month_modal">Generate</a>
+            </p>
+          </div>
+        </div>
+      </div>
+    
+    </div>
+
+    {% endif %}
 
         <!-- church income and expense  report form -->
         <div class="modal fade" id="add_income" tabindex="-1" aria-hidden="true">
@@ -261,7 +371,137 @@
   
         <!-- district trustfund model ends -->
 
+     <!-- Month form modal-->
+     <div class="modal fade" id="church_income_month_modal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog mt-lg-10">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="ModalLabel">District Trustfund Report</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
 
+      
+            <form action="{% url 'reports:user_church_income_expense_report' %}" method="post">
+              {% csrf_token %}
+              <div class="row justify-content-around">
+               
+       <style>
+         select{
+          padding-left: :10px;
+         }
+       </style>
+
+               
+
+                <div class="col-md-10">
+                  <div class="input-group input-group-dynamic mb-4">
+                   
+                    {{ form3.month }}
+                  </div>
+                </div>
+                
+                
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn bg-gradient-danger btn-sm" data-bs-dismiss="modal">Close</button>
+                <input type="submit" class="btn bg-gradient-info btn-sm" value ="Generate">
+              </div>
+            </form>
+          </div>
+          
+        </div>
+      </div>
+    </div>
+     <!-- Month form model -->
+
+      <!-- Month form modal TWO-->
+      <div class="modal fade" id="church_trustfund_month_modal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog mt-lg-10">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="ModalLabel">Church Trustfund Report</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+  
+        
+              <form action="{% url 'reports:user_church_trustfund_report' %}" method="post">
+                {% csrf_token %}
+                <div class="row justify-content-around">
+                 
+         <style>
+           select{
+            padding-left: :10px;
+           }
+         </style>
+  
+                 
+  
+                  <div class="col-md-10">
+                    <div class="input-group input-group-dynamic mb-4">
+                     
+                      {{ form3.month }}
+                    </div>
+                  </div>
+                  
+                  
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn bg-gradient-danger btn-sm" data-bs-dismiss="modal">Close</button>
+                  <input type="submit" class="btn bg-gradient-info btn-sm" value ="Generate">
+                </div>
+              </form>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+       <!-- Month form model -->
+
+       <!-- Month form modal TWO-->
+      <div class="modal fade" id="district_trustfund_month_modal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog mt-lg-10">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="ModalLabel">District Trustfund Report</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+  
+        
+              <form action="{% url 'reports:user_district_trustfund_report' %}" method="post">
+                {% csrf_token %}
+                <div class="row justify-content-around">
+                 
+         <style>
+           select{
+            padding-left: :10px;
+           }
+         </style>
+  
+                 
+  
+                  <div class="col-md-10">
+                    <div class="input-group input-group-dynamic mb-4">
+                     
+                      {{ form3.month }}
+                    </div>
+                  </div>
+                  
+                  
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn bg-gradient-danger btn-sm" data-bs-dismiss="modal">Close</button>
+                  <input type="submit" class="btn bg-gradient-info btn-sm" value ="Generate">
+                </div>
+              </form>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+       <!-- Month form model -->
 
 
       <!-- footer -->

@@ -408,135 +408,6 @@ def disable_church_treasurer(request, pk):
 
     })
     return render(request, "backend/users/parents.html", context)
-
-
-
-@login_required
-def delete_church_treasurer(request, pk):
-    church_treasurer = get_object_or_404(User, pk=pk)
-    context = getGlobalContext(request.user)
-    form = AddChurchTreasurer()
-    church_treasurers = User.objects.filter(role="Church_treasurer")
-
-    church_treasurer.delete()
-
-    context.update({
-        'message': 'Parent deleted successfully',
-        
-        'form':form,
-        'church_treasurers ':church_treasurers ,
-    })
-    return redirect("backend:parents")
-    
-
-
-@login_required
-def disable_secretary(request, pk):
-    church_secretary = get_object_or_404(User, pk=pk)
-    context = getGlobalContext(request.user)
-    form = AddChurchSecretary()
-
-    church_secretary.active = False
-    church_secretary.save()
-
-    context.update({
-        'message': 'Secretary disabled successfully',
-        'form':form,
-        
-
-    })
-    return render(request, "backend/users/parents.html", context)
-
-
-@login_required
-def delete_church_secretary(request, pk):
-    church_secretary = get_object_or_404(User, pk=pk)
-    context = getGlobalContext(request.user)
-    form = AddChurchSecretary()
-    church_secretaries = User.objects.filter(role="Church_secretary")
-
-    church_secretary.delete()
-
-    context.update({
-        'message': 'Secretary deleted successfully',
-        
-        'form':form,
-        'church_secretaries':church_secretaries ,
-    })
-    return redirect("backend:parents")
-    
-
-
-@login_required
-def disable_district_treasurer(request, pk):
-    district_treasurer = get_object_or_404(User, pk=pk)
-    context = getGlobalContext(request.user)
-    form = AddDistrictTreasurer()
-
-    district_treasurer.active = False
-    district_treasurer.save()
-
-    context.update({
-        'message': 'Parent disabled successfully',
-        'form':form,        
-
-    })
-    return render(request, "backend/users/parents.html", context)
-
-
-@login_required
-def delete_district_treasurer(request, pk):
-    district_treasurer = get_object_or_404(User, pk=pk)
-    context = getGlobalContext(request.user)
-    form = AddDistrictTreasurer()
-    district_treasurers = User.objects.filter(role="District_treasurer")
-
-    district_treasurer.delete()
-
-    context.update({
-        'message': 'Parent deleted successfully',
-        
-        'form':form,
-        'district_treasurers':district_treasurers ,
-    })
-    return redirect("backend:parents")
-    
-
-
-@login_required
-def disable_secretary(request, pk):
-    district_secretary = get_object_or_404(User, pk=pk)
-    context = getGlobalContext(request.user)
-    form = AddDistrictSecretary()
-
-    district_secretary.active = False
-    district_secretary.save()
-
-    context.update({
-        'message': 'Parent disabled successfully',
-        'form':form,
-        
-
-    })
-    return render(request, "backend/users/parents.html", context)
-
-
-@login_required
-def delete_district_secretary(request, pk):
-    district_secretary = get_object_or_404(User, pk=pk)
-    context = getGlobalContext(request.user)
-    form = AddDistrictSecretary()
-    district_secretaries = User.objects.filter(role="District_secretary")
-
-    district_secretary.delete()
-
-    context.update({
-        'message': 'Parent deleted successfully',
-        
-        'form':form,
-        'district_secretaries':district_secretaries ,
-    })
-    return redirect("backend:parents")
     
 
 
@@ -565,6 +436,7 @@ def districts(request):
     return render(request, "conference/create_district.html", context)
 
 
+
 @login_required
 def edit_district(request, pk):
     context = getGlobalContext(request.user)
@@ -583,6 +455,7 @@ def edit_district(request, pk):
         'form':form,       
     })
     return render(request, "backend/sections/section-details.html", context)
+
 
 
 @login_required

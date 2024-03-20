@@ -3,7 +3,7 @@
 {% block content %}
 {% load custom_filters %}
   <!-- side nav -->
- {% if request.user.role == "Admin" %}
+  {% if request.user.role == "Admin" %}
      {% include 'partials/conf_sidebar.html' %}
   
   {% elif request.user.role == 'District_secretary' %}   
@@ -48,19 +48,7 @@
         }
     </style>
     <!-- top nav -->
-    <div class="container-fluid py-4">
-      <div class="row">
-        <div class="col-sm-12">
-          <div class="">
-            <div class="p-3 position-relative">
-              <h4 class="badge badge-info d-inline">{{ active_quarter }}</h4>
-              <h4 class="badge badge-info d-inline">{{ active_week }}</h4>
-              <h4 class="badge badge-danger d-inline">Generate Reports</h4>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+   
     <div class="container-fluid py-1">
       <!-- main content -->
 
@@ -68,37 +56,48 @@
        
         <div class="row my-4">
             <div class="col-12 d-flex justify-content-end">
-                <button class="btn btn-primary btn-lg float-right"onclick="window.print()">Print</button>
+                <button class="btn btn-primary btn-lg float-right" onclick="window.print()">Print</button>
             </div>    
             <div class="col-12" id="printable-section">
                 <div class="card">
-                    <div class="card-header pb-0 px-3 mt-3 mb-4">
-                        <h6 class="mb-0 text-wrap">Seventh-Day Adventist Church <span class="text-primary"> {{ member.church }}, {{ member.church.district }} District<span></h6>
-                        <h6 class="mb-0 text-wrap">Aba South Conference </h6>
-                        <h6 class="mb-0 text-wrap">Account report of <span class="text-primary">{{ member.member_name }}</span></h6>
-                        <h6 class="mb-0 text-wrap">Period: <span class="text-primary">{{ active_quarter }}</span></h6>
+                  <div class="row">
+                    <div class="col-sm-12">
+                      <div class="">
+                        <div class="p-3 position-relative">
+                          <h6 class="">Seventh-Day Adventist Church <span class="text-primary"> {{ district }} District </span></h6>
+                          <h6 class="mb-0 text-wrap">Aba South Conference</h6>
+                          <h6 class="mb-0 text-wrap">District Trustfund Report</h6>
+                          <h6 class="mb-0 text-wrap">Period: {{ month.start_date }} - {{ month.end_date }}</h6>
+                        </div>
+                      </div>
                     </div>
+                  </div>
+
+                    <div class="card-header pb-0 px-3 mt-3 mb-4">
+                        <h6 class="mb-0 text-wrap">District Trustfund Report</h6>
+                    </div>
+
                     <div class="table-flush table-striped table-responsive">
                         <table class="table align-items-center mb-0">
                             <thead>
                                 <tr>
-                                    <th class="text-uppercase text-xxs font-weight-bolder text-dark">Month</th>
-                                    <th class="text-uppercase text-xxs font-weight-bolder text-dark">Date</th>
-                                    <th class="text-uppercase text-xxs font-weight-bolder text-dark">Tithe</th>
-                                    <th class="text-uppercase text-xxs font-weight-bolder text-dark">Offering</th>
+                                    <th class="text-uppercase text-xxs font-weight-bolder text-dark">Church</th>
+                                    <th class="text-uppercase text-xxs font-weight-bolder text-dark">Amount Due</th>
+                                    <th class="text-uppercase text-xxs font-weight-bolder text-dark">Week</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {% for month, offerings in monthly_data.items %}
-                                    {% for offering in offerings %}
-                                        <tr>
-                                            <td class="badge badge-primary">{{ month }}</td>
-                                            <td>{{ offering.date_added }}</td>
-                                            <td>#{{ offering.tithe }}</td>
-                                            <td>#{{ offering.offering }}</td>
-                                        </tr>
-                                    {% endfor %}
-                                {% endfor %}
+                              <!-- Placeholder for dynamic data -->
+                              {% for church, data in trust_funds.items %}
+                              <tr>
+                                <td class="text-dark">{{ church }}</td>
+                                <td class="text-dark">#{{ data.amount_due_district }}</td>
+                                <td class="text-dark">#{{ data.amount_due_district }}</td>
+                              </tr>
+                              {% endfor %}    
+                              <tr>
+                                <td colspan="2" class="text-dark">Total Amount Due for the District: #{{ total_amount_due_district }}</td>
+                              </tr>
                             </tbody>
                         </table>
                     </div>
@@ -106,6 +105,7 @@
             </div>
         </div>
       </div>
+
       <!-- footer -->
       {% include 'partials/footer.html' %}
       <!-- footer -->
