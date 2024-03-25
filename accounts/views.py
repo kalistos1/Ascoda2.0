@@ -12,9 +12,10 @@ from django.db.models import Count, Sum, Q, F
 from datetime import datetime
 from django.contrib.auth.decorators import login_required
 from .utils import getGlobalContext
-from .forms import LoginForm
+from .forms import *
 from django.contrib.auth.hashers import make_password
 from django.contrib import messages
+from . import utils
 
 def signin(request):
     # Check if the user is already authenticated
@@ -31,7 +32,7 @@ def signin(request):
             if user is not None:
                 login(request, user)
                 # Redirect to the appropriate dashboard based on the user's role
-                messages.success(request, 'Welcome back')
+               
                 return redirect(get_dashboard_url(user.role))
             else:
                 messages.error(request, 'Invalid login details')
@@ -67,7 +68,17 @@ def signout(request):
 
 @login_required
 def edit_user_info(request):
-    return render(request, 'pages/security.html')
+    user_context = getGlobalContext(request.user)
+
+    profile =request.user
+    form = EditProfileForm(instance=profile)
+
+    context={
+        'form':form,
+       
+    }
+
+    return render(request, 'pages/security.html',context)
 
 
 @login_required
@@ -108,37 +119,39 @@ def change_password(request):
 
     if confirm_password != new_password:
         messages.error(request, 'password mismatch (new password and confirm password)')
-        return redirect('authentication:change_password_form')
+        return redirect('account:edit_user_info')
 
     try:
         User.objects.filter(id=user.id).update(password=make_password(new_password))
         messages.success(request, 'password was successfully changed')
-        return redirect('dashboard:profile')
+        return redirect('account:edit_user_info')
         
     except User.DoesNotExist:
         messages.error(request, ' An unforeseen error occured while attempting to change your password. Please retry')
-        return redirect('authentication:change_password_form')
+        return redirect('account:edit_user_info')
 
 
 
 @login_required
-def edit_profile(request):
+def update_profile_info(request):
     if request.method =="POST":
-        profile = Profile.objects.get(user=request.user)
-        form = ProfileForm(request.POST, request.FILES, instance=profile)
+        user_context = getGlobalContext(request.user)
+
+        profile =request.user
+        form = EditProfileForm(request.POST, request.FILES, instance=profile)
         if form.is_valid():
             form.save()
             messages.success(request, 'profile was updates successfully')
-            return redirect('dashboard:profile')
+            return redirect('account:edit_user_info')
         else:
             messages.error(request, 'form was not saved successfully')
-            return redirect('authentication:edit_profile')
+            return redirect('account:edit_user_info')
     else:
-       profile = Profile.objects.get(user=request.user)
-       form = ProfileForm(instance=profile)
+       profile = request.user
+       form = EditProfileForm(instance=profile)
     
        context = {        
         'form':form,
     }   
 
-       return render(request, "pages/edit_profile.html", context)
+       return redirect('account:edit_user_info')

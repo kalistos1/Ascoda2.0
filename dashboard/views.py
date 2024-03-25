@@ -14,6 +14,9 @@ from django.contrib.auth.hashers import make_password
 from django.core.exceptions import ValidationError
 import csv
 from django.db import transaction
+from .utils import send_email
+from django.conf import settings
+from django.core.mail import EmailMessage
 
 # Create your views here.
 
@@ -91,6 +94,7 @@ def church_dashboard(request):
         
         
         previous_week = Sabbath.objects.filter(sabbath_week_ends__lt=active_week.sabbath_week_start).order_by('-sabbath_week_start').first()
+        balance_bf = None
         if previous_week:
             try:
                balance_bf = BalanceBroughtForward.objects.get(church =associated_church, sabbath_week= previous_week, sabbath_week__month__quarter=active_quarter_info)
@@ -100,8 +104,11 @@ def church_dashboard(request):
       
       
        # Calculate the combined income for the week using data fromm tithe offering model
-        weeks_combined_income_2= float(weeks_combined_top_2) + float(total_week_income) + float(balance_bf.balance_amount)
-       
+        if balance_bf is not None:
+            weeks_combined_income_2 = float(weeks_combined_top_2) + float(total_week_income) + float(balance_bf.balance_amount)
+        else:
+            weeks_combined_income_2 = float(weeks_combined_top_2) + float(total_week_income)
+            
         income_expence_balance = weeks_combined_income_2 -  total_week_expense 
 
        
@@ -273,7 +280,6 @@ def setup_accounting(request):
 
 @login_required
 def add_user(request):
-  
     if request.user.role == "Admin":
         context = getGlobalContext(request.user)
         conference  = context.get('conference')
@@ -285,13 +291,10 @@ def add_user(request):
             'active_quarter':active_quarter,
             'conference':conference,        
              })
-
-    
+   
         assign_officer_form = AddAssignedOfficerForm(request.POST)
         add_officer_form = AddOfficer(request.POST, request.FILES)
-        
-
-        
+               
         context.update({
             'assign_officer_form':assign_officer_form,
             'add_officer_form':add_officer_form
@@ -306,7 +309,6 @@ def process_add_officer_form(request):
     if request.method == 'POST':
         form = AddOfficer(request.POST, request.FILES)
        
-
         if form.is_valid():
             role_mapping = {
                 'admin_form': 'Admin',
@@ -318,14 +320,24 @@ def process_add_officer_form(request):
 
             # Determine the form submitted based on the button name
             submitted_form = next((key for key in role_mapping.keys() if key in request.POST), None)
-
+            
             if submitted_form:
                 user = form.save(commit=False)
                 # Set the role based on the mapping
                 user.set_password('abcd123')
                 user.role = role_mapping[submitted_form]
                 user.save()
+                context={
+                    'first_name': user.first_name,
+                    'last_name': user.last_name,
+                    'username': user.username,
+                    'email': user.email, 
+                }
                 
+
+                send_email([user.email,], 'From Ascoda.org', 'emails/new_signup_email.html', context, 'ascoda <no-reply@ascoda.org>')
+                
+                messages.success(request, 'New user was successfully added')
                 return redirect('dashboard:assign_officer')  # Redirect to a success page
 
     else:
@@ -389,6 +401,17 @@ def admin(request, pk):
         'admin':admin,
     })
     return render(request, "backend/users/admin-details.html", context)
+
+# view single admin
+@login_required
+def delete_user(request, pk):
+    user = get_object_or_404(User, pk=pk)
+    user.delete()
+    messages.success(request, 'user deleted successfully')
+
+    return redirect('dashboard:all_officers')
+    
+
     
     
 
@@ -409,7 +432,15 @@ def disable_church_treasurer(request, pk):
     })
     return render(request, "backend/users/parents.html", context)
     
+@login_required
+def delete_district(request, district_id):
+    district = get_object_or_404(District, district_id=district_id)
+    district.delete()
+    messages.success(request, 'District deleted successfully')
 
+    return redirect('dashboard:all_districts')
+    
+    
 
 @login_required
 def districts(request):
@@ -518,22 +549,6 @@ def admin_view_district(request, district_id):
 
     return render(request, 'conference/view_district_info.html', context)
 
-
-
-@login_required
-def delete_district(request, pk):
-    district = get_object_or_404(District, pk=pk)
-    context = getGlobalContext(request.user)
-    form = AddDistrictForm()
-    district = district.objects.all()
-
-    district.delete()
-    messages.success(request, "District Deleted successfully")
-    context.update({
-        'form':form,
-        'district':district,
-    })
-    return redirect("backend:sections")
 
     
 @login_required
@@ -864,23 +879,21 @@ def activate_quarter(request, quarter_id):
     context = getGlobalContext(request.user)
 
     if request.user.role == 'Admin':
-
         try:
-           current_active_quarter = Quarter.objects.get(is_active=True)
-           current_active_quarter.is_active = False
-           current_active_quarter.save()
+            current_active_quarter = Quarter.objects.filter(is_active=True).first()
+            if current_active_quarter:
+                current_active_quarter.is_active = False
+                current_active_quarter.save()
 
-
-           selected_quarter = get_object_or_404(Quarter, quarter_id=quarter_id)
-           selected_quarter.is_active = True
-           selected_quarter.save()
-
-           messages.success(request, 'Quarter activated successfully')
+            selected_quarter = get_object_or_404(Quarter, quarter_id=quarter_id)
+            selected_quarter.is_active = True
+            selected_quarter.save()
+            messages.success(request, 'Quarter activated successfully')
         except Exception as e:
             messages.error(request, f'Unable to activate quarter: {str(e)}')
             
     return redirect('dashboard:setup_accounting')
- 
+
 
 
 @login_required
@@ -1074,28 +1087,32 @@ def activate_sabbath(request, sabbath_id):
         try:
             all_churches = Church.objects.all()
 
-            # Iterate through churches and create entries only if they don't exist
-            with transaction.atomic():
-                for church in all_churches:
-                    # Check if entries already exist for the given church and week
-                    existing_entries = BalanceBroughtForward.objects.filter(church=church, sabbath_week=active_week)
-                    
-                    if not existing_entries.exists():
-                        # Create a new entry if none exist
-                        balance_entry = BalanceBroughtForward.create_balance_entry(church, active_week)
-                        balance_entry.save()
+            # Only proceed if there is an active week
+            if active_week:
+                # Iterate through churches and create entries only if they don't exist
+                with transaction.atomic():
+                    for church in all_churches:
+                        # Check if entries already exist for the given church and week
+                        existing_entries = BalanceBroughtForward.objects.filter(church=church, sabbath_week=active_week)
+                        
+                        if not existing_entries.exists():
+                            # Create a new entry if none exist
+                            balance_entry = BalanceBroughtForward.create_balance_entry(church, active_week)
+                            balance_entry.save()
 
                 # Deactivate the current active Sabbath
-                current_active_sabbath = Sabbath.objects.get(is_active=True)
+            current_active_sabbath = Sabbath.objects.filter(is_active=True).first()
+            if current_active_sabbath:
                 current_active_sabbath.is_active = False
                 current_active_sabbath.save()
 
                 # Activate the selected Sabbath
-                selected_sabbath = get_object_or_404(Sabbath, sabbath_id=sabbath_id)
-                selected_sabbath.is_active = True
-                selected_sabbath.save()
+            selected_sabbath = get_object_or_404(Sabbath, sabbath_id=sabbath_id)
+            selected_sabbath.is_active = True
+            selected_sabbath.save()
 
-                messages.success(request, 'Sabbath activated successfully')
+            messages.success(request, 'Sabbath activated successfully')
+            
         except Exception as e:
             messages.error(request, f'Unable to activate Sabbath: {str(e)}')
 

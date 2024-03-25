@@ -21,7 +21,23 @@ class EditProfileForm(forms.ModelForm):
     
     class Meta:
         model = User
-        fields = ('first_name', 'last_name', 'middle_name', 'sex', 'date_of_birth', 'photo', 'phone', 'address', 'city', 'state', 'email')
+        fields = ('first_name', 'last_name', 'middle_name','username', 'sex', 'date_of_birth',  'phone', 'address', 'city', 'state', 'email')
+    
+        
+    def __init__(self, *args, **kwargs):
+        super(EditProfileForm, self).__init__(*args, **kwargs)
+        self.fields['first_name'].widget.attrs.update({'class' : 'form-control'})
+        self.fields['last_name'].widget.attrs.update({'class' : 'form-control'})
+        self.fields['middle_name'].widget.attrs.update({'class' : 'form-control'})
+        self.fields['username'].widget.attrs.update({'class' : 'form-control'})
+        self.fields['date_of_birth'].widget.attrs.update({'class' : 'form-control'})
+        self.fields['sex'].widget.attrs.update({'class' : 'form-control'})
+      
+        self.fields['phone'].widget.attrs.update({'class' : 'form-control'})
+        self.fields['address'].widget.attrs.update({'class' : 'form-control'})
+        self.fields['city'].widget.attrs.update({'class' : 'form-control'})
+        self.fields['state'].widget.attrs.update({'class' : 'form-control'})
+        self.fields['email'].widget.attrs.update({'class' : 'form-control'})
        
 
 

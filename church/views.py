@@ -512,7 +512,7 @@ def view_trust_fund(request):
     # Get the global context for the logged-in user
     global_context = getGlobalContext(request.user)
     active_sabbath = Sabbath.objects.filter(is_active=True).first()
-    active_week_month = active_week.month if active_week else None
+    active_week_month = active_sabbath.month if active_sabbath else None
 
     # Fetch the associated church from the global context
     associated_church = global_context['associated_church']

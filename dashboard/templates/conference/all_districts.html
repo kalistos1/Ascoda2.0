@@ -57,7 +57,8 @@
                           <td class="text-sm">{{ district.phone }}</td>
 
                           <td class="text-sm">
-                           <a href="{% url 'dashboard:view_district' district.district_id %}" class="btn btn-primary "> View District info</a>
+                           <a href="{% url 'dashboard:view_district' district.district_id %}" class="btn btn-info "> View District info</a>
+                           <a href="{% url 'dashboard:delete_district' district.district_id %}" class="btn btn-primary "> Delete District</a>
 
                           </td>
                         </tr>

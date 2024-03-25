@@ -25,14 +25,15 @@
         </div>
       </div>
       <!-- main content -->
-      <div class="row mt-4">
-        <div class="col-md-4 col-sm-4 col-6">
+      <div class="row  justify-content-center mt-4">
+        <div class="col-md-4 col-sm-4 col-10 mt-3 mt-sm-3 mt-md-0">
           <div class="card">
-            <div class="card-body text-center">
+            <div class="card-body text-center mb-0 pb-0" >
               <h1 class="text-gradient text-primary"><span id="status1" countto="21">{{ all_quater.count }}</span> <span class="text-lg ms-n2"></span></h1>
               <h6 class="mb-0 font-weight-bolder">Quarters</h6>
             </div>
-            <div class="card h-100">
+
+            <div class="card  h-100">
               <div class="card-body d-flex p-3">
                 <div class="nav-wrapper position-relative ms-auto w-100">
                   <ul class="nav nav-pills nav-fill p-1" role="tablist">
@@ -43,11 +44,12 @@
                 </div>
               </div>
             </div>
+
           </div>
         </div>
-        <div class="col-md-4 col-sm-4 col-6">
+        <div class="col-md-4 col-sm-4 col-10 mt-3 mt-sm-3 mt-md-0">
           <div class="card">
-            <div class="card-body text-center">
+            <div class="card-body text-center mb-0 pb-0">
               <h1 class="text-gradient text-primary"><span id="status2" countto="44">{{ months.count }}</span> <span class="text-lg ms-n1"></span></h1>
               <h6 class="mb-0 font-weight-bolder">Months</h6>
               <p class="opacity-8 mb-0 text-sm"></p>
@@ -65,9 +67,9 @@
             </div>
           </div>
         </div>
-        <div class="col-md-4 col-sm-4 mt-md-0">
+        <div class="col-md-4 col-sm-4  col-10 mt-3 mt-sm-3 mt-md-0">
           <div class="card">
-            <div class="card-body text-center">
+            <div class="card-body text-center mb-0 pb-0">
               <h1 class="text-gradient text-primary"><span id="status3" countto="52">{{sabbaths.count}}</span> <span class="text-lg ms-n2"></span></h1>
               <h6 class="mb-0 font-weight-bolder">Sabbaths</h6>
               <p class="opacity-8 mb-0 text-sm"></p>
@@ -87,8 +89,8 @@
         </div>
       </div>
 
-      <div class="row mt-4">
-        <div class="col-4">
+      <div class="row justify-content-center mt-4">
+        <div class="col-10 col-sm-4">
           <div class="card mb-4">
             <div class="card-header pb-0 d-flex flex-row justify-content-between">
               <h6>Quarters</h6>
@@ -135,7 +137,7 @@
           </div>
         </div>
 
-        <div class="col-4">
+        <div class="col-10 col-sm-4">
           <div class="card mb-4">
             <div class="card-header pb-0 d-flex flex-row justify-content-between">
               <h6>Months</h6>
@@ -176,7 +178,7 @@
           </div>
         </div>
 
-        <div class="col-4">
+        <div class="col-10 col-sm-4">
           <div class="card mb-4">
             <div class="card-header pb-0 d-flex flex-row justify-content-between">
               <h6>Sabbaths</h6>
@@ -273,7 +275,7 @@
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn bg-gradient-danger" data-bs-dismiss="modal">Close</button>
-                <input type="submit" value="Create Conference" class="btn bg-gradient-info" />
+                <input type="submit" value="Create Quarter" class="btn bg-gradient-info" />
               </div>
             </form>
           </div>
@@ -338,8 +340,8 @@
           <div class="modal-content">
             <form action="{% url 'dashboard:add_sabbath' %}" method="post" >
               <div class="modal-header">
-                <h5 class="modal-title font-weight-normal" id="churchSecLabel">Add Sabbath Day</h5>
-                <h5 class="modal-title font-weight-normal" id="churchSecLabel">Add Sabbath</h5>
+                <h5 class="modal-title font-weight-normal" id="churchSecLabel">Add Sabbath Week</h5>
+               
                 <button type="button" class="btn-close text-dark" data-bs-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
               </div>
               <div class="modal-body">

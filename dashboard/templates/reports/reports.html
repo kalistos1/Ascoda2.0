@@ -31,7 +31,9 @@
           <div class="">
             <div class="p-3 position-relative">
               <h4 class="badge badge-info d-inline">{{ active_quarter }}</h4>
+              <h4 class="badge badge-info d-inline">{{ active_week_month}}</h4>
               <h4 class="badge badge-info d-inline">{{ active_week }}</h4>
+             
               <h4 class="badge badge-danger d-inline">Generate Reports</h4>
             </div>
           </div>
@@ -140,7 +142,7 @@
           <div class="card-footer p-3">
             <p class="mb-0 text-dark text-center">A church Member's Report</p>
             <p class="mt-3">
-              <a href="" class="btn btn-dark btn-lg w-100">Generate</a>
+              <a href="{% url 'church:add_new_member' %}" class="btn btn-dark btn-lg w-100">Generate</a>
             </p>
           </div>
         </div>

@@ -12,6 +12,10 @@ from accounts.utils import getGlobalContext
 def reports(request):
     context = getGlobalContext(request.user)
     role = request.user.role
+    active_week= context.get('active_week')
+    active_quarter = context.get('active_quarter')  
+    active_week_month = active_week.month if active_week else None
+
     form1 =  IncomeExpenseReportForm()
     form2= DistrictTrustfundForm()
     form3 = MonthForm()
@@ -20,6 +24,10 @@ def reports(request):
         'form1':form1,
         'form2':form2,
         'form3':form3,
+        'active_week':active_week,
+        'active_week_month':active_week_month,
+        'active_quarter':active_quarter,
+
         }
     return render(request, 'reports/reports.html',context)
 
@@ -27,6 +35,11 @@ def reports(request):
 
 @login_required
 def admin_church_income_expense_report(request):
+    context = getGlobalContext(request.user)
+    active_week= context.get('active_week')
+    active_quarter = context.get('active_quarter')  
+    active_week_month = active_week.month if active_week else None
+    
     if request.user.role == "Admin":
         form = IncomeExpenseReportForm(request.POST or None)
         if request.method == 'POST' and form.is_valid():
@@ -38,19 +51,29 @@ def admin_church_income_expense_report(request):
             # Query ChurchIncome and ChurchExpense for the selected church and sabbaths
             church_income = ChurchIncome.objects.filter(church=church, sabbath__in=sabbaths)
             church_expense = ChurchExpense.objects.filter(church=church, sabbath__in=sabbaths)
-        
+           
 
             context = {
                 'church':church,
                 'month':month,
                 'church_income': church_income,
                 'church_expense': church_expense,
+                'active_week':active_week,
+                'active_week_month':active_week_month,
+                'active_quarter':active_quarter,
+
             }
         return render(request, 'reports/report_template.html', context)
 
 
 
 def admin_church_trustfund_report(request):
+    context = getGlobalContext(request.user)
+    church_members = Member.objects.all()
+    active_week= context.get('active_week')
+    active_quarter = context.get('active_quarter')  
+    active_week_month = active_week.month if active_week else None
+    
     if request.user.role == "Admin":
         form = IncomeExpenseReportForm(request.POST or None)
         if request.method == 'POST' and form.is_valid():
@@ -62,12 +85,15 @@ def admin_church_trustfund_report(request):
 
             # Query ChurchIncome and ChurchExpense for the selected church and sabbaths
             church_trustfunds = TrustFund.objects.filter(church=church, sabbath_week__in=sabbaths)
+          
         
             context = {
                 'church':church,
                 'month':month,
                 'church_trustfunds': church_trustfunds,
-                
+                'active_week':active_week,
+                'active_week_month':active_week_month,
+                'active_quarter':active_quarter,
             }
         return render(request, 'reports/report_trustfund_template.html', context)
 
@@ -75,6 +101,11 @@ def admin_church_trustfund_report(request):
 
 @login_required
 def admin_district_trustfund_report(request):
+    context = getGlobalContext(request.user)
+    active_week= context.get('active_week')
+    active_quarter = context.get('active_quarter')  
+    active_week_month = active_week.month if active_week else None
+    
     if request.user.role == "Admin":
         form = DistrictTrustfundForm(request.POST or None)
         if request.method == 'POST' and form.is_valid():
@@ -108,7 +139,10 @@ def admin_district_trustfund_report(request):
             context = {
                 'district': district,
                 'month': month,
-                'data': data
+                'data': data,
+                'active_week':active_week,
+                'active_week_month':active_week_month,
+                'active_quarter':active_quarter,
             }
             return render(request, 'reports/district_trustfund_template.html', context)
 
@@ -116,6 +150,11 @@ def admin_district_trustfund_report(request):
 
 @login_required
 def  admin_member_tithe_offering_report(request, member_id):
+    context = getGlobalContext(request.user)
+    active_week= context.get('active_week')
+    active_quarter = context.get('active_quarter')  
+    active_week_month = active_week.month if active_week else None
+    
     if request.user.role == "Admin":
 
         member = Member.objects.get(member_id=member_id)
@@ -137,6 +176,9 @@ def  admin_member_tithe_offering_report(request, member_id):
             'member': member,
             'monthly_data': monthly_data,
             'active_quarter': active_quarter,
+            'active_week':active_week,
+            'active_week_month':active_week_month,
+            'active_quarter':active_quarter,
         }
 
         
@@ -150,6 +192,9 @@ def  admin_member_tithe_offering_report(request, member_id):
 @login_required
 def church_income_expense_report(request):
     user_context = getGlobalContext(request.user)
+    active_week= user_context.get('active_week')
+    active_quarter = user_context.get('active_quarter')  
+    active_week_month = active_week.month if active_week else None
     church = user_context.get('associated_church')
     context = {}  # Initialize an empty context dictionary
 
@@ -168,6 +213,9 @@ def church_income_expense_report(request):
                 'month': month,
                 'church_income': church_income,
                 'church_expense': church_expense,
+                'active_week':active_week,
+                'active_week_month':active_week_month,
+                'active_quarter':active_quarter,
             }
 
     else:
@@ -181,6 +229,10 @@ def church_income_expense_report(request):
 
 def church_trustfund_report(request):
         user_context = getGlobalContext(request.user)
+        active_week= user_context.get('active_week')
+        active_quarter = user_context.get('active_quarter')  
+        active_week_month = active_week.month if active_week else None
+
         church = user_context.get('associated_church')
         context = {}
         if request.user.role in ['Church_secretary', 'Church_treasurer']:
@@ -198,6 +250,9 @@ def church_trustfund_report(request):
                    'church':church,
                    'month':month,
                    'church_trustfunds': church_trustfunds,
+                    'active_week':active_week,
+                    'active_week_month':active_week_month,
+                    'active_quarter':active_quarter,
                 
                  }
         else:
@@ -211,6 +266,11 @@ def church_trustfund_report(request):
 
 @login_required
 def member_tithe_offering_report(request, member_id):
+    user_context = getGlobalContext(request.user)
+    active_week= user_context.get('active_week')
+    active_quarter = user_context.get('active_quarter')  
+    active_week_month = active_week.month if active_week else None
+
     if request.user.role in ['Church_secretary', 'Church_treasurer']:
 
         member = Member.objects.get(member_id=member_id)
@@ -231,7 +291,10 @@ def member_tithe_offering_report(request, member_id):
         context = {
             'member': member,
             'monthly_data': monthly_data,
-            'active_quarter': active_quarter,
+            'active_quarter': active_quarter,      
+            'active_week':active_week,
+            'active_week_month':active_week_month,
+        
         }
 
         
@@ -297,6 +360,11 @@ def member_tithe_offering_report(request, member_id):
 @login_required
 def district_trustfund_report(request):
     user_context = getGlobalContext(request.user)
+     
+    active_week= user_context.get('active_week')
+    active_quarter = user_context.get('active_quarter')  
+    active_week_month = active_week.month if active_week else None
+
     district = user_context.get('associated_district')
     context = {}
     
@@ -334,6 +402,9 @@ def district_trustfund_report(request):
             context = {
                 'district': district,
                 'month': month,
-                'data': data
+                'data': data,
+                'active_week':active_week,
+                'active_week_month':active_week_month,
+                'active_quarter':active_quarter,
             }
     return render(request, 'reports/district_trustfund_template.html', context)
