@@ -59,7 +59,8 @@ def church_dashboard(request):
         church_expenses = ChurchExpense.objects.filter(church=associated_church, sabbath=active_week,sabbath__month__quarter=active_quarter_info)
         church_incomes = ChurchIncome.objects.filter(church=associated_church, sabbath=active_week, sabbath__month__quarter=active_quarter_info)
         cash = ChurchCashAccount.objects.filter(church=associated_church, sabbath_week=active_week, sabbath_week__month__quarter=active_quarter_info)
-
+       
+        
         total_week_cash = cash.aggregate(Sum('cash_generated'))['cash_generated__sum'] or 0
         total_cash_spent = cash.aggregate(Sum('cash_spent'))['cash_spent__sum'] or 0
         total_cash_to_bank = cash.aggregate(Sum('cash_to_bank'))['cash_to_bank__sum'] or 0
@@ -94,13 +95,14 @@ def church_dashboard(request):
         
         
         previous_week = Sabbath.objects.filter(sabbath_week_ends__lt=active_week.sabbath_week_start).order_by('-sabbath_week_start').first()
+      
         balance_bf = None
         if previous_week:
             try:
-               balance_bf = BalanceBroughtForward.objects.get(church =associated_church, sabbath_week= previous_week, sabbath_week__month__quarter=active_quarter_info)
-               
+               balance_bf = BalanceBroughtForward.objects.get(church =associated_church, sabbath_week= previous_week,sabbath_week__month__quarter=active_quarter_info)
+              
             except:
-                balance_bf = 0
+                balance_bf = None
       
       
        # Calculate the combined income for the week using data fromm tithe offering model
@@ -109,7 +111,7 @@ def church_dashboard(request):
         else:
             weeks_combined_income_2 = float(weeks_combined_top_2) + float(total_week_income)
             
-        income_expence_balance = weeks_combined_income_2 -  total_week_expense 
+        income_expence_balance = float(weeks_combined_income_2) - float(total_week_expense )
 
        
     user_context.update({
@@ -143,17 +145,21 @@ def church_dashboard(request):
 @login_required
 def district_dashboard(request):
     context = getGlobalContext(request.user)
-
+  
     # Check if the user is a district secretary or treasurer
     if request.user.role in ['District_secretary', 'District_treasurer']:
+
         associated_district = context.get('associated_district')
         active_week = context.get('active_week')
         active_quarter = context.get('active_quarter')
         active_week_month = active_week.month if active_week else None
+        print('ddddddddddddddddddddddddddddddddddddddddddddd',associated_district)
        
         if associated_district:
             district_expenses = DistrictExpense.objects.filter(district=associated_district, sabbath_week=active_week, sabbath_week__month__quarter=active_quarter)
             district_incomes = DistrictIncome.objects.filter(district=associated_district, sabbath_week=active_week, sabbath_week__month__quarter=active_quarter)
+           
+            print('exppppppppppppppppppppppppppppppppp',district_incomes)
 
             total_weekly_expense = district_expenses.aggregate(Sum('amount'))['amount__sum'] or 0
             # Calculate the sum of all district incomes for the active week
@@ -188,15 +194,17 @@ def district_dashboard(request):
                 'district_address': associated_district.address,
                 'district_email': associated_district.email,
                 'district_phone': associated_district.pastors_phone,
-                'district_facebook': associated_district.facebook,
-                'income_form':income_form,
-                'expense_form':expense_form,
+                'district_facebook': associated_district.facebook,              
                 'active_week_month':active_week_month,
                 'total_amount_due_district': total_amount_due_district,
                 'district_incomes': district_incomes,
                 'district_expenses': district_expenses,
+                'income_form':income_form,
+                'expense_form':expense_form,
+
             }
             context['district_info'] = district_info
+    
 
     return render(request, 'district/dashboard.html', context)
    
