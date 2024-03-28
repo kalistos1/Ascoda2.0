@@ -69,7 +69,7 @@ def church_dashboard(request):
         
         #total_week_income = church_incomes.aggregate(Sum('amount'))['amount__sum'] or 0
         # Calculate total income excluding specific income_types
-        excluded_income_types = ['APPRECIATION', 'LOOSE_OFFERING', 'CHILD_DEDICATION', 'THANKS_OFFERING', 'SABBATH_SCHOOL']
+        excluded_income_types = ['APPRECIATION', 'LOOSE_OFFERING', 'CHILD_DEDICATION', 'THANKS_OFFERING', 'SABBATH_SCHOOL_EXPENSE_OFFERING']
         total_week_income = church_incomes.exclude(income_type__in=excluded_income_types).aggregate(Sum('amount'))['amount__sum'] or 0
         
 
@@ -153,14 +153,13 @@ def district_dashboard(request):
         active_week = context.get('active_week')
         active_quarter = context.get('active_quarter')
         active_week_month = active_week.month if active_week else None
-        print('ddddddddddddddddddddddddddddddddddddddddddddd',associated_district)
+       
        
         if associated_district:
             district_expenses = DistrictExpense.objects.filter(district=associated_district, sabbath_week=active_week, sabbath_week__month__quarter=active_quarter)
             district_incomes = DistrictIncome.objects.filter(district=associated_district, sabbath_week=active_week, sabbath_week__month__quarter=active_quarter)
            
-            print('exppppppppppppppppppppppppppppppppp',district_incomes)
-
+         
             total_weekly_expense = district_expenses.aggregate(Sum('amount'))['amount__sum'] or 0
             # Calculate the sum of all district incomes for the active week
             total_weekly_income = district_incomes.aggregate(Sum('amount'))['amount__sum'] or 0
@@ -701,7 +700,7 @@ def admin_view_church(request, church_id):
         
         #total_week_income = church_incomes.aggregate(Sum('amount'))['amount__sum'] or 0
         # Calculate total income excluding specific income_types
-        excluded_income_types = ['APPRECIATION', 'LOOSE_OFFERING', 'CHILD_DEDICATION', 'THANKS_OFFERING', 'SABBATH_SCHOOL']
+        excluded_income_types = ['APPRECIATION', 'LOOSE_OFFERING', 'CHILD_DEDICATION', 'THANKS_OFFERING', 'SABBATH_SCHOOL_EXPENSE_OFFERING']
         total_week_income = church_incomes.exclude(income_type__in=excluded_income_types).aggregate(Sum('amount'))['amount__sum'] or 0
         
 

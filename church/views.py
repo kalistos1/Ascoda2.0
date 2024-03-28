@@ -568,7 +568,7 @@ def calculate_combined_offering(request):
     )['combined_offering'] or 0
   
     # Fetch amounts of specific income types from ChurchIncome
-    specific_income_types = ['APPRECIATION', 'LOOSE_OFFERING', 'CHILD_DEDICATION', 'THANKS_OFFERING', 'SABBATH_SCHOOL']
+    specific_income_types = ['APPRECIATION', 'LOOSE_OFFERING', 'CHILD_DEDICATION', 'THANKS_OFFERING', 'SABBATH_SCHOOL_EXPENSE_OFFERING']
     specific_income_amount = ChurchIncome.objects.filter(
         church=associated_church,
         sabbath=active_sabbath,
@@ -668,7 +668,7 @@ def calculate_weekly_totals(request):
 #             church_income_entries = ChurchIncome.objects.filter(
 #                 sabbath=active_sabbath,
 #                 church=church,
-#                 income_type__in=['APPRECIATION', 'LOOSE_OFFERING', 'CHILD_DEDICATION', 'THANKS_OFFERING', 'SABBATH_SCHOOL']
+#                 income_type__in=['APPRECIATION', 'LOOSE_OFFERING', 'CHILD_DEDICATION', 'THANKS_OFFERING', 'SABBATH_SCHOOL_EXPENSE_OFFERING']
 #             )
 
 #             # Call the class method to calculate combined offering and amounts due

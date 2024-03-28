@@ -19,11 +19,13 @@ def reports(request):
     form1 =  IncomeExpenseReportForm()
     form2= DistrictTrustfundForm()
     form3 = MonthForm()
+    form4 = IncomeExpenseForm()
 
     context = {
         'form1':form1,
         'form2':form2,
         'form3':form3,
+        'form4':form4,
         'active_week':active_week,
         'active_week_month':active_week_month,
         'active_quarter':active_quarter,
@@ -45,11 +47,16 @@ def admin_church_income_expense_report(request):
         if request.method == 'POST' and form.is_valid():
             church = form.cleaned_data['church']
             month = form.cleaned_data['month']
+            payment_method = form.cleaned_data.get('payment_method')
 
             sabbaths = Sabbath.objects.filter(month=month)
 
             # Query ChurchIncome and ChurchExpense for the selected church and sabbaths
-            church_income = ChurchIncome.objects.filter(church=church, sabbath__in=sabbaths)
+            if payment_method:
+                church_income = ChurchIncome.objects.filter(church=church, sabbath__in=sabbaths, payment_method=payment_method)
+            else:
+                church_income = ChurchIncome.objects.filter(church=church, sabbath__in=sabbaths)
+
             church_expense = ChurchExpense.objects.filter(church=church, sabbath__in=sabbaths)
            
 
@@ -161,8 +168,8 @@ def  admin_member_tithe_offering_report(request, member_id):
 
         active_quarter = Quarter.objects.get(is_active=True)
         tithe_offering = TitheOffering.objects.filter(
-            church_member=member,
-            sabbath_week__month__quarter=active_quarter
+            church_member=member
+          
         )
 
         monthly_data = {}
@@ -189,23 +196,30 @@ def  admin_member_tithe_offering_report(request, member_id):
 # church user report 
 # ========================================================================================================== 
     
-@login_required
 def church_income_expense_report(request):
     user_context = getGlobalContext(request.user)
-    active_week= user_context.get('active_week')
-    active_quarter = user_context.get('active_quarter')  
+    active_week = user_context.get('active_week')
+    active_quarter = user_context.get('active_quarter')
     active_week_month = active_week.month if active_week else None
     church = user_context.get('associated_church')
     context = {}  # Initialize an empty context dictionary
 
     if request.user.role in ['Church_secretary', 'Church_treasurer']:
-        form = MonthForm(request.POST or None)
+        form = IncomeExpenseForm(request.POST or None)
 
         if request.method == 'POST' and form.is_valid():
+          
             month = form.cleaned_data['month']
-            sabbaths = Sabbath.objects.filter(month=month)
+            payment_method = form.cleaned_data.get('payment_method')
+          
 
-            church_income = ChurchIncome.objects.filter(church=church, sabbath__in=sabbaths)
+            sabbaths = Sabbath.objects.filter(month=month)
+            if  payment_method :
+                church_income = ChurchIncome.objects.filter(church=church, sabbath__in=sabbaths, payment_method=payment_method)
+            else:
+                church_income = ChurchIncome.objects.filter(church=church, sabbath__in=sabbaths)
+
+           
             church_expense = ChurchExpense.objects.filter(church=church, sabbath__in=sabbaths)
 
             context = {
@@ -213,17 +227,19 @@ def church_income_expense_report(request):
                 'month': month,
                 'church_income': church_income,
                 'church_expense': church_expense,
-                'active_week':active_week,
-                'active_week_month':active_week_month,
-                'active_quarter':active_quarter,
+                'active_week': active_week,
+                'active_week_month': active_week_month,
+                'active_quarter': active_quarter,
+                'payment_method': payment_method,
             }
 
     else:
-        form = MonthForm()  # Instantiate the form for GET requests
+        form = IncomeExpenseForm()  # Instantiate the form for GET requests
 
     context['form'] = form  # Add the form to the context dictionary
 
     return render(request, 'reports/church_report_template.html', context)
+
 
 
 
@@ -277,8 +293,8 @@ def member_tithe_offering_report(request, member_id):
         
         active_quarter = Quarter.objects.get(is_active=True)
         tithe_offering = TitheOffering.objects.filter(
-            church_member=member,
-            sabbath_week__month__quarter=active_quarter
+            church_member=member
+           
         )
 
         monthly_data = {}

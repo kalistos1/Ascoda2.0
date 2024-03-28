@@ -14,6 +14,14 @@ class IncomeExpenseReportForm(forms.Form):
         widget=forms.Select(attrs={'class': 'form-select', 'placeholder': 'Select a month'})
     )
 
+    payment_method = forms.ChoiceField(
+        choices=[('', 'choose Payment Method'),('', 'All'), ('Cash', 'Cash'), ('Bank', 'Bank')],
+
+        required=False,
+        widget=forms.Select(attrs={'name':'payment_method','class': 'form-select', 'placeholder': 'Select payment method'})
+    )
+
+
     def __init__(self, *args, **kwargs):
         super(IncomeExpenseReportForm, self).__init__(*args, **kwargs)
         for field_name, field in self.fields.items():
@@ -50,3 +58,19 @@ class MonthForm (forms.Form):
             field.widget.attrs.update({'class': 'form-control'})
 
 
+class IncomeExpenseForm(forms.Form):
+    month = forms.ModelChoiceField(
+        queryset=Month.objects.all(),
+        empty_label="Select a month",
+        widget=forms.Select(attrs={'class': 'form-select', 'placeholder': 'Select a month'})
+    )
+    payment_method = forms.ChoiceField(
+        choices=[('', 'All'), ('Cash', 'Cash'), ('Bank', 'Bank')],
+        required=False,
+        widget=forms.Select(attrs={'name':'payment_method','class': 'form-select', 'placeholder': 'Select payment method'})
+    )
+
+    def __init__(self, *args, **kwargs):
+        super(IncomeExpenseForm, self).__init__(*args, **kwargs)
+        for field_name, field in self.fields.items():
+            field.widget.attrs.update({'class': 'form-control'})

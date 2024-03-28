@@ -70,7 +70,8 @@ class ChurchIncome(models.Model):
         ('CHILD_DEDICATION', 'CHILD_DEDICATION'),
         ('THANKS_OFFERING', 'THANKS_OFFERING'),
         ('VOW', 'VOW'),
-        ('SABBATH_SCHOOL', 'SABBATH_SCHOOL'),
+        ('SABBATH_SCHOOL_EXPENSE_OFFERING', 'SABBATH_SCHOOL_EXPENSE_OFFERING'),
+        ('SABBATH_SCHOOL_OFFERING', 'SABBATH_SCHOOL_OFFERING'),
         ('LOOSE_OFFERING', 'LOOSE_OFFERING'),
         ('13TH_SABBATH', '13TH_SABBATH'),
         ('HARVEST', 'HARVEST'),
@@ -86,7 +87,7 @@ class ChurchIncome(models.Model):
     sabbath = models.ForeignKey(Sabbath, on_delete=models.CASCADE)
     church = models.ForeignKey(Church, on_delete=models.CASCADE)
     comment = models.CharField(max_length=255, blank=True, null=True)
-    income_type = models.CharField(max_length=20, choices=INCOME)
+    income_type = models.CharField(max_length=40, choices=INCOME)
     payment_method = models.CharField(max_length=10, choices=METHOD)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     date_added = models.DateTimeField(auto_now=True)
@@ -186,7 +187,7 @@ class BalanceBroughtForward(models.Model):
         church_incomes = ChurchIncome.objects.filter(church=church, sabbath=sabbath_week, sabbath__month__quarter=active_quarter_info)
 
         # Calculate total income excluding specific income_types
-        excluded_income_types = ['APPRECIATION', 'LOOSE_OFFERING', 'CHILD_DEDICATION', 'THANKS_OFFERING', 'SABBATH_SCHOOL']
+        excluded_income_types = ['APPRECIATION', 'LOOSE_OFFERING', 'CHILD_DEDICATION', 'THANKS_OFFERING', 'SABBATH_SCHOOL_EXPENSE_OFFERING']
         total_week_income = church_incomes.exclude(income_type__in=excluded_income_types).aggregate(Sum('amount'))['amount__sum'] or 0
 
         total_week_expense = church_expenses.aggregate(Sum('amount'))['amount__sum'] or 0
