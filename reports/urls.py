@@ -13,5 +13,6 @@ urlpatterns = [
     path('church_trustfund_report/',views.church_trustfund_report, name ="user_church_trustfund_report"),
     path('member_tithe_offering_report/<int:member_id>/',views.member_tithe_offering_report, name ="church_member_tithe_offering_report"),
     path('district_trustfund_report/',views.district_trustfund_report, name ="user_district_trustfund_report"),
-   
+    path('church_tithe_offering_report/',views.church_tithe_offering_report, name ="church_tithe_offering_report"),
+    path('admin_church_tithe_offering_report/',views.admin_church_tithe_offering_report, name ="admin_church_tithe_offering_report"),
 ] 

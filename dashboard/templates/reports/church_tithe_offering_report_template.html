@@ -75,31 +75,33 @@
             <div class="col-12" id="printable-section">
                 <div class="card">
                     <div class="card-header pb-0 px-3 mt-3 mb-4">
-                        <h6 class="mb-0 text-wrap">Seventh-Day Adventist Church <span class="text-primary"> {{ member.church }}, {{ member.church.district }} District<span></h6>
+                        <h6 class="mb-0 text-wrap">Seventh-Day Adventist Church <span class="text-primary"> {{ church }}, {{ member.church.district }} District<span></h6>
                         <h6 class="mb-0 text-wrap">Aba South Conference </h6>
-                        <h6 class="mb-0 text-wrap">Account report of <span class="text-primary">{{ member.member_name }}</span></h6>
-                        <h6 class="mb-0 text-wrap">Period: <span class="text-primary">{{ active_quarter }}</span></h6>
+                        <h6 class="mb-0 text-wrap">Tithe and offering Account report </h6>
+                                <h6 class="mb-0 text-wrap">Period: <span class="text-primary">{{ week }} of {{week.month.quarter}}</span></h6>
                     </div>
                     <div class="table-flush table-striped table-responsive">
                         <table class="table align-items-center mb-0">
                             <thead>
                                 <tr>
-                                    <th class="text-uppercase text-xxs font-weight-bolder text-dark">Month</th>
-                                    <th class="text-uppercase text-xxs font-weight-bolder text-dark">Date</th>
+                                    <th class="text-uppercase text-xxs font-weight-bolder text-dark">Card No.</th>
+                                    <th class="text-uppercase text-xxs font-weight-bolder text-dark">Name</th>
                                     <th class="text-uppercase text-xxs font-weight-bolder text-dark">Tithe</th>
                                     <th class="text-uppercase text-xxs font-weight-bolder text-dark">Offering</th>
+                                    <th class="text-uppercase text-xxs font-weight-bolder text-dark">payment Method</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {% for month, offerings in monthly_data.items %}
-                                    {% for offering in offerings %}
+                                {% for offering in church_tithes_and_offerings %}
+                                   
                                         <tr>
-                                            <td class="badge badge-primary">{{ month }}</td>
-                                            <td>{{ offering.date_added }}</td>
+                                            <td>{{ offering.church_member.tithe_card_number }}</td>
+                                            <td>{{ offering.church_member.member_name }}</td>
                                             <td>#{{ offering.tithe }}</td>
                                             <td>#{{ offering.offering }}</td>
+                                            <td>{{ offering.payment_method }}</td>
                                         </tr>
-                                    {% endfor %}
+                                    
                                 {% endfor %}
                             </tbody>
                         </table>

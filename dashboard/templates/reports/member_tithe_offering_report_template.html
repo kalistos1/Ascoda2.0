@@ -88,6 +88,7 @@
                                     <th class="text-uppercase text-xxs font-weight-bolder text-dark">Date</th>
                                     <th class="text-uppercase text-xxs font-weight-bolder text-dark">Tithe</th>
                                     <th class="text-uppercase text-xxs font-weight-bolder text-dark">Offering</th>
+                                    <th class="text-uppercase text-xxs font-weight-bolder text-dark"> payment method </th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -98,6 +99,7 @@
                                             <td>{{ offering.date_added }}</td>
                                             <td>#{{ offering.tithe }}</td>
                                             <td>#{{ offering.offering }}</td>
+                                             <td>{{ offering.payment_method }}</td>
                                         </tr>
                                     {% endfor %}
                                 {% endfor %}

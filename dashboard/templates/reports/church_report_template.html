@@ -94,6 +94,14 @@
                                 <td class="text-dark">{{ income_entry.amount }}</td>
                             </tr>
                             {% endfor %}
+                            <tr class=""> 
+                                <td colspan ="4" class="text-primary  text-danger bolder"> Total Tithe For The Month</td>
+                                <td class="text-primary text-primary text-danger fw-bolder">{{ total_tithe }}</td>
+                           </tr>
+                            <tr class=""> 
+                                <td colspan ="4" class="text-primary fs-6 fw-bolder"> Total Income</td>
+                                <td class="text-primary text-primary fs-6 fw-bolder">{{ sum_of_income }}</td>
+                           </tr>  
                         </tbody>
                     </table>
                 </div>
@@ -123,9 +131,24 @@
                                 <td class="text-dark">{{ expense_entry.amount }}</td>
                             </tr>
                             {% endfor %}
+                            <tr class=""> 
+                                <td colspan ="4" class="text-primary  text-danger bolder"> Total Tithe For The Month</td>
+                                <td class="text-primary text-primary text-danger fw-bolder">{{ total_tithe }}</td>
+                           </tr>
+                            <tr class=""> 
+                                <td colspan ="4" class="text-primary fs-6 fw-bolder"> Total Expense</td>
+                                <td class="text-primary text-primary fs-6 fw-bolder">{{ sum_of_expenses }}</td>
+                           </tr>  
                         </tbody>
                     </table>
                 </div>
+
+                <hr>
+                    <div class="row justify-content-end mt-4 mb-4">
+                         <div class="col-4 border">
+                            <h4 class="text-primary"> Total Balance = {{income_expense_balance }} </h5>
+                         </div>
+                    </div>
             </div>
         </div>
         

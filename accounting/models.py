@@ -73,6 +73,7 @@ class ChurchIncome(models.Model):
         ('SABBATH_SCHOOL_EXPENSE_OFFERING', 'SABBATH_SCHOOL_EXPENSE_OFFERING'),
         ('SABBATH_SCHOOL_OFFERING', 'SABBATH_SCHOOL_OFFERING'),
         ('LOOSE_OFFERING', 'LOOSE_OFFERING'),
+        ('ENVELOPE_OFFERING', 'LOOSE_ENVELOPE'),
         ('13TH_SABBATH', '13TH_SABBATH'),
         ('HARVEST', 'HARVEST'),
         ('CAMP_MEETING', 'CAMP_MEETING'),
@@ -187,7 +188,7 @@ class BalanceBroughtForward(models.Model):
         church_incomes = ChurchIncome.objects.filter(church=church, sabbath=sabbath_week, sabbath__month__quarter=active_quarter_info)
 
         # Calculate total income excluding specific income_types
-        excluded_income_types = ['APPRECIATION', 'LOOSE_OFFERING', 'CHILD_DEDICATION', 'THANKS_OFFERING', 'SABBATH_SCHOOL_EXPENSE_OFFERING']
+        excluded_income_types = ['APPRECIATION', 'LOOSE_OFFERING', 'CHILD_DEDICATION', 'THANKS_OFFERING', 'SABBATH_SCHOOL_EXPENSE_OFFERING','ENVELOPE_OFFERING']
         total_week_income = church_incomes.exclude(income_type__in=excluded_income_types).aggregate(Sum('amount'))['amount__sum'] or 0
 
         total_week_expense = church_expenses.aggregate(Sum('amount'))['amount__sum'] or 0

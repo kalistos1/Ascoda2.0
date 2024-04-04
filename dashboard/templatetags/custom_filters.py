@@ -5,7 +5,7 @@ register = template.Library()
 
 @register.filter(name='divide_by_half')
 def divide_by_half(amount, income_type):
-    if income_type in ['APPRECIATION', 'LOOSE_OFFERING', 'CHILD_DEDICATION', 'THANKS_OFFERING', 'SABBATH_SCHOOL_EXPENSE_OFFERING']:
+    if income_type in ['APPRECIATION', 'LOOSE_OFFERING', 'CHILD_DEDICATION', 'THANKS_OFFERING', 'SABBATH_SCHOOL_EXPENSE_OFFERING','ENVELOPE_OFFERING']:
         return amount / 2
     return amount
 

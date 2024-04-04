@@ -568,7 +568,7 @@ def calculate_combined_offering(request):
     )['combined_offering'] or 0
   
     # Fetch amounts of specific income types from ChurchIncome
-    specific_income_types = ['APPRECIATION', 'LOOSE_OFFERING', 'CHILD_DEDICATION', 'THANKS_OFFERING', 'SABBATH_SCHOOL_EXPENSE_OFFERING']
+    specific_income_types = ['APPRECIATION', 'LOOSE_OFFERING', 'CHILD_DEDICATION', 'THANKS_OFFERING', 'SABBATH_SCHOOL_EXPENSE_OFFERING','ENVELOPE_OFFERING']
     specific_income_amount = ChurchIncome.objects.filter(
         church=associated_church,
         sabbath=active_sabbath,

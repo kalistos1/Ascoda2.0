@@ -108,7 +108,7 @@
                                                     <td class="text-dark">  {{ income_entry.amount}}  {% if income_entry.income_type in 'APPRECIATION,LOOSE_OFFERING,CHILD_DEDICATION,THANKS_OFFERING,SABBATH_SCHOOL' %} <span class="text-danger" style ="color:red;">   -  [#{{ income_entry.amount|divide_by_half:income_entry.income_type }}] </span>{% endif %}
                                                       </td>
                                                 </tr>
-                                                
+                                            
                                             {% else %}
 
                                                 {% with income_entry.sabbath as current_sabbath %}
@@ -124,12 +124,86 @@
                                                 {% endwith %}
                                             {% endif %}         
                                                                              
-                                        {% endfor %}      
+                                        {% endfor %}  
+                                        <tr class=""> 
+                                            <td colspan ="4" class="text-primary  text-danger bolder"> Total Tithe For The Month</td>
+                                            <td class="text-primary text-primary text-danger fw-bolder">{{ total_tithe }}</td>
+                                       </tr>
+                                        <tr class=""> 
+                                             <td colspan ="4" class="text-primary fs-6 fw-bolder"> Total Income</td>
+                                             <td class="text-primary text-primary fs-6 fw-bolder">{{sum_of_income }}</td>
+                                        </tr>    
                                                                         
                                     {% endwith %}
                               
                             </tbody>
                         </table>
+                    </div>
+
+
+
+                    <div class=" table-flush table-striped table-responsive">
+                        <table class=" table align-items-center mb-0">
+                            <thead>
+                                <tr>
+                                    <th class="text-uppercase text-xxs font-weight-bolder text-dark">Date</th>
+                                    <th class="text-uppercase text-xxs font-weight-bolder text-dark">Particulars</th>
+                                    <th class="text-uppercase text-xxs font-weight-bolder text-dark">Comment</th>
+                                    <th class="text-uppercase text-xxs font-weight-bolder text-dark">Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                               
+                                    {% with church_expense.0.sabbath as current_sabbath %}
+                                        <tr>
+                                            <td colspan="3" class="badge badge-primary text-uppercase font-weight-bold text-center">{{ current_sabbath.sabbath_alias }} Expense</td>
+                                        </tr>
+
+                                        {% for expense_entry in church_expense%}
+                                            {% if expense_entry.sabbath == current_sabbath %}
+                                                <tr class ="p-4">
+                                                    <td class="text-dark">{{ expense_entry.date_added|date:"Y-m-d"}}</td>
+                                                    <td class="text-dark">{{ expense_entry.title }}</td>
+                                                    <td class="text-dark">{{ expense_entry.comment }}</td>
+                                                    <td class="text-dark">  {{ expense_entry.amount}}  {% if expense_entry.income_type in 'APPRECIATION,LOOSE_OFFERING,CHILD_DEDICATION,THANKS_OFFERING,SABBATH_SCHOOL' %} <span class="text-danger" style ="color:red;">   -  [#{{ income_entry.amount|divide_by_half:income_entry.income_type }}] </span>{% endif %}
+                                                      </td>
+                                                </tr>
+                                            
+                                            {% else %}
+
+                                                {% with expense_entry.sabbath as current_sabbath %}
+                                                    <tr>
+                                                        <td colspan="3" class="badge badge-primary text-uppercase font-weight-bold text-center ">{{ current_sabbath.sabbath_alias }} Expense</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-dark">{{expense_entry.date_added|date:"Y-m-d" }}</td>
+                                                        <td class="text-dark">{{ expense_entry.title }}</td>
+                                                        <td class="text-dark">{{ expense_entry.comment }}</td>
+                                                        <td class="text-dark">  {{ expense_entry.amount}}  {% if expense_entry.income_type in 'APPRECIATION,LOOSE_OFFERING,CHILD_DEDICATION,THANKS_OFFERING,SABBATH_SCHOOL' %} <span class="text-danger" style ="color:red;">   -  [#{{ income_entry.amount|divide_by_half:income_entry.income_type }}] </span>{% endif %}</td>
+                                                    </tr>
+                                                {% endwith %}
+                                            {% endif %}         
+                                                                             
+                                        {% endfor %}   
+                                        <tr class=""> 
+                                            <td colspan ="4" class="text-primary  text-danger bolder"> Total Tithe For The Month</td>
+                                            <td class="text-primary text-primary text-danger fw-bolder">{{ total_tithe }}</td>
+                                       </tr>   
+                                        <tr class=""> 
+                                            <td colspan ="4" class="text-primary fs-6 fw-bolder"> Total Expense</td>
+                                            <td class="text-primary text-primary fs-6 fw-bolder">{{ sum_of_expenses }}</td>
+                                       </tr>  
+                                                                        
+                                    {% endwith %}
+                              
+                            </tbody>
+                        </table>
+                    </div>
+                    <hr>
+                    <div class="row justify-content-end mt-4 mb-4">
+                         <div class="col-4 border">
+                            <h4 class="text-primary"> Total Balance = {{income_expense_balance }} </h5>
+                         </div>
                     </div>
                 </div>
             </div>
