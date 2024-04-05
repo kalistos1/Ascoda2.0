@@ -763,22 +763,12 @@ def admin_view_church(request, church_id):
 
 
 @login_required
-def delete_class(request, pk):
-    church = get_object_or_404(Church, pk=pk)
-    context = getGlobalContext(request.user)
-    form = AddChurchForm()
-    churches = Church.objects.all()
-
-
+def delete_church(request, church_id):
+    church = get_object_or_404(Church, church_id=church_id)
     church.delete()
+    messages.success(request,'church was deleted successfully')
 
-    context.update({
-        'message': 'class deleted successfully',
-        
-        'form':form,
-        'churches':churches,
-    })
-    return redirect("backend:classes")
+    return redirect("dashboard:all_churches")
     
     
 @login_required

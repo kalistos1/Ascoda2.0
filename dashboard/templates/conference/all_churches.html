@@ -60,7 +60,8 @@
                           <td class="text-sm">{{ church.email }}</td>
                           <td class="text-sm">{{church.phone }}</td>
                           <td>
-                            <a href="{% url 'dashboard:view_church' church.church_id %}" class="btn btn-primary "> View church info</a>
+                            <a href="{% url 'dashboard:view_church' church.church_id %}" class="btn btn-sm btn-info "> View church info</a>
+                            <a href="{% url 'dashboard:delete_church' church.church_id %}" class="btn btn-sm btn-primary "> Delete church </a>
                           </td>
                         </tr>
                       {% endfor %}

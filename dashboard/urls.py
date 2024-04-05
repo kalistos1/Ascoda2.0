@@ -17,6 +17,7 @@ urlpatterns = [
    path('conference/admin/church_list/', views.all_church, name="all_churches"),
    path('conference/admin/district_list/', views.all_districts, name="all_districts"),
    path('conference/admin/districtdelete/<int:district_id>/', views.delete_district, name="delete_district"),
+   path('conference/admin/church_delete/<int:church_id>/', views.delete_church, name="delete_church"),
    path('conference/admin/district_list/view_district/<int:district_id>', views.admin_view_district, name="view_district"),
    path('conference/admin/church_list/view_church/<int:church_id>', views.admin_view_church, name="view_church"),
    path('admin/church_list/view_user/<int:member_id>', views.view_member, name="view_member"),

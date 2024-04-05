@@ -1,5 +1,7 @@
 from django import forms
 from .models import * 
+from django.forms import DateInput
+from django.utils import timezone
 
 class DateInput(forms.DateInput):
     input_type = 'date'
@@ -46,10 +48,11 @@ class ChurchIncomeForm(forms.ModelForm):
 
 
 class ChurchExpenseForm(forms.ModelForm):
-    expense_date = forms.DateField(widget=DateInput)
+    expense_date = forms.DateField(widget=DateInput(attrs={'max': timezone.now().date()}))
+
     class Meta:
         model = ChurchExpense
-        fields = ( 'title', 'comment', 'amount','expense_date')
+        fields = ('title', 'comment', 'amount', 'expense_date')
         
     def __init__(self, *args, **kwargs):
         super(ChurchExpenseForm, self).__init__(*args, **kwargs)        
@@ -58,7 +61,6 @@ class ChurchExpenseForm(forms.ModelForm):
         self.fields['comment'].widget.attrs.update({'class': 'form-control'})
         self.fields['amount'].widget.attrs.update({'class': 'form-control'})
         self.fields['expense_date'].widget.attrs.update({'class': 'form-control'})
-       
 
 class ChurchCashAccountForm(forms.ModelForm):
     class Meta:

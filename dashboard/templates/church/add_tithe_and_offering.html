@@ -110,7 +110,7 @@
                           <td class="text-sm">{{ detail.tithe_offering.payment_method }}</td>
 
                           <td class="text-sm">
-                            {% if detail.tithe_offering.tithe == None or detail.tithe_offering.offering == None or detail.tithe_offering.project == None %}
+                            {% if detail.tithe_offering.tithe == None and detail.tithe_offering.offering == None and detail.tithe_offering.project == None %}
                               <a href="{% url 'church:add_tithe_offering' detail.member.member_id %}" class="btn btn-warning">Add</a>
                             {% else %}
                               <a href="" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#add_tithe">Edit</a>
