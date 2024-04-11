@@ -17,6 +17,7 @@ from django.db import transaction
 from .utils import send_email
 from django.conf import settings
 from django.core.mail import EmailMessage
+from django.contrib.auth import authenticate, login, logout
 
 # Create your views here.
 
@@ -54,6 +55,10 @@ def church_dashboard(request):
             conference_info = user_context.get('conference')
             district_info= user_context.get('associated_district')
             active_quarter_info = user_context.get('active_quarter')
+        else:
+            messages.error(request, "unable to login: you have not been assigned to  a church or district contact the admin")
+            logout(request)
+            return redirect('account:signout')
 
         # Get expenses and income for the district
         church_expenses = ChurchExpense.objects.filter(church=associated_church, sabbath=active_week,sabbath__month__quarter=active_quarter_info)
@@ -73,7 +78,9 @@ def church_dashboard(request):
         total_week_income = church_incomes.exclude(income_type__in=excluded_income_types).aggregate(Sum('amount'))['amount__sum'] or 0
         
 
-        total_week_expense = church_expenses.aggregate(Sum('amount'))['amount__sum'] or 0
+        excluded_expense_types = ['10_PERCENT_DUE_DISTRICT', '40_PERCENT_DUE_CONFERENCE', ]
+        total_week_expense = church_expenses.exclude(title__in=excluded_expense_types).aggregate(Sum('amount'))['amount__sum'] or 0
+      
       
 
             
@@ -173,7 +180,7 @@ def district_dashboard(request):
             # Get the value of amount_due_district_field for the active week
        
 
-            combined_total_weekly_income =  total_amount_due_district + total_weekly_income 
+            combined_total_weekly_income =  total_weekly_income #+ total_amount_due_district 
 
             weekly_balance = combined_total_weekly_income - total_weekly_expense
             active_week_month = active_week.month if active_week else None
@@ -203,6 +210,10 @@ def district_dashboard(request):
 
             }
             context['district_info'] = district_info
+        else:
+            messages.error(request, "unable to login: you have not been assigned to  a church or district contact the admin")
+            logout(request)
+            return redirect('account:signout')
     
 
     return render(request, 'district/dashboard.html', context)
@@ -409,6 +420,7 @@ def admin(request, pk):
     })
     return render(request, "backend/users/admin-details.html", context)
 
+
 # view single admin
 @login_required
 def delete_user(request, pk):
@@ -529,7 +541,7 @@ def admin_view_district(request, district_id):
         # Get the value of amount_due_district_field for the active week
        
 
-        combined_total_weekly_income =  total_amount_due_district + total_weekly_income 
+        combined_total_weekly_income = total_weekly_income # + total_amount_due_district 
 
         weekly_balance = combined_total_weekly_income - total_weekly_expense
         active_week_month = active_week.month if active_week else None
@@ -703,8 +715,8 @@ def admin_view_church(request, church_id):
         excluded_income_types = ['APPRECIATION', 'LOOSE_OFFERING', 'CHILD_DEDICATION', 'THANKS_OFFERING', 'SABBATH_SCHOOL_EXPENSE_OFFERING','ENVELOPE_OFFERING']
         total_week_income = church_incomes.exclude(income_type__in=excluded_income_types).aggregate(Sum('amount'))['amount__sum'] or 0
         
-
-        total_week_expense = church_expenses.aggregate(Sum('amount'))['amount__sum'] or 0
+        excluded_expense_types = ['10_PERCENT_DUE_DISTRICT', '40_PERCENT_DUE_CONFERENCE', ]
+        total_week_expense = church_expenses.exclude(title__in=excluded_expense_types).aggregate(Sum('amount'))['amount__sum'] or 0
       
 
             

@@ -132,11 +132,16 @@ class CombinedOffering(models.Model):
 
   
 class ChurchExpense(models.Model):
+    EXPENSE_TYPE = (
+        ('10_PERCENT_DUE_DISTRICT', '10_PERCENT_DUE_DISTRICT'),
+        ('40_PERCENT_DUE_CONFERENCE', '40_PERCENT_DUE_CONFERENCE'),
+        ('OTHER_EXPENSE', 'OTHER_EXPENSE'),
+    )
 
     expense_id = models.AutoField(primary_key=True)
     sabbath = models.ForeignKey(Sabbath, on_delete=models.CASCADE)
     church = models.ForeignKey(Church, on_delete=models.CASCADE)
-    title = models.CharField(max_length=255, blank=False, null=False)
+    title = models.CharField(max_length=255, choices= EXPENSE_TYPE)
     comment = models.CharField(max_length=255, blank=True, null=True)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     expense_date = models.DateField()

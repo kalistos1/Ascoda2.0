@@ -61,6 +61,7 @@
                       <th>CAsh Spent</th>
                       <th>Cash To Bank</th>
                       <th>Cash At Hand</th>
+                      <th>Date</th>
                     
                     </tr>
                   </thead>
@@ -72,8 +73,7 @@
                           <td class="text-sm">{{ cash_account.cash_spent }}</td>
                           <td class="text-sm">{{ cash_account.cash_to_bank }}</td>
                           <td class="text-sm">{{ cash_account.cash_at_hand }}</td>
-
-                         
+                          <td class="text-sm">{{ cash_account.date_added }}</td>                         
                         </tr>
                       {% endfor %}
                     {% endif %}

@@ -66,12 +66,14 @@ def admin_church_income_expense_report(request):
             if payment_method:
                 church_income = ChurchIncome.objects.filter(church=church, sabbath__in=sabbaths, payment_method=payment_method)
                 sum_of_income = church_income.aggregate(Sum('amount'))['amount__sum'] or 0
+                sum_of_income+=total_tithe
 
                 church_expense = ChurchExpense.objects.filter(church=church, sabbath__in=sabbaths)
                 sum_of_expenses = church_expense.aggregate(Sum('amount'))['amount__sum'] or 0
             else:
                 church_income = ChurchIncome.objects.filter(church=church, sabbath__in=sabbaths)
                 sum_of_income = church_income.aggregate(Sum('amount'))['amount__sum'] or 0
+                sum_of_income+=total_tithe
 
                 church_expense = ChurchExpense.objects.filter(church=church, sabbath__in=sabbaths)
                 sum_of_expenses = church_expense.aggregate(Sum('amount'))['amount__sum'] or 0
@@ -246,6 +248,8 @@ def church_income_expense_report(request):
             if  payment_method :
                 church_income = ChurchIncome.objects.filter(church=church, sabbath__in=sabbaths, payment_method=payment_method)
                 sum_of_income = church_income.aggregate(Sum('amount'))['amount__sum'] or 0
+                sum_of_income+=total_tithe
+
 
                 church_expense = ChurchExpense.objects.filter(church=church, sabbath__in=sabbaths)
                 sum_of_expenses = church_expense.aggregate(Sum('amount'))['amount__sum'] or 0
@@ -253,6 +257,8 @@ def church_income_expense_report(request):
             else:
                 church_income = ChurchIncome.objects.filter(church=church, sabbath__in=sabbaths)
                 sum_of_income = church_income.aggregate(Sum('amount'))['amount__sum'] or 0
+                sum_of_income+=total_tithe
+
 
                 church_expense = ChurchExpense.objects.filter(church=church, sabbath__in=sabbaths)
                 sum_of_expenses = church_expense.aggregate(Sum('amount'))['amount__sum'] or 0
