@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'maintenance_mode',
     'accounts',
     'accounting',
     'church',
@@ -50,6 +51,10 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    #maintenance mode middleware
+    'maintenance_mode.middleware.MaintenanceModeMiddleware', 
+    #session auto logout
+    'django_auto_logout.middleware.auto_logout',
     # costume middle ware
     #'accounts.middleware.SessionTimeoutMiddleware'
 ]
@@ -67,6 +72,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                # session logout client side script
+                'django_auto_logout.context_processors.auto_logout_client',
             ],
         },
     },
@@ -138,6 +145,9 @@ MEDIA_URL = '/media/'
 # Save the session on every request
 #SESSION_SAVE_EVERY_REQUEST = True
 
+#django session timeout
+AUTO_LOGOUT = {'IDLE_TIME': 10, 'REDIRECT_TO_LOGIN_IMMEDIATELY': True, 'MESSAGE': 'The session has expired. Please login again to continue.',}
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
@@ -163,3 +173,9 @@ EMAIL_HOST_PASSWORD = 'yvsysjmniyparzkr'
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend' 
+
+
+
+MAINTENANCE_MODE = False
+MAINTENANCE_MODE_IGNORE_ADMIN_SITE = True
+MAINTENANCE_MODE_TEMPLATE = "pages/503.html"

@@ -105,7 +105,7 @@
                                                     <td class="text-dark">{{ income_entry.date_added|date:"Y-m-d"}}</td>
                                                     <td class="text-dark">{{ income_entry.income_type }}</td>
                                                     <td class="text-dark">{{ income_entry.comment }}</td>
-                                                    <td class="text-dark">  {{ income_entry.amount}}  {% if income_entry.income_type in 'APPRECIATION,LOOSE_OFFERING,CHILD_DEDICATION,THANKS_OFFERING,SABBATH_SCHOOL' %} <span class="text-danger" style ="color:red;">   -  [#{{ income_entry.amount|divide_by_half:income_entry.income_type }}] </span>{% endif %}
+                                                    <td class="text-dark">  {{ income_entry.amount}}  {% if income_entry.income_type in 'APPRECIATION,LOOSE_OFFERING,CHILD_DEDICATION,SABBATH_SCHOOL_EXPENSE_OFFERING,INFANT_DEPT_OFFERING,THANKS_OFFERING,ENVELOPE_OFFERING' %} <span class="text-danger" style ="color:red;">   -  [#{{ income_entry.amount|divide_by_half:income_entry.income_type }}] </span>{% endif %}
                                                       </td>
                                                 </tr>
                                             
@@ -119,7 +119,7 @@
                                                         <td class="text-dark">{{income_entry.date_added|date:"Y-m-d" }}</td>
                                                         <td class="text-dark">{{ income_entry.income_type }}</td>
                                                         <td class="text-dark">{{ income_entry.comment }}</td>
-                                                        <td class="text-dark">  {{ income_entry.amount}}  {% if income_entry.income_type in 'APPRECIATION,LOOSE_OFFERING,CHILD_DEDICATION,THANKS_OFFERING,SABBATH_SCHOOL' %} <span class="text-danger" style ="color:red;">   -  [#{{ income_entry.amount|divide_by_half:income_entry.income_type }}] </span>{% endif %}</td>
+                                                        <td class="text-dark">  {{ income_entry.amount}}  {% if income_entry.income_type in 'APPRECIATION,LOOSE_OFFERING,CHILD_DEDICATION,SABBATH_SCHOOL_EXPENSE_OFFERING,INFANT_DEPT_OFFERING,THANKS_OFFERING,ENVELOPE_OFFERING' %} <span class="text-danger" style ="color:red;">   -  [#{{ income_entry.amount|divide_by_half:income_entry.income_type }}] </span>{% endif %}</td>
                                                     </tr>
                                                 {% endwith %}
                                             {% endif %}         
@@ -165,7 +165,7 @@
                                                     <td class="text-dark">{{ expense_entry.date_added|date:"Y-m-d"}}</td>
                                                     <td class="text-dark">{{ expense_entry.title }}</td>
                                                     <td class="text-dark">{{ expense_entry.comment }}</td>
-                                                    <td class="text-dark">  {{ expense_entry.amount}}  {% if expense_entry.income_type in 'APPRECIATION,LOOSE_OFFERING,CHILD_DEDICATION,THANKS_OFFERING,SABBATH_SCHOOL' %} <span class="text-danger" style ="color:red;">   -  [#{{ income_entry.amount|divide_by_half:income_entry.income_type }}] </span>{% endif %}
+                                                    <td class="text-dark">  {{ expense_entry.amount}}  {% if expense_entry.income_type in 'APPRECIATION,LOOSE_OFFERING,CHILD_DEDICATION,SABBATH_SCHOOL_EXPENSE_OFFERING,INFANT_DEPT_OFFERING,THANKS_OFFERING,ENVELOPE_OFFERING' %} <span class="text-danger" style ="color:red;">   -  [#{{ income_entry.amount|divide_by_half:income_entry.income_type }}] </span>{% endif %}
                                                       </td>
                                                 </tr>
                                             
@@ -179,7 +179,7 @@
                                                         <td class="text-dark">{{expense_entry.date_added|date:"Y-m-d" }}</td>
                                                         <td class="text-dark">{{ expense_entry.title }}</td>
                                                         <td class="text-dark">{{ expense_entry.comment }}</td>
-                                                        <td class="text-dark">  {{ expense_entry.amount}}  {% if expense_entry.income_type in 'APPRECIATION,LOOSE_OFFERING,CHILD_DEDICATION,THANKS_OFFERING,SABBATH_SCHOOL' %} <span class="text-danger" style ="color:red;">   -  [#{{ income_entry.amount|divide_by_half:income_entry.income_type }}] </span>{% endif %}</td>
+                                                        <td class="text-dark">  {{ expense_entry.amount}}  {% if expense_entry.income_type in 'APPRECIATION,LOOSE_OFFERING,CHILD_DEDICATION,SABBATH_SCHOOL_EXPENSE_OFFERING,INFANT_DEPT_OFFERING,THANKS_OFFERING,ENVELOPE_OFFERING' %} <span class="text-danger" style ="color:red;">   -  [#{{ income_entry.amount|divide_by_half:income_entry.income_type }}] </span>{% endif %}</td>
                                                     </tr>
                                                 {% endwith %}
                                             {% endif %}         

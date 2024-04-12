@@ -74,7 +74,7 @@ def church_dashboard(request):
         
         #total_week_income = church_incomes.aggregate(Sum('amount'))['amount__sum'] or 0
         # Calculate total income excluding specific income_types
-        excluded_income_types = ['APPRECIATION', 'LOOSE_OFFERING', 'CHILD_DEDICATION', 'THANKS_OFFERING', 'SABBATH_SCHOOL_EXPENSE_OFFERING','ENVELOPE_OFFERING']
+        excluded_income_types = ['APPRECIATION', 'LOOSE_OFFERING', 'CHILD_DEDICATION', 'THANKS_OFFERING', 'SABBATH_SCHOOL_EXPENSE_OFFERING','ENVELOPE_OFFERING','INFANT_DEPT_OFFERING']
         total_week_income = church_incomes.exclude(income_type__in=excluded_income_types).aggregate(Sum('amount'))['amount__sum'] or 0
         
 
@@ -712,7 +712,7 @@ def admin_view_church(request, church_id):
         
         #total_week_income = church_incomes.aggregate(Sum('amount'))['amount__sum'] or 0
         # Calculate total income excluding specific income_types
-        excluded_income_types = ['APPRECIATION', 'LOOSE_OFFERING', 'CHILD_DEDICATION', 'THANKS_OFFERING', 'SABBATH_SCHOOL_EXPENSE_OFFERING','ENVELOPE_OFFERING']
+        excluded_income_types = ['APPRECIATION', 'LOOSE_OFFERING', 'CHILD_DEDICATION', 'THANKS_OFFERING', 'SABBATH_SCHOOL_EXPENSE_OFFERING','ENVELOPE_OFFERING','INFANT_DEPT_OFFERING']
         total_week_income = church_incomes.exclude(income_type__in=excluded_income_types).aggregate(Sum('amount'))['amount__sum'] or 0
         
         excluded_expense_types = ['10_PERCENT_DUE_DISTRICT', '40_PERCENT_DUE_CONFERENCE', ]

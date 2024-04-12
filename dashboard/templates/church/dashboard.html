@@ -205,7 +205,7 @@
                         </div>
                       </div>
                       <div class="d-flex align-items-center text-success text-gradient text-sm font-weight-bold">#{{ income.amount }}    
-                        {% if income.income_type in 'APPRECIATION,LOOSE_OFFERING,CHILD_DEDICATION,THANKS_OFFERING,SABBATH_SCHOOL' %} <span class="text-danger" style ="color:red;">   -  [#{{ income.amount|divide_by_half:income.income_type }}] </span>{% endif %}
+                        {% if income.income_type in 'APPRECIATION,LOOSE_OFFERING,CHILD_DEDICATION,SABBATH_SCHOOL_EXPENSE_OFFERING,INFANT_DEPT_OFFERING,THANKS_OFFERING,ENVELOPE_OFFERING' %} <span class="text-danger" style ="color:red;">   -  [#{{ income.amount|divide_by_half:income.income_type }}] </span>{% endif %}
                        </div>
                     </li>
                   {% endfor %}
