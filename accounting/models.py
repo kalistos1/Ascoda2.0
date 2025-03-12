@@ -44,6 +44,7 @@ class TitheOffering(models.Model):
     #     return combined_offering_entry
 
 
+
 class WeeklyTransaction(models.Model):
     transaction_id = models.AutoField(primary_key=True)
     sabbath_week = models.ForeignKey(Sabbath, on_delete=models.CASCADE)
@@ -149,7 +150,8 @@ class ChurchExpense(models.Model):
     date_added = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return str("Expense =" + "" + self.title + " " + self.comment)
+        
+        return f"{self.church} - church  Expenses - { self.title}"    
 
 
 class ChurchCashAccount(models.Model):

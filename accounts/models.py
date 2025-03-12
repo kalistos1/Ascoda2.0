@@ -115,11 +115,11 @@ class Member(models.Model):
     )
     member_id = models.AutoField(primary_key=True)
     member_name = models.CharField(max_length=255)
-    member_email = models.CharField(max_length=300, blank=True, null=True, unique= True)
+    member_email = models.CharField(max_length=300, blank=True, null=True,)
     member_phone = models.CharField(max_length=300, blank=True, null=True)
     member_Gender = models.CharField(max_length=10, choices=SEX, null=True, blank=True)
     church = models.ForeignKey(Church, on_delete=models.CASCADE)
-    tithe_card_number= models.IntegerField( default=0, blank=False, null= False, unique= True )
+    tithe_card_number= models.IntegerField( default=0, blank=False, null= False )
     created_on = models.DateTimeField(auto_now=True)
     last_modified = models.DateTimeField(auto_now_add=True)
     

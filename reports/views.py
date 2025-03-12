@@ -495,8 +495,14 @@ def church_tithe_offering_report (request):
             payment_method = form.cleaned_data.get('payment_method')
             if  payment_method :
                 church_tithes_and_offerings = TitheOffering.objects.filter(church_member__church=church,sabbath_week=week, payment_method=payment_method)
+                total_tithe_sum = ""
+                total_offering_sum=""
             else:
+
                 church_tithes_and_offerings = TitheOffering.objects.filter(church_member__church=church,sabbath_week=week)
+                total_tithe_sum = ""
+                total_offering_sum =""
+
             context = {
                
                 'church': church,
